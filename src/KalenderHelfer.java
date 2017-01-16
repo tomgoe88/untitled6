@@ -64,6 +64,8 @@ public class KalenderHelfer {
     private Date end;
     private static KalenderHelfer instance= new KalenderHelfer();
     private KalenderHelfer helfer;
+    private String terminart;
+    private String eintrager;
 
     int month;
     int day;
@@ -90,6 +92,22 @@ public class KalenderHelfer {
 
     public void setHelfer(KalenderHelfer helfer) {
         this.helfer = helfer;
+    }
+
+    public String getTerminart() {
+        return terminart;
+    }
+
+    public void setTerminart(String terminart) {
+        this.terminart = terminart;
+    }
+
+    public String getEintrager() {
+        return eintrager;
+    }
+
+    public void setEintrager(String eintrager) {
+        this.eintrager = eintrager;
     }
 
     public static KalenderHelfer getInstance() {
@@ -472,7 +490,14 @@ public class KalenderHelfer {
     //bei click auf neuer Termin
     public void newTermin(){
         calendarBean=null;
-        this.calendarBean= new FullCalendarEventBean(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("title"), start);
+
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+        String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
+
+        String title= terminart+" | "+vorname+" "+nachname+" | "+tele+" | "+beschreibung+" | "+eintrager;
+        this.calendarBean= new FullCalendarEventBean(title, start);
         calendarBean.setEnd(end);
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){

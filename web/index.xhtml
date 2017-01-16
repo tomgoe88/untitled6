@@ -106,9 +106,30 @@
                     <b:selectOneMenu value="#{kalenderHelfer.helfer.ma}" >
                         <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}" itemValue="#{mi.name}" />
                     </b:selectOneMenu>
-                    <h:outputText id="title" value="Beschreibung"/>
-                    <b:inputText name="title" for="title" />
-                    <b/>
+                <b:selectOneMenu value="#{kalenderHelfer.helfer.terminart}" >
+                    <f:selectItem value="Check-up"  itemLabel="Check-up" itemValue="Check-up" />
+                    <f:selectItem value="Ersteinweisung"  itemLabel="Ersteinweisung" itemValue="Ersteinweisung" />
+                    <f:selectItem value="Re-Check"  itemLabel="Re-Check" itemValue="Re-Check" />
+                    <f:selectItem value="Neuer Trainingsplan"  itemLabel="Neuer Trainingsplan" itemValue="Neuer Trainingsplan" />
+                    <f:selectItem value="Probetraining"  itemLabel="Probetraining" itemValue="Probetraining" />
+                </b:selectOneMenu>
+                <b/>
+                <h:outputText id="vorname" value="Vorname"/>
+                <b:inputText name="vorname" for="vorname" />
+                <b/>
+                <h:outputText id="nachname" value="Nachname"/>
+                <b:inputText name="nachname" for="nachname" />
+                <b/>
+                <h:outputText id="tele" value="Telefonnummer"/>
+                <b:inputText name="tele" for="tele" />
+                <b/>
+                <h:outputText id="beschreibung" value="Beschreibung"/>
+                <b:inputText name="beschreibung" for="beschreibung" />
+                <b/>
+                <b:selectOneMenu value="#{kalenderHelfer.helfer.eintrager}" >
+                    <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}" itemValue="#{mitarb.name}" />
+                </b:selectOneMenu>
+                <b/>
                     <h:outputText id="Start" value="Terminbeginn"/>
                     <p:calendar name="start" for="Start"   pattern="MM/dd/yyyy HH:mm" locale="de">
                         <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleStartDate}"  />
