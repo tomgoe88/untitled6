@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="Mojarra-2.2.1" type="jsf">
+    <properties version="2.2.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jstl-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.faces-2.2.1.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="jar://I:/Java_Bibiliotheken/primefaces-6.0.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/components-2.1.18.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/BootsFaces-OSP-1.0.1-dist.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/bootstrap-1.0.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://I:/Java_Bibiliotheken/primefaces-6.0-sources.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/components-2.1.18-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
+  </library>
+</component>
