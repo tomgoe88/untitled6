@@ -66,6 +66,7 @@ public class KalenderHelfer {
     private KalenderHelfer helfer;
     private String terminart;
     private String eintrager;
+    private String text;
 
     int month;
     int day;
@@ -84,6 +85,17 @@ public class KalenderHelfer {
         mitarbeiter.add(new Mitarbeiter("Hannes"));
         mitarbeiter.add(new Mitarbeiter("Walter"));
         mitarbeiter.add(new Mitarbeiter("Gregor"));
+    }
+
+    public String getText() {
+        return text;
+    }
+    public void myEvent(String texten){
+        this.text= texten;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public KalenderHelfer getHelfer() {

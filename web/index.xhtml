@@ -6,6 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 
       xmlns:bu="http://butterfaces.org/components">
@@ -15,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <script type="text/javascript" src="de.js"></script>
+
 </h:head>
 
 <body>
@@ -59,7 +61,14 @@
                         <f:selectItem value="keine Auswahl" itemLabel="keine Auswahl" itemValue="#{null}" />
                     </b:selectOneMenu>
                     <p:commandButton value="go for it" update="cal" />
-                    <b:fullCalendar lang="de" defaultView="agendaDay" events="#{kalenderHelfer.helfer.mitarbeit.tem}" rendered="#{kalenderHelfer.helfer.mitarbeit!=null}"
+                    <b:fullCalendar lang="de"
+                                    defaultView="agendaDay"
+                                    events="#{kalenderHelfer.helfer.mitarbeit.tem}"
+                                    eventClick="function(calEvent, jsEvent, view) {
+
+                                                test(calEvent);
+                                               }"
+                                    rendered="#{kalenderHelfer.helfer.mitarbeit!=null}"
                                     dayClick="function(calEvent, jsEvent, view) {PF('eventDialog').show();
                                                     document.getElementById('Start').value = calEvent;}">
 
@@ -150,6 +159,28 @@
             </p:panelGrid>
             </h:form>
         </p:dialog>
+    <p:dialog id="formId"   widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip">
+
+        <h:form id="ding">
+            <b:panelGrid columns="1">
+                <b:inputText name="tec"  id="tec" value="#{kalenderHelfer.helfer.text}"/>
+                <pe:remoteCommand id="myCommand" name="sendEvent" process="@this"  actionListener="#{kalenderHelfer.helfer.myEvent}">
+                    <pe:methodSignature parameters="java.lang.String" />
+                    <pe:methodParam name="event">
+
+                    </pe:methodParam>
+                </pe:remoteCommand>
+                <script type="text/javascript" src="form.js"></script>
+
+                <p:commandButton value="test" update="ding"></p:commandButton>
+            </b:panelGrid>
+        </h:form>
+
+
+
+
+
+    </p:dialog>
 
 
 </b:container>
