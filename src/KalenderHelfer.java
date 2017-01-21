@@ -235,6 +235,11 @@ public class KalenderHelfer {
             for(Mitarbeiter m: mitarbeiter){
                 if(m.getName().equalsIgnoreCase(q)){
                     mitarbeit= m;
+                    break;
+                }
+                else {
+                    mitarbeit=null;
+
                 }
             }
         } else {
