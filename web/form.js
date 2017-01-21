@@ -5,7 +5,6 @@ function test(eevent) {
 
     var test = ' '+eevent.title;
     //document.getElementsByName('tec').value= JSON.stringify(test);//hier ist zumindest schon mal der Wert angekommen, also über name zu suchen ist super
-    alert(''+test);
     sendEvent(test);
     PF('testVar').show();
 }

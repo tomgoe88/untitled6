@@ -163,8 +163,9 @@
 
         <h:form id="ding">
             <b:panelGrid columns="1">
-                <b:inputText name="tec"  id="tec" value="#{kalenderHelfer.helfer.text}"/>
-                <pe:remoteCommand id="myCommand" name="sendEvent" process="@this"  actionListener="#{kalenderHelfer.helfer.myEvent}">
+                <h:outputLabel for="tec" value="Termin: "/>
+                <h:outputText name="tec"  id="tec" value="#{kalenderHelfer.helfer.text}"/>
+                <pe:remoteCommand id="myCommand" name="sendEvent" process="@this" update="ding" actionListener="#{kalenderHelfer.helfer.myEvent}">
                     <pe:methodSignature parameters="java.lang.String" />
                     <pe:methodParam name="event">
 
