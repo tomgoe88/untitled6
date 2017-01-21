@@ -67,6 +67,13 @@ public class KalenderHelfer {
     private String terminart;
     private String eintrager;
     private String text;
+    private String eingetragenVorname;
+    private String eingetragenTerminart;
+    private String eingetragenNachname;
+    private String eingetragenEintraeger;
+    private String eingetrageneTelefonnummer;
+    private String eignetrageneBeschreibung;
+
 
     int month;
     int day;
@@ -91,7 +98,62 @@ public class KalenderHelfer {
         return text;
     }
     public void myEvent(String texten){
+        String [] terminspilt= texten.split(" ; ");
+        this.eingetragenTerminart= terminspilt[0];
+        this.eingetragenVorname=terminspilt[1];
+        this.eingetragenNachname=terminspilt[2];
+        this.eingetrageneTelefonnummer=terminspilt[3];
+        this.eignetrageneBeschreibung=terminspilt[4];
+        this.eingetragenEintraeger=terminspilt[5];
         this.text= texten;
+    }
+
+    public String getEignetrageneBeschreibung() {
+        return eignetrageneBeschreibung;
+    }
+
+    public void setEignetrageneBeschreibung(String eignetrageneBeschreibung) {
+        this.eignetrageneBeschreibung = eignetrageneBeschreibung;
+    }
+
+    public String getEingetragenVorname() {
+        return eingetragenVorname;
+    }
+
+    public void setEingetragenVorname(String eingetragenVorname) {
+        this.eingetragenVorname = eingetragenVorname;
+    }
+
+    public String getEingetragenTerminart() {
+        return eingetragenTerminart;
+    }
+
+    public void setEingetragenTerminart(String eingetragenTerminart) {
+        this.eingetragenTerminart = eingetragenTerminart;
+    }
+
+    public String getEingetrageneTelefonnummer() {
+        return eingetrageneTelefonnummer;
+    }
+
+    public void setEingetrageneTelefonnummer(String eingetrageneTelefonnummer) {
+        this.eingetrageneTelefonnummer = eingetrageneTelefonnummer;
+    }
+
+    public String getEingetragenNachname() {
+        return eingetragenNachname;
+    }
+
+    public void setEingetragenNachname(String eingetragenNachname) {
+        this.eingetragenNachname = eingetragenNachname;
+    }
+
+    public String getEingetragenEintraeger() {
+        return eingetragenEintraeger;
+    }
+
+    public void setEingetragenEintraeger(String eingetragenEintraeger) {
+        this.eingetragenEintraeger = eingetragenEintraeger;
     }
 
     public void setText(String text) {
@@ -508,7 +570,7 @@ public class KalenderHelfer {
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
 
-        String title= terminart+" | "+vorname+" "+nachname+" | "+tele+" | "+beschreibung+" | "+eintrager;
+        String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         this.calendarBean= new FullCalendarEventBean(title, start);
         calendarBean.setEnd(end);
         for ( Mitarbeiter m: this.mitarbeiter){
