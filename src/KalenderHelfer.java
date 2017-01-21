@@ -576,11 +576,16 @@ public class KalenderHelfer {
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
 
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-        this.calendarBean= new FullCalendarEventBean(title, start);
-        calendarBean.setEnd(end);
+
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
+                this.calendarBean= new FullCalendarEventBean(title, start);
+                calendarBean.setEnd(end);
                 m.getList().add(calendarBean);
+            } else {
+                FullCalendarEventBean kb= new FullCalendarEventBean("In dieser Zeit liegt ein Termin bei "+getMa(),start);
+                kb.setEnd(end);
+                m.getList().add(kb);
             }
         }
 
