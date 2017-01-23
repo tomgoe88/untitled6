@@ -238,16 +238,16 @@ public class KalenderHelfer {
 
     public void handleDateSelect(SelectEvent event) {
         defaultDate = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
-     /*   GregorianCalendar gc= new GregorianCalendar();
+       GregorianCalendar gc= new GregorianCalendar();
         gc.setTime(defaultDate);
-        int day= gc.get(Calendar.DAY_OF_WEEK);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
         if(day== Calendar.SUNDAY){
             gc.add(Calendar.DAY_OF_MONTH, 0);
-        } else{
-            gc.add(Calendar.DAY_OF_MONTH,1);
-        }*/
+        } else{*/
+            gc.add(Calendar.HOUR_OF_DAY,1);
+       // }
         //
-        //this.defaultDate= gc.getTime();// auch hier schauen, welches Datum raus komme
+        this.defaultDate= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
 

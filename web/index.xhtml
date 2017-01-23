@@ -38,7 +38,7 @@
                                 locale="de"
                                 pattern="dd.MM.yyyy"
                                                     >
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal"/>
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal terminWidget"/>
                     </p:calendar>
                 </h:form>
             </b:panel>
@@ -85,7 +85,7 @@
                                                     dayClick="
                                                     function(calEvent, jsEvent, view) {
                                                     PF('eventDialog').show();
-                                                    selectDate(calEvent);
+
                                                     }"
                                                     defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
 
@@ -106,7 +106,7 @@
                                                         dayClick="
                                                         function(calEvent, jsEvent, view) {
                                                         PF('eventDialog').show();
-                                                        selectDate(calEvent);}"
+                                                        }"
                                                         eventClick="
                                                         function(calEvent, jsEvent, view) {
                                                         test(calEvent);
@@ -134,7 +134,7 @@
 
 
 <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
-    <h:form>
+    <h:form id="terminWidget">
         <p:panelGrid id="eventDetails">
             <b:selectOneMenu value="#{kalenderHelfer.helfer.ma}">
                 <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
