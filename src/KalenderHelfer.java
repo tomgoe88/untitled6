@@ -7,12 +7,7 @@
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
@@ -33,7 +28,7 @@ public class KalenderHelfer {
 
     private String currentMonth;
     private String test;
-
+    private String theDefaultDate;
     private Date changeMontag;
     private Date changeDienstag;
     private Date changeMittwoch;
@@ -41,7 +36,7 @@ public class KalenderHelfer {
     private Date changeFreitag;
     private Date changeSamstag;
     private Date changeSonntag;
-
+    private Date defaultDate;
     private String montag;
     private String dienstag;
     private String mittwoch;
@@ -73,7 +68,7 @@ public class KalenderHelfer {
     private String eingetragenEintraeger;
     private String eingetrageneTelefonnummer;
     private String eignetrageneBeschreibung;
-
+    private TimeZone timeZone;
 
     int month;
     int day;
@@ -92,6 +87,14 @@ public class KalenderHelfer {
         mitarbeiter.add(new Mitarbeiter("Hannes"));
         mitarbeiter.add(new Mitarbeiter("Walter"));
         mitarbeiter.add(new Mitarbeiter("Gregor"));
+    }
+
+    public TimeZone getTimeZone() {
+        return TimeZone.getDefault();
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
     }
 
     public String getText() {
@@ -114,6 +117,23 @@ public class KalenderHelfer {
 
     public void setEignetrageneBeschreibung(String eignetrageneBeschreibung) {
         this.eignetrageneBeschreibung = eignetrageneBeschreibung;
+    }
+
+    public String getTheDefaultDate() {
+        String dd;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.GERMAN);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        if(defaultDate!=null) {
+            dd=dateFormat.format(defaultDate);
+        } else {
+            dd=dateFormat.format(new Date());
+        }
+
+        return dd;
+    }
+
+    public void setTheDefaultDate(String theDefaultDate) {
+        this.theDefaultDate = theDefaultDate;
     }
 
     public String getEingetragenVorname() {
@@ -208,18 +228,26 @@ public class KalenderHelfer {
         this.chooseDate = chooseDate;
     }
 
+    public Date getDefaultDate() {
+        return defaultDate;
+    }
+
+    public void setDefaultDate(Date defaultDate) {
+        this.defaultDate = defaultDate;
+    }
+
     public void handleDateSelect(SelectEvent event) {
-        date = (Date) event.getObject();
-        GregorianCalendar gc= new GregorianCalendar();
-        gc.setTime(this.getChangeDate());
+        defaultDate = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+     /*   GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(defaultDate);
         int day= gc.get(Calendar.DAY_OF_WEEK);
         if(day== Calendar.SUNDAY){
             gc.add(Calendar.DAY_OF_MONTH, 0);
         } else{
             gc.add(Calendar.DAY_OF_MONTH,1);
-        }
+        }*/
         //
-        this.date= gc.getTime();
+        //this.defaultDate= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
 
@@ -609,6 +637,9 @@ public class KalenderHelfer {
                 m.getCalendarList().getList().add(calendarBean);
             }
         }
+    }
+    public void handleDefaultDate(SelectEvent event) {
+        defaultDate = (Date) event.getObject();
     }
 
 

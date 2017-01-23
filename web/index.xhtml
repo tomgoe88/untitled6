@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="selectdate.js"></script>
 
 </h:head>
 
@@ -30,35 +31,28 @@
 </h:form>
 <b:container fluid="true">
     <b:row>
+        <b:column>
+            <b:panel look="primary" collapsible="true" title="Day">
+                <h:form>
+                    <p:calendar showTodayButton="true" showOn="button"
+                                locale="de"
+                                pattern="dd.MM.yyyy"
+                                                    >
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal"/>
+                    </p:calendar>
+                </h:form>
+            </b:panel>
+        </b:column>
+    </b:row>
+    <b:row>
         <b:column span="2">
-            <b:panel look="primary" collapsible="true" title="Menü">
+            <b:panel look="primary" collapsible="true" title="Memos">
 
             </b:panel>
         </b:column>
-        <b:column span="9">
+        <b:column span="7">
             <b:panel look="primary" collapsible="true" title="Kalender">
-                <b:container fluid="true">
-                    <h:form>
-                        <b:panel look="primary">
-                            <b:row>
-                                <b:column span="1" class="row">
-                                    <h:outputText value="#{kalenderHelfer.helfer.currentMonth}"/>
-                                </b:column>
-                                <b:column span="1" class="row">
 
-                                </b:column>
-                                <b:column span="4" class="row">
-
-                                    <p:calendar showTodayButton="true" showOn="button" value="#{kalenderHelfer.helfer.changeDate}"
-                                                locale="de"
-                                                pattern="dd.MM.yyyy">
-                                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}"/>
-                                    </p:calendar>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </h:form>
-                </b:container>
 
                 <b:container fluid="true">
                     <!-- so sie die Möglichkeit aus, alle Mitarbeiter mit den Terminen nebeneinander anzuzeige anzugezeigen-->
@@ -83,13 +77,17 @@
                                     <b:fullCalendar lang="de"
                                                     defaultView="agendaDay"
                                                     events="#{kalenderHelfer.helfer.mitarbeit.tem}"
-                                                    eventClick="function(calEvent, jsEvent, view) {
-
-                                                test(calEvent);
-                                               }"
+                                                    eventClick="
+                                                    function(calEvent, jsEvent, view) {
+                                                    test(calEvent);
+                                                    }"
                                                     rendered="#{kalenderHelfer.helfer.mitarbeit!=null}"
-                                                    dayClick="function(calEvent, jsEvent, view) {PF('eventDialog').show();
-                                                    document.getElementById('Start').value = calEvent;}">
+                                                    dayClick="
+                                                    function(calEvent, jsEvent, view) {
+                                                    PF('eventDialog').show();
+                                                    selectDate(calEvent);
+                                                    }"
+                                                    defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
 
                                     </b:fullCalendar>
                                 </b:column>
@@ -105,11 +103,15 @@
                                                         defaultView="agendaDay"
                                                         events="#{mit.tem}"
                                                         rendered="#{kalenderHelfer.helfer.mitarbeit==null}"
-                                                        dayClick="function(calEvent, jsEvent, view) {PF('eventDialog').show()}"
-                                                        eventClick="function(calEvent, jsEvent, view) {
-
-                                                test(calEvent);
-                                               }">
+                                                        dayClick="
+                                                        function(calEvent, jsEvent, view) {
+                                                        PF('eventDialog').show();
+                                                        selectDate(calEvent);}"
+                                                        eventClick="
+                                                        function(calEvent, jsEvent, view) {
+                                                        test(calEvent);
+                                                        }"
+                                                        defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
                                                 </b:fullCalendar>
                                             </b:column>
                                         </ui:repeat>
@@ -119,6 +121,11 @@
                         </b:panel>
                     </h:form>
                 </b:container>
+
+            </b:panel>
+        </b:column>
+        <b:column span="2">
+            <b:panel look="primary" collapsible="true" title="Aufgaben">
 
             </b:panel>
         </b:column>
@@ -160,12 +167,18 @@
             </b:selectOneMenu>
             <b/>
             <h:outputText id="Start" value="Terminbeginn: "/>
-            <p:calendar name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de">
+            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" pagedate="#{kalenderHelfer.helfer.defaultDate}">
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleStartDate}"/>
             </p:calendar>
             <b/>
             <h:outputText id="End" value="Terminende: "/>
-            <p:calendar name="end" for="End" pattern="MM/dd/yyyy HH:mm" locale="de">
+            <p:calendar
+                    widgetVar="endDate"
+                    name="end"
+                    for="End"
+                    pattern="MM/dd/yyyy HH:mm"
+                    locale="de"
+                    pagedate="#{kalenderHelfer.helfer.defaultDate}" >
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleEndDate}"/>
             </p:calendar>
             <b/>
