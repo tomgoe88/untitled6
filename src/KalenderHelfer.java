@@ -642,7 +642,7 @@ public class KalenderHelfer {
         Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
         final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
                 "Date: " + date);
-        Calendar c2=calendar;
+        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
         c2.add(Calendar.HOUR_OF_DAY,1);
         start= calendar.getTime();
         end=c2.getTime();
