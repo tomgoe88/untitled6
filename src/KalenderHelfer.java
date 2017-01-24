@@ -638,6 +638,22 @@ public class KalenderHelfer {
             }
         }
     }
+    public void myDate(String date){
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        start= calendar.getTime();
+        end=calendar.getTime();
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+    }
+
     public void handleDefaultDate(SelectEvent event) {
         defaultDate = (Date) event.getObject();
     }

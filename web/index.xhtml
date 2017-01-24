@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <script type="text/javascript" src="de.js"></script>
-    <script type="text/javascript" src="selectdate.js"></script>
+
 
 </h:head>
 
@@ -83,7 +83,8 @@
                                                     }"
                                                     rendered="#{kalenderHelfer.helfer.mitarbeit!=null}"
                                                     dayClick="
-                                                    function(calEvent, jsEvent, view) {
+                                                    function(date, jsEvent, view) {
+                                                    selectDate(date);
                                                     PF('eventDialog').show();
 
                                                     }"
@@ -104,7 +105,8 @@
                                                         events="#{mit.tem}"
                                                         rendered="#{kalenderHelfer.helfer.mitarbeit==null}"
                                                         dayClick="
-                                                        function(calEvent, jsEvent, view) {
+                                                        function(date, jsEvent, view) {
+                                                        selectDate(date);
                                                         PF('eventDialog').show();
                                                         }"
                                                         eventClick="
@@ -167,7 +169,7 @@
             </b:selectOneMenu>
             <b/>
             <h:outputText id="Start" value="Terminbeginn: "/>
-            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" pagedate="#{kalenderHelfer.helfer.defaultDate}">
+            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" value="#{kalenderHelfer.helfer.start}" >
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleStartDate}"/>
             </p:calendar>
             <b/>
@@ -178,13 +180,20 @@
                     for="End"
                     pattern="MM/dd/yyyy HH:mm"
                     locale="de"
-                    pagedate="#{kalenderHelfer.helfer.defaultDate}" >
+                    value="#{kalenderHelfer.helfer.end}" >
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleEndDate}"/>
             </p:calendar>
             <b/>
             <p:commandButton action="#{kalenderHelfer.helfer.newTermin}" value="go for it" update="cal"
                              oncomplete="PF('eventDialog').hide();"/>
         </p:panelGrid>
+        <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
+                          actionListener="#{kalenderHelfer.helfer.myDate}">
+            <pe:methodSignature parameters="java.lang.String"/>
+            <pe:methodParam name="dateEvent">
+            </pe:methodParam>
+        </pe:remoteCommand>
+        <script type="text/javascript" src="selectdate.js"></script>
     </h:form>
 </p:dialog>
 
