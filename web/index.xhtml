@@ -45,13 +45,9 @@
             </b:panel>
         </b:column>
     </b:row>
-    <b:row>
-        <b:column span="2">
-            <b:panel look="primary" collapsible="true" title="Memos">
 
-            </b:panel>
-        </b:column>
-        <b:column span="7">
+    <b:row>
+        <b:column span="12">
             <b:panel look="primary" collapsible="true" title="Kalender">
 
 
@@ -99,7 +95,7 @@
                                     <b:row>
                                         <ui:repeat value="#{kalenderHelfer.helfer.mitarbeiter}"
                                                    var="mit">
-                                            <b:column span="3" >
+                                            <b:column span="3"  >
                                                 <b:label text="#{mit.name}"/>
                                                 <b:fullCalendar
 
@@ -132,7 +128,15 @@
 
             </b:panel>
         </b:column>
-        <b:column span="2">
+
+    </b:row>
+    <b:row>
+        <b:column span="6">
+            <b:panel look="primary" collapsible="true" title="Memos">
+
+            </b:panel>
+        </b:column>
+        <b:column span="6">
             <b:panel look="primary" collapsible="true" title="Aufgaben">
 
             </b:panel>
