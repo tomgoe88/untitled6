@@ -25,7 +25,7 @@ import sun.security.jca.GetInstance;
 @ApplicationScoped
 public class KalenderHelfer {
     private int currentWeek;
-
+    private String tempColor;
     private String currentMonth;
     private String test;
     private String theDefaultDate;
@@ -82,11 +82,11 @@ public class KalenderHelfer {
      */
     public KalenderHelfer() {
         mitarbeiter= new ArrayList<Mitarbeiter>();
-        Mitarbeiter m= new Mitarbeiter("Otto");
+        Mitarbeiter m= new Mitarbeiter("Otto","orange");
         mitarbeiter.add(m);
-        mitarbeiter.add(new Mitarbeiter("Hannes"));
-        mitarbeiter.add(new Mitarbeiter("Walter"));
-        mitarbeiter.add(new Mitarbeiter("Gregor"));
+        mitarbeiter.add(new Mitarbeiter("Hannes", "grey"));
+        mitarbeiter.add(new Mitarbeiter("Walter","green"));
+        mitarbeiter.add(new Mitarbeiter("Gregor", "blue"));
     }
 
     public TimeZone getTimeZone() {
@@ -602,17 +602,22 @@ public class KalenderHelfer {
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
-
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-
+        for ( Mitarbeiter m: this.mitarbeiter){
+            if(m.getName().equalsIgnoreCase(getMa())){
+                tempColor=m.getFarbe();
+            }
+        }
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
                 this.calendarBean= new FullCalendarEventBean(title, start);
                 calendarBean.setEnd(end);
+                calendarBean.setColor(m.getFarbe());
                 m.getList().add(calendarBean);
             } else {
                 FullCalendarEventBean kb= new FullCalendarEventBean("In dieser Zeit liegt ein Termin bei "+getMa(),start);
                 kb.setEnd(end);
+                kb.setColor(tempColor);
                 m.getList().add(kb);
             }
         }

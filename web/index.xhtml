@@ -15,6 +15,7 @@
     <title>Facelet Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
 
 
@@ -93,17 +94,22 @@
                                     </b:fullCalendar>
                                 </b:column>
                             </b:row>
-                            <b:row>
+                            <b:row rendered="#{kalenderHelfer.helfer.mitarbeit==null}">
                                 <b:column>
                                     <b:row>
                                         <ui:repeat value="#{kalenderHelfer.helfer.mitarbeiter}"
                                                    var="mit">
-                                            <b:column span="3">
+                                            <b:column span="3" >
+                                                <b:label text="#{mit.name}"/>
                                                 <b:fullCalendar
+
+                                                        calendarHeader
+                                                                ="{left:'title'}"
+                                                        weekMode="false"
                                                         lang="de"
                                                         defaultView="agendaDay"
                                                         events="#{mit.tem}"
-                                                        rendered="#{kalenderHelfer.helfer.mitarbeit==null}"
+
                                                         dayClick="
                                                         function(date, jsEvent, view) {
                                                         selectDate(date);
@@ -259,7 +265,7 @@
     </h:form>
 </p:dialog>
 
-
+<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </body>
 </html>
 

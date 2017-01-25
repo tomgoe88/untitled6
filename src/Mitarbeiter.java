@@ -23,12 +23,14 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String name;
     private List<Termine> termine;
     private String tem;
+    private String farbe;
     private FullCalendarEventList calendarList;
 
 
-    public Mitarbeiter(String name) {
+    public Mitarbeiter(String name, String farbe) {
         super();
         this.name= name;
+        this.farbe= farbe;
 
     }
 
@@ -45,6 +47,14 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     public String getName() {
         return name;
+    }
+
+    public String getFarbe() {
+        return farbe;
+    }
+
+    public void setFarbe(String farbe) {
+        this.farbe = farbe;
     }
 
     public void setTest(List<String> test) {
