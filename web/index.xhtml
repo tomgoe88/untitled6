@@ -59,9 +59,9 @@
                                 <b:column>
                                     <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
                                     <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.helfer.q}">
-                                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="#{null}"/>
                                         <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                                        itemValue="#{mi.name}"/>
+                                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="#{null}"/>
                                     </b:selectOneMenu>
                                 </b:column>
                                 <b:column>

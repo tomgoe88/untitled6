@@ -271,7 +271,7 @@ public class KalenderHelfer {
                 }
             }
         } else {
-            mitarbeit=null;
+            mitarbeit=mitarbeiter.get(0);
         }
 
         return mitarbeit;
