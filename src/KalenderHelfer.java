@@ -29,21 +29,9 @@ public class KalenderHelfer {
     private String currentMonth;
     private String test;
     private String theDefaultDate;
-    private Date changeMontag;
-    private Date changeDienstag;
-    private Date changeMittwoch;
-    private Date changeDonnerstag;
-    private Date changeFreitag;
-    private Date changeSamstag;
-    private Date changeSonntag;
+
     private Date defaultDate;
-    private String montag;
-    private String dienstag;
-    private String mittwoch;
-    private String donnerstag;
-    private String freitag;
-    private String samstag;
-    private String sonntag;
+
     private Date changeDate;
     private Date currentDate;
     private String changedDate;
@@ -377,33 +365,7 @@ public class KalenderHelfer {
         this.kalender = kalender;
     }
 
-    public String getMontag() {
-        return "Montag";
-    }
 
-    public String getDienstag() {
-        return "Dienstag";
-    }
-
-    public String getMittwoch() {
-        return "Mittwoch";
-    }
-
-    public String getDonnerstag() {
-        return "Donnerstag";
-    }
-
-    public String getFreitag() {
-        return "Freitag";
-    }
-
-    public String getSamstag() {
-        return "Samstag";
-    }
-
-    public String getSonntag() {
-        return "Sonntag";
-    }
 
     public int getJetday() {
         return jetday;
@@ -420,129 +382,7 @@ public class KalenderHelfer {
         requestContext.update("form:display");
         requestContext.execute("PF('dlg').show()");
     }
-    public Date getChangeSonntag() {
-        if(date!= null) {
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            int f= Calendar.DAY_OF_WEEK;
-            if(f== Calendar.SUNDAY){
-                c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                c.add(Calendar.DAY_OF_WEEK, 7);
-            } else {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                c.add(Calendar.DAY_OF_WEEK, 1);
-            }
-            changeSonntag = c.getTime();
-        }
 
-        return changeSonntag;
-    }
-
-    public void setChangeSonntag(Date changeSonntag) {
-        this.changeSonntag = changeSonntag;
-    }
-
-    public Date getChangeMontag() {
-        if (date!=null) {
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeMontag = c.getTime();
-        }
-
-        return changeMontag;
-    }
-
-    public void setChangeMontag(Date changeMontag) {
-        this.changeMontag = changeMontag;
-    }
-
-    public Date getChangeDienstag() {
-        if (date!=null) {
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeDienstag = c.getTime();
-        }
-
-        return changeDienstag;
-    }
-
-    public void setChangeDienstag(Date changeDienstag) {
-        this.changeDienstag = changeDienstag;
-    }
-
-    public Date getChangeMittwoch() {
-        if(date!=null){
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeMittwoch = c.getTime();
-        }
-
-        return changeMittwoch;
-    }
-
-    public void setChangeMittwoch(Date changeMittwoch) {
-        this.changeMittwoch = changeMittwoch;
-    }
-
-    public Date getChangeDonnerstag() {
-        if (date!=null){
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeDonnerstag = c.getTime();
-        }
-
-        return changeDonnerstag;
-    }
-
-    public void setChangeDonnerstag(Date changeDonnerstag) {
-        this.changeDonnerstag = changeDonnerstag;
-    }
-
-    public Date getChangeFreitag() {
-        if(date!=null){
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeFreitag = c.getTime();
-        }
-
-        return changeFreitag;
-    }
-
-    public void setChangeFreitag(Date changeFreitag) {
-        this.changeFreitag = changeFreitag;
-    }
-
-    public Date getChangeSamstag() {
-        if(date!=null){
-            GregorianCalendar c= new GregorianCalendar();
-            c.setTime(date);
-            //int f= c.getFirstDayOfWeek();
-            c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-            c.add(Calendar.DAY_OF_WEEK, 1);
-            changeSamstag = c.getTime();
-        }
-
-        return changeSamstag;
-    }
-
-    public void setChangeSamstag(Date changeSamstag) {
-        this.changeSamstag = changeSamstag;
-    }
 
 
 
@@ -593,21 +433,21 @@ public class KalenderHelfer {
     public void handleEndDate(SelectEvent event) {
         end = (Date) event.getObject();
     }
-    ///TODO es wird noch kein Termin erstellt, danach muss geschaut werden
+
     //bei click auf neuer Termin
     public void newTermin(){
         calendarBean=null;
-
-        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+//TODO: hier müssen die Angaben direkt in der Datenbank landen
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname"); //TODO: der Vorname und Nachnname, Tele wird in der Tabelle Kunde gespeichert
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung"); //TODO Beschreibung landet im Termin
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
                 tempColor=m.getFarbe();
             }
-        }
+        } //TODO hinzufügen in di einzelnen Objekte passiert dann beim Aurfu des Kalenders, dies wird dann aus der SQLbank gezogen
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
                 this.calendarBean= new FullCalendarEventBean(title, start);
@@ -618,6 +458,7 @@ public class KalenderHelfer {
                 FullCalendarEventBean kb= new FullCalendarEventBean("In dieser Zeit liegt ein Termin bei "+getMa(),start);
                 kb.setEnd(end);
                 kb.setColor(tempColor);
+                kb.setRendering("background");
                 m.getList().add(kb);
             }
         }

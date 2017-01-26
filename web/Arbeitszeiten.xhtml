@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+
+
+</h:head>
+<body>
+<b:container fluid="true">
+    <b:row>
+        <ui:repeat value="#{kalenderHelfer.helfer.mitarbeiter}"
+                   var="mit">
+            <b:column span="12">
+                <b:label text="#{mit.name}"/>
+                <b:fullCalendar
+
+                        calendarHeader
+                                ="{left:'title'}"
+                        weekMode="false"
+                        lang="de"
+                        defaultView="agendaDay"
+                        events="#{mit.tem}"
+
+                        dayClick="
+                                                        function(date, jsEvent, view) {
+                                                        selectDate(date);
+                                                        PF('arbeitszeitWidget').show();
+                                                        }"
+                        defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
+                </b:fullCalendar>
+            </b:column>
+        </ui:repeat>
+
+
+    </b:row>
+</b:container>
+<p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
+    <h:form id="terminWidget">
+        <p:panelGrid id="eventDetails">
+            <b:selectOneMenu value="#{kalenderHelfer.helfer.ma}">
+                <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
+                               itemValue="#{mi.name}"/>
+            </b:selectOneMenu>
+            <h:outputText id="Start" value="Schichtbeginn: "/>
+            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
+                        value="#{kalenderHelfer.helfer.start}">
+                <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleStartDate}"/>
+            </p:calendar>
+            <b/>
+            <h:outputText id="End" value="Schichtende: "/>
+            <p:calendar
+                    widgetVar="endDate"
+                    name="end"
+                    for="End"
+                    pattern="MM/dd/yyyy HH:mm"
+                    locale="de"
+                    value="#{kalenderHelfer.helfer.end}">
+                <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleEndDate}"/>
+            </p:calendar>
+            <b/>
+            <p:commandButton action="#{kalenderHelfer.helfer.newTermin}" value="go for it" update="cal"
+                             oncomplete="PF('eventDialog').hide();"/>
+        </p:panelGrid>
+        <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
+                          actionListener="#{kalenderHelfer.helfer.myDate}">
+            <pe:methodSignature parameters="java.lang.String"/>
+            <pe:methodParam name="dateEvent">
+            </pe:methodParam>
+        </pe:remoteCommand>
+        <script type="text/javascript" src="selectdate.js"></script>
+    </h:form>
+</p:dialog>
+</body>
+</html>

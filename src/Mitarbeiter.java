@@ -62,6 +62,10 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public String getTem() {
+        //TODO: hier wird alles über die Datenbank bezogen und dann befüllt
+        //TODO: die liste wir hier mit allen Events, also auch den arbeitszeiten befüllt
+        //getList().addAll("Arbeitszeiten")
+        //getList().addAll("Events")
         tem= this.toJson();
         return tem;
     }
