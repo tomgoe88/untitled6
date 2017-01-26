@@ -458,7 +458,7 @@ public class KalenderHelfer {
                 FullCalendarEventBean kb= new FullCalendarEventBean("In dieser Zeit liegt ein Termin bei "+getMa(),start);
                 kb.setEnd(end);
                 kb.setColor(tempColor);
-                kb.setRendering("background");
+                //kb.setRendering("background");
                 m.getList().add(kb);
             }
         }
