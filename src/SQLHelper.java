@@ -110,6 +110,7 @@ public class SQLHelper{
                     "KundenID int NOT NULL AUTO_INCREMENT," +
                     "vorname VARCHAR(45)," +
                     "nachname VARCHAR(45)," +
+                    "telefonnummer VARCHAR (45)" +
                     "PRIMARY KEY (KundenID)" +
                     ")";
             con.createStatement().executeUpdate(tableKunden);
