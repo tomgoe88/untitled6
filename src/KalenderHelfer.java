@@ -248,6 +248,10 @@ public class KalenderHelfer {
 
     public Mitarbeiter getMitarbeit() {
         if(q != null){
+
+
+
+
             for(Mitarbeiter m: mitarbeiter){
                 if(m.getName().equalsIgnoreCase(q)){
                     mitarbeit= m;
@@ -263,6 +267,16 @@ public class KalenderHelfer {
         }
 
         return mitarbeit;
+    }
+    public String getTerminplanerEvents(){ //TODO: diese Rückgabe wird den Kalender im Terminplaner hinzugefügt
+        FullCalendarEventList event= new FullCalendarEventList();
+        if(q != null) {
+
+           event.getList().addAll( SQLHelper.getAllArbeitszeiten(q));
+            event.getList().addAll( SQLHelper.getAllEvents(q));
+
+        }
+        return event.toJson();
     }
 
     public void setMitarbeit(Mitarbeiter mitarbeit) {
