@@ -29,6 +29,7 @@ public class KalenderHelfer {
     private String currentMonth;
     private String test;
     private String theDefaultDate;
+    private int kundenID;
 
     private Date defaultDate;
 
@@ -451,9 +452,20 @@ public class KalenderHelfer {
                 tempColor=m.getFarbe();
             }
         } //TODO hinzufügen in di einzelnen Objekte passiert dann beim Aurfu des Kalenders, dies wird dann aus der SQLbank gezogen
+
+        for(Kunde k: SQLHelper.kunden()){
+            if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
+                kundenID=k.getKundeID();
+            }
+            else{
+                kundenID=SQLHelper.getMaxKundenID()+1;
+                SQLHelper.neuerKunde(vorname,nachname,tele);
+            }
+        }
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
-                this.calendarBean= new FullCalendarEventBean(title, start);
+                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start,end);
+       /*         this.calendarBean= new FullCalendarEventBean(title, start);
                 calendarBean.setEnd(end);
                 calendarBean.setColor(m.getFarbe());
                 m.getList().add(calendarBean);
@@ -462,7 +474,7 @@ public class KalenderHelfer {
                 kb.setEnd(end);
                 kb.setColor(tempColor);
                 //kb.setRendering("background");
-                m.getList().add(kb);
+                m.getList().add(kb);*/
             }
         }
 

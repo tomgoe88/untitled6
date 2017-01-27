@@ -200,7 +200,7 @@ public class SQLHelper{
         }
         return m;
     }
-    public void newMitarbeiter(String vorname, String nachname, String farbe){
+    public static void newMitarbeiter(String vorname, String nachname, String farbe){
         con = getInstance();
         if(con != null) {
             // Abfrage-Statement erzeugen.
@@ -216,7 +216,13 @@ public class SQLHelper{
         }
     //TODO insert statement
     }
-    public void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
+    public static List<Kunde> kunden(){
+        //TODO: Kunden finden
+        con = getInstance();
+        List<Kunde> kunden= new ArrayList<Kunde>();
+        return kunden;
+    }
+    public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
         con = getInstance();
         //TODO InsertSdtatement
     }
@@ -227,12 +233,48 @@ public class SQLHelper{
     }
     public static List<FullCalendarEventBean> getAllArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
-        //TODO nnerjoin auf die tabeller  und Arbeitszeiten
-        return new ArrayList<>();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+                // Tabelle anzeigen //TODO noch eine InnerJoin machen
+                String sql =
+                        "SELECT * FROM mitarbeiter";
+                ResultSet result = query.executeQuery(sql);
+
+                // Ergebnisstabelle durchforsten //TODO: die richtigen Zellen eintrage
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+                    temp.setStart(result.getDate("vorname"));
+                    temp.setEnd(result.getDate("kalenderfarbe"));
+                    temp.setColor(result.getString("MitarbeiterID"));
+                    temp.setTitle("Arbeiteszeit");
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        //TODO innerjoin auf die tabeller  und Arbeitszeiten um die Mitarbeiterfarbe herauszufinden
+        return fb;
     }
     public static void newArbeitszeit(int mitarbeiterID, Date schichtbeginn, Date schichtende){
         con = getInstance();
         //TODO Anwesenheitstabelle befüllen
+    }
+    public static void neuerKunde (String vorname, String nachname,String telefonnummer ){
+        con = getInstance();
+        //TODO InsertSdtatement
+    }
+    public static int getMaxKundenID(){
+        //TODO: mit Operator Max die Maxnummer der tabelle heruasfinden
+        con = getInstance();
+        int max=0;
+        return max;
     }
 
 }
