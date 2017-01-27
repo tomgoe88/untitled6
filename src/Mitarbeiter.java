@@ -25,6 +25,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String tem;
     private String farbe;
     private FullCalendarEventList calendarList;
+    private int MitarbeiterID;
+    private String arbeitszeiten;
 
 
     public Mitarbeiter(String name, String farbe) {
@@ -43,6 +45,24 @@ public class Mitarbeiter extends FullCalendarEventList {
         return test;
 
 
+    }
+
+    public String getArbeitszeiten() {
+        FullCalendarEventList fk= new FullCalendarEventList();
+        fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
+        return fk.toJson();
+    }
+
+    public void setArbeitszeiten(String arbeitszeiten) {
+        this.arbeitszeiten = arbeitszeiten;
+    }
+
+    public int getMitarbeiterID() {
+        return MitarbeiterID;
+    }
+
+    public void setMitarbeiterID(int mitarbeiterID) {
+        MitarbeiterID = mitarbeiterID;
     }
 
     public String getName() {
@@ -64,8 +84,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     public String getTem() {
         //TODO: hier wird alles über die Datenbank bezogen und dann befüllt
         //TODO: die liste wir hier mit allen Events, also auch den arbeitszeiten befüllt
-        //getList().addAll("Arbeitszeiten")
-        //getList().addAll("Events")
+        this.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
+        this.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         tem= this.toJson();
         return tem;
     }

@@ -37,7 +37,6 @@ public class KalenderHelfer {
     private String changedDate;
     private Date date=null;
     private List<Mitarbeiter> mitarbeiter;
-    private List<Termine> termine;
     private Date chooseDate;
     private FullCalendarEventBean calendarBean;
     private String ma;
@@ -57,7 +56,7 @@ public class KalenderHelfer {
     private String eingetrageneTelefonnummer;
     private String eignetrageneBeschreibung;
     private TimeZone timeZone;
-
+    private String termine;
     int month;
     int day;
     int jetday;
@@ -248,11 +247,7 @@ public class KalenderHelfer {
 
     public Mitarbeiter getMitarbeit() {
         if(q != null){
-
-
-
-
-            for(Mitarbeiter m: mitarbeiter){
+            for(Mitarbeiter m: getMitarbeiter()){
                 if(m.getName().equalsIgnoreCase(q)){
                     mitarbeit= m;
                     break;
@@ -263,12 +258,12 @@ public class KalenderHelfer {
                 }
             }
         } else {
-            mitarbeit=mitarbeiter.get(0);
+            mitarbeit=getMitarbeiter().get(0);
         }
-
         return mitarbeit;
     }
-    public String getTerminplanerEvents(){ //TODO: diese Rückgabe wird den Kalender im Terminplaner hinzugefügt
+    //Das war die alte Idee
+/*    public String getTerminplanerEvents(){ //TODO: diese Rückgabe wird den Kalender im Terminplaner hinzugefügt
         FullCalendarEventList event= new FullCalendarEventList();
         if(q != null) {
 
@@ -277,7 +272,7 @@ public class KalenderHelfer {
 
         }
         return event.toJson();
-    }
+    }*/
 
     public void setMitarbeit(Mitarbeiter mitarbeit) {
         this.mitarbeit = mitarbeit;
@@ -295,23 +290,16 @@ public class KalenderHelfer {
         //hier muss eine Select-Abfrage für die Mitarbeiter an diesem Tag gemacht werden
 
 
-        return mitarbeiter;
+        return SQLHelper.getMitarbeiterListe();
     }
 
     public void setMitarbeiter(List<Mitarbeiter> mitarbeiter) {
         this.mitarbeiter = mitarbeiter;
     }
 
-    public List<Termine> getTermine() {
-        //hier muss eine Select-Abfrage mit allen Terminen der Mitarbeiter und dem jeweiligem Datum gemacht werden
-        termine= new ArrayList<Termine>();
 
-        return SQLHelper.termine(chooseDate);
-    }
 
-    public void setTermine(List<Termine> termine) {
-        this.termine = termine;
-    }
+
 
 
 

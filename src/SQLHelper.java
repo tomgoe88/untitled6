@@ -152,7 +152,7 @@ public class SQLHelper{
         }
     }
     //TODO: hier müssen noch weiter Methoden aufgeschrieben werden
-    public List<Mitarbeiter> getMitarbeiterListe(){
+    public static List<Mitarbeiter> getMitarbeiterListe(){
         return new ArrayList<Mitarbeiter>();
     }
     public void newMitarbeiter(String vorname, String nachname, String farbe){
@@ -161,11 +161,11 @@ public class SQLHelper{
     public void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
 
     }
-    public static List<FullCalendarEventBean> getAllEvents(String mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+    public static List<FullCalendarEventBean> getAllEvents(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         //innerjoin auf die tabeller
         return new ArrayList<>();
     }
-    public static List<FullCalendarEventBean> getAllArbeitszeiten(String mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+    public static List<FullCalendarEventBean> getAllArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         //innerjoin auf die tabeller
         return new ArrayList<>();
     }
