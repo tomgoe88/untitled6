@@ -24,11 +24,11 @@ public class SQLHelper{
     private static Connection con = null;
     private static String dbHost = "localhost"; // Hostname
     private static String dbPort = "3306";      // Port -- Standard: 3306
-    private static String dbName = "Terminplaner";   // Datenbankname
+    private String dbName = "Terminplaner";   // Datenbankname
     private static String dbUser = "root";     // Datenbankuser
     private static String dbPass = "times-88";      // Datenbankpasswort
     private static String sql = "CREATE DATABASE IF NOT EXISTS DEMODB";
-
+    private static SQLHelper aktuell = new SQLHelper();
 
     private SQLHelper(){
         try {
@@ -47,6 +47,15 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+
+    }
+
+    public static SQLHelper getAktuell() {
+        return aktuell;
+    }
+
+    public static void setAktuell(SQLHelper aktuell) {
+        SQLHelper.aktuell = aktuell;
     }
 
     private static Connection getInstance() {
@@ -54,6 +63,15 @@ public class SQLHelper{
             new SQLHelper();
         return con;
     }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
     //so wie diese Methode wird auch die Methode um die Termine zu holen verwenden also : mit public static
     public static List<Termine> termine(Date chooseDate){
         List<Termine> termine= new ArrayList<Termine>();
@@ -89,6 +107,7 @@ public class SQLHelper{
             }
         }
     }
+
     public static void createTables(){
         con= getInstance();
         try {
@@ -153,23 +172,29 @@ public class SQLHelper{
     }
     //TODO: hier müssen noch weiter Methoden aufgeschrieben werden
     public static List<Mitarbeiter> getMitarbeiterListe(){
+        con = getInstance();
         return new ArrayList<Mitarbeiter>();
     }
     public void newMitarbeiter(String vorname, String nachname, String farbe){
+        con = getInstance();
     //TODO insert statement
     }
     public void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
+        con = getInstance();
         //TODO InsertSdtatement
     }
     public static List<FullCalendarEventBean> getAllEvents(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
         // TODO innerjoin auf die tabeller auf Kunde, Mitarbeiter und Termine
         return new ArrayList<>();
     }
     public static List<FullCalendarEventBean> getAllArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
         //TODO nnerjoin auf die tabeller  und Arbeitszeiten
         return new ArrayList<>();
     }
     public static void newArbeitszeit(int mitarbeiterID, Date schichtbeginn, Date schichtende){
+        con = getInstance();
         //TODO Anwesenheitstabelle befüllen
     }
 

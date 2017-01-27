@@ -76,6 +76,7 @@ public class KalenderHelfer {
         mitarbeiter.add(new Mitarbeiter("Gregor", "blue"));
     }
 
+
     public TimeZone getTimeZone() {
         return TimeZone.getDefault();
     }
