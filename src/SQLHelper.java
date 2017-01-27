@@ -173,10 +173,47 @@ public class SQLHelper{
     //TODO: hier müssen noch weiter Methoden aufgeschrieben werden
     public static List<Mitarbeiter> getMitarbeiterListe(){
         con = getInstance();
-        return new ArrayList<Mitarbeiter>();
+        List<Mitarbeiter> m= new ArrayList<Mitarbeiter>();
+        if(con != null){
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+                // Tabelle anzeigen
+                String sql =
+                        "SELECT * FROM mitarbeiter";
+                ResultSet result = query.executeQuery(sql);
+
+                // Ergebnisstabelle durchforsten
+                while (result.next()) {
+                    Mitarbeiter temp=new Mitarbeiter();
+                    temp.setName(result.getString("vorname"));
+                    temp.setFarbe(result.getString("kalenderfarbe"));
+                    temp.setMitarbeiterID(result.getInt("MitarbeiterID"));
+                    m.add(temp);
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return m;
     }
     public void newMitarbeiter(String vorname, String nachname, String farbe){
         con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO mitarbeiter(vorname,nachname,kalenderfarbe) VALUES('"+vorname+"','"+nachname+"','"+farbe+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
     //TODO insert statement
     }
     public void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){

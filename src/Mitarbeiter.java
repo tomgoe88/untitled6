@@ -28,6 +28,9 @@ public class Mitarbeiter extends FullCalendarEventList {
     private int MitarbeiterID;
     private String arbeitszeiten;
 
+    public Mitarbeiter(){
+
+    }
 
     public Mitarbeiter(String name, String farbe) {
         super();
