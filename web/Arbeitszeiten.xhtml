@@ -70,9 +70,16 @@
 
 
     </b:row>
+    <b:row>
+        <b:column>
+            <b:panel look="primary" title=" neuer Mitarbeiter">
+                <p:commandButton title="speichern"></p:commandButton>
+            </b:panel>
+        </b:column>
+    </b:row>
 </b:container>
 <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
-    <h:form id="terminWidget">
+    <h:form id="arbeitszeitfenster">
         <p:panelGrid id="eventDetails">
             <b:selectOneMenu value="#{kalenderHelfer.helfer.ma}">
                 <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
@@ -98,8 +105,8 @@
             <p:commandButton action="#{kalenderHelfer.helfer.newTermin}" value="go for it" update="cal"
                              oncomplete="PF('eventDialog').hide();"/>
         </p:panelGrid>
-        <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
-                          actionListener="#{kalenderHelfer.helfer.myDate}">
+        <pe:remoteCommand id="arbeitszeitComand" name="dateSelect" process="@this" update="arbeitszeitfenster"
+                          actionListener="#{kalenderHelfer.helfer.myWorkDate}">
             <pe:methodSignature parameters="java.lang.String"/>
             <pe:methodParam name="dateEvent">
             </pe:methodParam>

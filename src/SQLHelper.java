@@ -224,12 +224,42 @@ public class SQLHelper{
     }
     public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
         con = getInstance();
+
         //TODO InsertSdtatement
     }
     public static List<FullCalendarEventBean> getAllEvents(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         // TODO innerjoin auf die tabeller auf Kunde, Mitarbeiter und Termine
-        return new ArrayList<>();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+                // Tabelle anzeigen //TODO noch eine InnerJoin machen
+                String sql =
+                        "SELECT * FROM mitarbeiter";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+                // Ergebnisstabelle durchforsten //TODO: die richtigen Zellen eintrage
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+                    temp.setStart(result.getDate("vorname"));
+                    temp.setEnd(result.getDate("kalenderfarbe"));
+                    temp.setColor(result.getString("MitarbeiterID"));
+
+                    temp.setTitle( title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager);
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        //TODO innerjoin auf die tabeller  und Arbeitszeiten um die Mitarbeiterfarbe herauszufinden
+        return fb;
     }
     public static List<FullCalendarEventBean> getAllArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();

@@ -508,6 +508,16 @@ public class KalenderHelfer {
         start= calendar.getTime();
         end=c2.getTime();
     }
+    public void myWorkDate(String date){
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
+        c2.add(Calendar.HOUR_OF_DAY,8);
+        c2.add(Calendar.MINUTE,30);
+        start= calendar.getTime();
+        end=c2.getTime();
+    }
 
     public void setStart(Date start) {
         this.start = start;
@@ -519,6 +529,13 @@ public class KalenderHelfer {
 
     public void handleDefaultDate(SelectEvent event) {
         defaultDate = (Date) event.getObject();
+    }
+
+    public void newWorker(){
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeitervorname");
+        String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiternachname");
+        String colour =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiterfarbe");
+        SQLHelper.newMitarbeiter(vorname, nachname, colour);
     }
 
 
