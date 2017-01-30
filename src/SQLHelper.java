@@ -112,12 +112,12 @@ public class SQLHelper{
         con= getInstance();
         try {
             String tableMitarbeiter="" +
-                    "CREATE TABLE IF NOT EXISTS mitarbeiter(" +
-                    "MitarbeiterID int NOT NULL AUTO_INCREMENT," +
-                    "vorname VARCHAR(45)," +
-                    "nachname VARCHAR(45)," +
-                    "kalenderfarbe VARCHAR(45)" +
-                    "PRIMARY KEY (MitarbeiterID)" +
+                    "CREATE TABLE IF NOT EXISTS mitarbeiter( " +
+                    "MitarbeiterID int NOT NULL AUTO_INCREMENT, " +
+                    "vorname VARCHAR(45), " +
+                    "nachname VARCHAR(45), " +
+                    "kalenderfarbe VARCHAR(45) " +
+                    "PRIMARY KEY (MitarbeiterID) " +
                     ")";
             con.createStatement().executeUpdate(tableMitarbeiter);
         } catch (SQLException e){
@@ -125,12 +125,12 @@ public class SQLHelper{
         }
         try {
             String tableKunden="" +
-                    "CREATE TABLE IF NOT EXISTS mitarbeiter(" +
-                    "KundenID int NOT NULL AUTO_INCREMENT," +
-                    "vorname VARCHAR(45)," +
-                    "nachname VARCHAR(45)," +
-                    "telefonnummer VARCHAR (45)" +
-                    "PRIMARY KEY (KundenID)" +
+                    "CREATE TABLE IF NOT EXISTS kunde( " +
+                    "KundenID int NOT NULL AUTO_INCREMENT, " +
+                    "vorname VARCHAR(45), " +
+                    "nachname VARCHAR(45), " +
+                    "telefonnummer VARCHAR (45) " +
+                    "PRIMARY KEY (KundenID) " +
                     ")";
             con.createStatement().executeUpdate(tableKunden);
         } catch (SQLException e){
@@ -138,18 +138,18 @@ public class SQLHelper{
         }
         try {
             String tableTermine="" +
-                    "CREATE TABLE IF NOT EXISTS termin(" +
-                    "TerminID int NOT NULL AUTO_INCREMENT," +
-                    "MitarbeiterMacherID int," +
-                    "KundenID," +
-                    "Terminstart DATETIME," +
-                    "Terminende DATETIME," +
-                    "Terminart VARCHAR (200)," +
-                    "Beschreibung TEXT," +
-                    "MitarbeiterSchreiberID int," +
-                    "PRIMARY KEY (TerminID)" +
-                    "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID)" +
-                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID)" +
+                    "CREATE TABLE IF NOT EXISTS termin( " +
+                    "TerminID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterMacherID int, " +
+                    "KundenID, " +
+                    "Terminstart DATETIME, " +
+                    "Terminende DATETIME, " +
+                    "Terminart VARCHAR (200), " +
+                    "Beschreibung TEXT, " +
+                    "MitarbeiterSchreiberID int, " +
+                    "PRIMARY KEY (TerminID) " +
+                    "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID) " +
+                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) " +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
         } catch (SQLException e){
@@ -157,12 +157,12 @@ public class SQLHelper{
         }
         try {
             String tableArbeitszeiten="" +
-                    "CREATE TABLE IF NOT EXISTS arbeitszeiten(" +
-                    "ArbeitszeitID int NOT NULL AUTO_INCREMENT," +
-                    "MitarbeiterID int," +
-                    "Schichtbeginn DATETIME," +
-                    "Schichtende DATETIME," +
-                    "PRIMARY KEY (ArbeitszeitID)," +
+                    "CREATE TABLE IF NOT EXISTS arbeitszeiten( " +
+                    "ArbeitszeitID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterID int, " +
+                    "Schichtbeginn DATETIME, " +
+                    "Schichtende DATETIME, " +
+                    "PRIMARY KEY (ArbeitszeitID), " +
                     "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableArbeitszeiten);
@@ -214,22 +214,58 @@ public class SQLHelper{
                 e.printStackTrace();
             }
         }
-    //TODO insert statement
+
     }
     public static List<Kunde> kunden(){
-        //TODO: Kunden finden
+
         con = getInstance();
         List<Kunde> kunden= new ArrayList<Kunde>();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql =
+                        "SELECT * FROM Kunde";
+                ResultSet ergebnis = query.executeQuery(sql);
+                String title;
+
+                while (ergebnis.next()) {
+                    Kunde temp = new Kunde();
+                    temp.setKundeID(ergebnis.getInt("KundenID"));
+                    temp.setVorname(ergebnis.getString("vorname"));
+                    temp.setNachname(ergebnis.getString("nachname"));
+                    temp.setTelefonnummer(ergebnis.getString("telefonnummer"));
+                    kunden.add(temp);
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return kunden;
     }
-    public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end ){
+    public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end , int eintrager){
         con = getInstance();
+        if(con != null) {
 
-        //TODO InsertSdtatement
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO termin(MitarbeiterMacherID, KundenID, Beschreibung, Terminart, Terminstart, Terminende, MitarbeiterSchreiberID) VALUES(" +
+                                "'"+MitarbeiterID+"','"+KundenID+"','"+Beschreibung+"','"+Terminart+"','"+start+"','"+end+"','"+eintrager+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+
     }
     public static List<FullCalendarEventBean> getAllEvents(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
-        // TODO innerjoin auf die tabeller auf Kunde, Mitarbeiter und Termine
+
         List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
 
         if(con != null) {
@@ -238,19 +274,30 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
 
-                // Tabelle anzeigen //TODO noch eine InnerJoin machen
+
                 String sql =
-                        "SELECT * FROM mitarbeiter";
+                        "SELECT termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, kunde.Beschreibung, M2.vorname AS eintrager " +
+                                "FROM termin " +
+                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = mitarbeiter.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = mitarbeiter.MitarbeiterID " +
+                                "INNER JOIN kunde ON termin.KundenID = kunde.KundenID " +
+                                "WHERE termin.MitarbeiterMacherID = '"+mitarbeiter+"'";
                 ResultSet result = query.executeQuery(sql);
                 String title;
-                // Ergebnisstabelle durchforsten //TODO: die richtigen Zellen eintrage
+
                 while (result.next()) {
                     FullCalendarEventBean temp = new FullCalendarEventBean();
-                    temp.setStart(result.getDate("vorname"));
-                    temp.setEnd(result.getDate("kalenderfarbe"));
-                    temp.setColor(result.getString("MitarbeiterID"));
-
-                    temp.setTitle( title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager);
+                    temp.setStart(result.getDate("Terminstart"));
+                    temp.setEnd(result.getDate("Terminende"));
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    String terminart= result.getString("Terminart");
+                    String vorname=result.getString("vorname");
+                    String nachname =result.getString("nachname");
+                    String tele=result.getString("telefonnummer");
+                    String beschreibung = result.getString("Beschreibung");
+                    String eintrager=result.getString("eintrager");
+                    title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
+                    temp.setTitle(title);
                     fb.add(temp);
 
                 }
@@ -258,7 +305,7 @@ public class SQLHelper{
                 e.printStackTrace();
             }
         }
-        //TODO innerjoin auf die tabeller  und Arbeitszeiten um die Mitarbeiterfarbe herauszufinden
+
         return fb;
     }
     public static List<FullCalendarEventBean> getAllArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
@@ -270,18 +317,21 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
 
-                // Tabelle anzeigen //TODO noch eine InnerJoin machen
+
                 String sql =
-                        "SELECT * FROM mitarbeiter";
+                        "SELECT * FROM arbeitszeiten " +
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE arbeitszeiten.MitarbeiterID = '"+mitarbeiter+"'";
                 ResultSet result = query.executeQuery(sql);
 
-                // Ergebnisstabelle durchforsten //TODO: die richtigen Zellen eintrage
+
                 while (result.next()) {
                     FullCalendarEventBean temp = new FullCalendarEventBean();
-                    temp.setStart(result.getDate("vorname"));
-                    temp.setEnd(result.getDate("kalenderfarbe"));
-                    temp.setColor(result.getString("MitarbeiterID"));
+                    temp.setStart(result.getDate("Schichtbeginn"));
+                    temp.setEnd(result.getDate("Schichtende"));
+                    temp.setColor(result.getString("kalenderfarbe"));
                     temp.setTitle("Arbeiteszeit");
+                    temp.setRendering("background");
                     fb.add(temp);
 
                 }
@@ -289,7 +339,7 @@ public class SQLHelper{
                 e.printStackTrace();
             }
         }
-        //TODO innerjoin auf die tabeller  und Arbeitszeiten um die Mitarbeiterfarbe herauszufinden
+
         return fb;
     }
     public static void newArbeitszeit(int mitarbeiterID, Date schichtbeginn, Date schichtende){

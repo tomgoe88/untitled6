@@ -30,7 +30,7 @@ public class KalenderHelfer {
     private String test;
     private String theDefaultDate;
     private int kundenID;
-
+    private  int sEintrager;
     private Date defaultDate;
 
     private Date changeDate;
@@ -98,6 +98,14 @@ public class KalenderHelfer {
         this.eignetrageneBeschreibung=terminspilt[4];
         this.eingetragenEintraeger=terminspilt[5];
         this.text= texten;
+    }
+
+    public int getsEintrager() {
+        return sEintrager;
+    }
+
+    public void setsEintrager(int sEintrager) {
+        this.sEintrager = sEintrager;
     }
 
     public String getEignetrageneBeschreibung() {
@@ -462,9 +470,15 @@ public class KalenderHelfer {
                 SQLHelper.neuerKunde(vorname,nachname,tele);
             }
         }
+
+        for(Mitarbeiter m2:this.mitarbeiter){
+            if(eintrager.equalsIgnoreCase(m2.getName())){
+                sEintrager=m2.getMitarbeiterID();
+            }
+        }
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
-                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start,end);
+                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start,end, sEintrager);
        /*         this.calendarBean= new FullCalendarEventBean(title, start);
                 calendarBean.setEnd(end);
                 calendarBean.setColor(m.getFarbe());
