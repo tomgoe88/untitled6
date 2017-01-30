@@ -77,36 +77,7 @@ public class SQLHelper{
         List<Termine> termine= new ArrayList<Termine>();
         return termine ;
     }
-    //Gebe Tabelle in die Konsole aus
-    public static void printNameList(){
-        con = getInstance();
 
-        if(con != null){
-            // Abfrage-Statement erzeugen.
-            Statement query;
-            try {
-                query = con.createStatement();
-
-                // Tabelle anzeigen
-                String sql =
-                        "SELECT kundeid, vorname, nachname, email FROM kunde";
-                ResultSet result = query.executeQuery(sql);
-
-                // Ergebnisstabelle durchforsten
-                while (result.next()) {
-                    String kundeid = result.getString("kundeid");
-                    String vorname = result.getString("vorname");
-                    String nachname = result.getString("nachname");
-                    String email = result.getString("email");
-                    String info = kundeid + ", " + vorname + ", " + nachname + ", " + email;
-
-                    System.out.println(info);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public static void createTables(){
         con= getInstance();
@@ -170,7 +141,7 @@ public class SQLHelper{
             e.getErrorCode();
         }
     }
-    //TODO: hier müssen noch weiter Methoden aufgeschrieben werden
+
     public static List<Mitarbeiter> getMitarbeiterListe(){
         con = getInstance();
         List<Mitarbeiter> m= new ArrayList<Mitarbeiter>();
