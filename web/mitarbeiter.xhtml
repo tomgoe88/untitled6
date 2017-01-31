@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+
+
+</h:head>
+<body>
+<h:form>
+    <b:navBar>
+        <b:navbarLinks>
+            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
+            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
+        </b:navbarLinks>
+    </b:navBar>
+</h:form>
+<h:form>
+<b:container fluid="true">
+    <b:row>
+        <b:column>
+            <b:dataTable value="#{kalenderHelfer.helfer.mitarbeiter}" var="mitarbeiter">
+                <b:dataTableColumn label="Mitarbeiternummer">
+                    <h:outputText value="#{mitarbeiter.mitarbeiterID}"/>
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Name">
+                    <h:outputText value="#{mitarbeiter.name}"/>
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Name">
+                    <h:outputText value="Farbe" style="background-color: \##{mitarbeiter.farbe}"/>
+                </b:dataTableColumn>
+            </b:dataTable>
+        </b:column>
+    </b:row>
+    <b:row>
+        <b:column>
+            <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('mitarbeiter').show()"/>
+        </b:column>
+    </b:row>
+</b:container>
+</h:form>
+<p:dialog widgetVar="mitarbeiter" header="Event Details" showEffect="clip" hideEffect="clip">
+    <h:form id="arbeitszeitfenster">
+        <b:panelGrid columns="2">
+            <h:outputLabel for="mvor" value="Voranme "/>
+            <b:inputText id="mvor" name="mitarbeitervorname"/>
+            <h:outputLabel for="mnach" value="Nachname "/>
+            <b:inputText id="mnach" name="mitarbeiternachname"/>
+            <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
+            <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" />
+        </b:panelGrid>
+        <p:commandButton value="Speichern" actionListener="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide()"/>
+    </h:form>
+</p:dialog>
+</body>
+</html>

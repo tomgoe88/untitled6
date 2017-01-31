@@ -159,7 +159,7 @@ public class SQLHelper{
                 // Ergebnisstabelle durchforsten
                 while (result.next()) {
                     Mitarbeiter temp=new Mitarbeiter();
-                    temp.setName(result.getString("vorname"));
+                    temp.setName(result.getString("vorname")+" "+result.getString("nachname"));
                     temp.setFarbe(result.getString("kalenderfarbe"));
                     temp.setMitarbeiterID(result.getInt("MitarbeiterID"));
                     m.add(temp);
@@ -315,16 +315,59 @@ public class SQLHelper{
     }
     public static void newArbeitszeit(int mitarbeiterID, Date schichtbeginn, Date schichtende){
         con = getInstance();
-        //TODO Anwesenheitstabelle befüllen
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO arbeitszeiten(MitarbeiterID, Schichtbeginn, Schichtende) VALUES(" +
+                                "'"+mitarbeiterID+"','"+schichtbeginn+"','"+schichtende+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
     public static void neuerKunde (String vorname, String nachname,String telefonnummer ){
         con = getInstance();
-        //TODO InsertSdtatement
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO kunde(vorname, nachname, telefonnummer) VALUES(" +
+                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
     public static int getMaxKundenID(){
         //TODO: mit Operator Max die Maxnummer der tabelle heruasfinden
         con = getInstance();
         int max=0;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT MAX(KundenID) AS maxID FROM kunde";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    max = result.getInt("maxID");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return max;
     }
 

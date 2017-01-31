@@ -85,8 +85,6 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public String getTem() {
-        //TODO: hier wird alles über die Datenbank bezogen und dann befüllt
-        //TODO: die liste wir hier mit allen Events, also auch den arbeitszeiten befüllt
         this.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
         this.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         tem= this.toJson();

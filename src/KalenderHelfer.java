@@ -449,17 +449,13 @@ public class KalenderHelfer {
     //bei click auf neuer Termin
     public void newTermin(){
         calendarBean=null;
-//TODO: hier müssen die Angaben direkt in der Datenbank landen
-        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname"); //TODO: der Vorname und Nachnname, Tele wird in der Tabelle Kunde gespeichert
+
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung"); //TODO Beschreibung landet im Termin
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-        for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getName().equalsIgnoreCase(getMa())){
-                tempColor=m.getFarbe();
-            }
-        } //TODO hinzufügen in di einzelnen Objekte passiert dann beim Aurfu des Kalenders, dies wird dann aus der SQLbank gezogen
+
 
         for(Kunde k: SQLHelper.kunden()){
             if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
@@ -492,6 +488,13 @@ public class KalenderHelfer {
             }
         }
 
+    }
+    public void newWorktime(){
+        for ( Mitarbeiter m: this.mitarbeiter){
+            if(m.getName().equalsIgnoreCase(getMa())){
+                SQLHelper.newArbeitszeit(m.getMitarbeiterID(),start,end);
+            }
+        }
     }
 
     public String getTest() {
@@ -545,11 +548,18 @@ public class KalenderHelfer {
         defaultDate = (Date) event.getObject();
     }
 
+    public String getTempColor() {
+        return tempColor;
+    }
+
+    public void setTempColor(String tempColor) {
+        this.tempColor = tempColor;
+    }
+
     public void newWorker(){
         String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeitervorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiternachname");
-        String colour =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiterfarbe");
-        SQLHelper.newMitarbeiter(vorname, nachname, colour);
+        SQLHelper.newMitarbeiter(vorname, nachname, tempColor);
     }
 
 
