@@ -69,12 +69,8 @@ public class KalenderHelfer {
      * Creates a new instance of KalenderHelfer
      */
     public KalenderHelfer() {
-        mitarbeiter= new ArrayList<Mitarbeiter>();
-        Mitarbeiter m= new Mitarbeiter("Otto","orange");
-        mitarbeiter.add(m);
-        mitarbeiter.add(new Mitarbeiter("Hannes", "grey"));
-        mitarbeiter.add(new Mitarbeiter("Walter","green"));
-        mitarbeiter.add(new Mitarbeiter("Gregor", "blue"));
+        mitarbeiter = new ArrayList<Mitarbeiter>();
+        mitarbeiter.addAll(SQLHelper.getMitarbeiterListe());
     }
 
 
@@ -300,11 +296,11 @@ public class KalenderHelfer {
         //hier muss eine Select-Abfrage für die Mitarbeiter an diesem Tag gemacht werden
 
 
-        return SQLHelper.getMitarbeiterListe();
+        return mitarbeiter;
     }
 
     public void setMitarbeiter(List<Mitarbeiter> mitarbeiter) {
-        this.mitarbeiter = mitarbeiter;
+        this.mitarbeiter = SQLHelper.getMitarbeiterListe();
     }
 
 
