@@ -124,7 +124,7 @@ public class SQLHelper{
                     "CREATE TABLE IF NOT EXISTS termin( " +
                     "TerminID int NOT NULL AUTO_INCREMENT, " +
                     "MitarbeiterMacherID int, " +
-                    "KundenID, " +
+                    "KundenID INT , " +
                     "Terminstart DATETIME, " +
                     "Terminende DATETIME, " +
                     "Terminart VARCHAR (200), " +
@@ -132,6 +132,7 @@ public class SQLHelper{
                     "MitarbeiterSchreiberID int, " +
                     "PRIMARY KEY (TerminID), " +
                     "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
+                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID), " +
                     "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) " +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
@@ -276,10 +277,10 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, kunde.Beschreibung, M2.vorname AS eintrager " +
+                        "SELECT termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
                                 "FROM termin " +
-                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = mitarbeiter.MitarbeiterID " +
-                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = mitarbeiter.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
                                 "INNER JOIN kunde ON termin.KundenID = kunde.KundenID " +
                                 "WHERE termin.MitarbeiterMacherID = '"+mitarbeiter+"'";
                 ResultSet result = query.executeQuery(sql);
@@ -302,7 +303,7 @@ public class SQLHelper{
 
                 }
             } catch (SQLException e) {
-                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
@@ -338,7 +339,7 @@ public class SQLHelper{
 
                 }
             } catch (SQLException e) {
-                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

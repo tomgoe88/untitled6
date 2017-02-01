@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
-
-
 </h:head>
 <body>
 <h:form>
@@ -29,7 +27,7 @@
         </b:navbarLinks>
     </b:navBar>
 </h:form>
-<h:form>
+<h:form id="cal">
 <b:container fluid="true">
     <b:row>
         <b:column>
@@ -46,15 +44,15 @@
             </b:dataTable>
         </b:column>
     </b:row>
-    <b:row>
-        <b:column>
-            <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('mitarbeiter').show()"/>
-        </b:column>
-    </b:row>
+
 </b:container>
+
+    <p:panelGrid columns="1">
+        <p:commandButton value="Neuer Mitarbeiter" type="button" onclick="PF('testen').show();"></p:commandButton>
+    </p:panelGrid>
 </h:form>
-<p:dialog widgetVar="mitarbeiter" header="Event Details" showEffect="clip" hideEffect="clip">
-    <h:form id="arbeitszeitfenster">
+<p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
+    <h:form id="deng">
         <b:panelGrid columns="2">
             <h:outputLabel for="mvor" value="Voranme "/>
             <b:inputText id="mvor" name="mitarbeitervorname"/>
@@ -63,7 +61,7 @@
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" />
         </b:panelGrid>
-        <p:commandButton value="Speichern" actionListener="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide()"/>
+        <p:commandButton value="Speichern" actionListener="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide();"/>
     </h:form>
 </p:dialog>
 </body>

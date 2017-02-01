@@ -29,6 +29,7 @@
         </b:navbarLinks>
     </b:navBar>
 </h:form>
+<h:form id="cal">
 <b:container fluid="true">
     <b:row>
         <b:column>
@@ -38,7 +39,7 @@
                                 locale="de"
                                 pattern="dd.MM.yyyy"
                     >
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal terminWidget"/>
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal arbeitszeitfenster"/>
                     </p:calendar>
                 </h:form>
             </b:panel>
@@ -78,6 +79,7 @@
         </b:column>
     </b:row>
 </b:container>
+</h:form>
 <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
     <h:form id="arbeitszeitfenster">
         <p:panelGrid id="eventDetails">
@@ -114,5 +116,6 @@
         <script type="text/javascript" src="selectdate.js"></script>
     </h:form>
 </p:dialog>
+
 </body>
 </html>
