@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.sql.DriverManager;
 
 
 /**
@@ -22,6 +23,11 @@ import java.util.Date;
 @SessionScoped
 public class SQLHelper{
     private static Connection con = null;
+    String driver = "com.mysql.jdbc.Driver";
+    String url = "jdbc:mysql://localhost/demodb";
+    String user = "root";
+    String passwd = "times-88";
+
     private static String dbHost = "localhost"; // Hostname
     private static String dbPort = "3306";      // Port -- Standard: 3306
     private String dbName = "Terminplaner";   // Datenbankname
@@ -32,12 +38,14 @@ public class SQLHelper{
 
     private SQLHelper(){
         try {
-            Class.forName("com.mysql.jdbc.Driver"); // Datenbanktreiber für JDBC Schnittstellen laden.
+            //Class.forName("com.mysql.jdbc.Driver"); // Datenbanktreiber für JDBC Schnittstellen laden.
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, user, passwd);
 
             // Verbindung zur JDBC-Datenbank herstellen.
-            con = DriverManager.getConnection("jdbc:mysql://"+dbHost+":"+ dbPort+"/"+"user="+dbUser+"&"+"password="+dbPass);
+           // con = DriverManager.getConnection("jdbc:mysql://"+dbHost+":"+ dbPort+"/"+"?user="+dbUser+"&"+"?password="+dbPass);//+"&"+"password="+dbPass
             PreparedStatement stmt = con.prepareStatement(sql);
-
+            createTables(con);
                 stmt.execute();
         } catch (ClassNotFoundException e) {
             System.out.println("Treiber nicht gefunden");
@@ -79,20 +87,22 @@ public class SQLHelper{
     }
 
 
-    public static void createTables(){
-        con= getInstance();
+    public static void createTables(Connection con){
+       // con= getInstance();
         try {
             String tableMitarbeiter="" +
                     "CREATE TABLE IF NOT EXISTS mitarbeiter( " +
                     "MitarbeiterID int NOT NULL AUTO_INCREMENT, " +
                     "vorname VARCHAR(45), " +
                     "nachname VARCHAR(45), " +
-                    "kalenderfarbe VARCHAR(45) " +
-                    "PRIMARY KEY (MitarbeiterID) " +
+                    "kalenderfarbe VARCHAR(45), " +
+                    "PRIMARY KEY (MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableMitarbeiter);
         } catch (SQLException e){
-            e.getErrorCode();
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
             String tableKunden="" +
@@ -100,12 +110,14 @@ public class SQLHelper{
                     "KundenID int NOT NULL AUTO_INCREMENT, " +
                     "vorname VARCHAR(45), " +
                     "nachname VARCHAR(45), " +
-                    "telefonnummer VARCHAR (45) " +
-                    "PRIMARY KEY (KundenID) " +
+                    "telefonnummer VARCHAR (45), " +
+                    "PRIMARY KEY (KundenID)" +
                     ")";
             con.createStatement().executeUpdate(tableKunden);
         } catch (SQLException e){
-            e.getErrorCode();
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
             String tableTermine="" +
@@ -118,13 +130,15 @@ public class SQLHelper{
                     "Terminart VARCHAR (200), " +
                     "Beschreibung TEXT, " +
                     "MitarbeiterSchreiberID int, " +
-                    "PRIMARY KEY (TerminID) " +
-                    "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID) " +
+                    "PRIMARY KEY (TerminID), " +
+                    "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
                     "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) " +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
         } catch (SQLException e){
-            e.getErrorCode();
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
             String tableArbeitszeiten="" +
@@ -138,7 +152,9 @@ public class SQLHelper{
                     ")";
             con.createStatement().executeUpdate(tableArbeitszeiten);
         } catch (SQLException e){
-            e.getErrorCode();
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
     }
 
@@ -169,6 +185,13 @@ public class SQLHelper{
                 e.printStackTrace();
             }
         }
+        if(m.size()==0){
+            Mitarbeiter neu= new Mitarbeiter();
+            neu.setMitarbeiterID(0);
+            neu.setName("-");
+            neu.setFarbe("red");
+            m.add(neu);
+        }
         return m;
     }
     public static void newMitarbeiter(String vorname, String nachname, String farbe){
@@ -182,7 +205,9 @@ public class SQLHelper{
                         "INSERT INTO mitarbeiter(vorname,nachname,kalenderfarbe) VALUES('"+vorname+"','"+nachname+"','"+farbe+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
 
@@ -211,7 +236,9 @@ public class SQLHelper{
 
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
         return kunden;
@@ -228,7 +255,9 @@ public class SQLHelper{
                                 "'"+MitarbeiterID+"','"+KundenID+"','"+Beschreibung+"','"+Terminart+"','"+start+"','"+end+"','"+eintrager+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
 
@@ -273,7 +302,9 @@ public class SQLHelper{
 
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
 
@@ -307,7 +338,9 @@ public class SQLHelper{
 
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
 
@@ -325,7 +358,9 @@ public class SQLHelper{
                                 "'"+mitarbeiterID+"','"+schichtbeginn+"','"+schichtende+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
     }
@@ -341,7 +376,9 @@ public class SQLHelper{
                                 "'"+vorname+"','"+nachname+"','"+telefonnummer+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
     }
@@ -365,7 +402,9 @@ public class SQLHelper{
                     max = result.getInt("maxID");
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
         }
         return max;

@@ -12,6 +12,7 @@
       <root url="jar://I:/Java_Bibiliotheken/primefaces-extensions-3.0.0.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/gson-2.2.2.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/common-lang3.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
