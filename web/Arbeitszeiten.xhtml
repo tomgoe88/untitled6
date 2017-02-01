@@ -74,7 +74,7 @@
     <b:row>
         <b:column>
             <b:panel look="primary" title=" neuer Mitarbeiter">
-                <p:commandButton title="speichern"></p:commandButton>
+                <p:commandButton title="speichern" onclick="PF('testen').show();"></p:commandButton>
             </b:panel>
         </b:column>
     </b:row>
@@ -116,6 +116,18 @@
         <script type="text/javascript" src="selectdate.js"></script>
     </h:form>
 </p:dialog>
-
+<p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
+    <h:form id="deng">
+        <b:panelGrid columns="2">
+            <h:outputLabel for="mvor" value="Voranme "/>
+            <b:inputText id="mvor" name="mitarbeitervorname"/>
+            <h:outputLabel for="mnach" value="Nachname "/>
+            <b:inputText id="mnach" name="mitarbeiternachname"/>
+            <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
+            <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" mode="inline" />
+        </b:panelGrid>
+        <p:commandButton value="Speichern" action="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide();"/>
+    </h:form>
+</p:dialog>
 </body>
 </html>
