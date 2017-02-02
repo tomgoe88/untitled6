@@ -452,16 +452,28 @@ public class KalenderHelfer {
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
 
-
-        for(Kunde k: SQLHelper.kunden()){
-            if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
-                kundenID=k.getKundeID();
+        if(SQLHelper.kunden().size()!=0){
+            for(Kunde k: SQLHelper.kunden()){
+                if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
+                    kundenID=k.getKundeID();
+                    break;
+                }
+                else{
+                    kundenID=SQLHelper.getMaxKundenID()+1;
+                    SQLHelper.neuerKunde(vorname,nachname,tele);
+                    break;
+                }
             }
-            else{
-                kundenID=SQLHelper.getMaxKundenID()+1;
-                SQLHelper.neuerKunde(vorname,nachname,tele);
+        }else {
+            SQLHelper.neuerKunde(vorname,nachname,tele);
+            for(Kunde k: SQLHelper.kunden()) {
+                if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())) {
+                    kundenID = k.getKundeID();
+                    break;
+                }
             }
         }
+
 
         for(Mitarbeiter m2:this.mitarbeiter){
             if(eintrager.equalsIgnoreCase(m2.getName())){
@@ -470,7 +482,7 @@ public class KalenderHelfer {
         }
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
-                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start,end, sEintrager);
+                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), sEintrager);
        /*         this.calendarBean= new FullCalendarEventBean(title, start);
                 calendarBean.setEnd(end);
                 calendarBean.setColor(m.getFarbe());
@@ -486,9 +498,12 @@ public class KalenderHelfer {
 
     }
     public void newWorktime(){
+        Date workstart;
+        Date workend;
+
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getName().equalsIgnoreCase(getMa())){
-                SQLHelper.newArbeitszeit(m.getMitarbeiterID(),start,end);
+                SQLHelper.newArbeitszeit(m.getMitarbeiterID(),start.toString(),end.toString());
             }
         }
     }

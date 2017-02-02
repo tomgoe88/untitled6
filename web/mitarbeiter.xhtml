@@ -31,33 +31,33 @@
 <b:container fluid="true">
     <b:row>
         <b:column>
-            <b:dataTable value="#{kalenderHelfer.helfer.mitarbeiter}" var="mitarbeiter">
-                <b:dataTableColumn label="Mitarbeiternummer">
-                    <h:outputText value="#{mitarbeiter.mitarbeiterID}"/>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Name">
-                    <h:outputText value="#{mitarbeiter.name}"/>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Name">
-                    <h:outputText value="Farbe" style="background-color: \##{mitarbeiter.farbe}"/>
-                </b:dataTableColumn>
-            </b:dataTable>
+            <p:dataTable value="#{kalenderHelfer.helfer.mitarbeiter}" var="arbeiter">
+                <p:column label="Mitarbeiternummer">
+                    <h:outputText value="#{arbeiter.mitarbeiterID}"/>
+                </p:column>
+                <p:column label="Name">
+                    <h:outputText value="#{arbeiter.name}"/>
+                </p:column>
+                <p:column label="Farbe">
+                    <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"/>
+                </p:column>
+            </p:dataTable>
         </b:column>
     </b:row>
-    <b:commandButton value="Neuer Mitarbeiter" onclick="PF('testen').show();"/>
+    <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();"/>
 </b:container>
 </h:form>
 <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
     <h:form id="deng">
-        <b:panelGrid columns="2">
+        <p:panelGrid columns="2">
             <h:outputLabel for="mvor" value="Voranme "/>
             <b:inputText id="mvor" name="mitarbeitervorname"/>
             <h:outputLabel for="mnach" value="Nachname "/>
             <b:inputText id="mnach" name="mitarbeiternachname"/>
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" mode="inline" />
-        </b:panelGrid>
-        <p:commandButton value="Speichern" action="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide();"/>
+        </p:panelGrid>
+        <p:commandButton update="cal" value="Speichern" action="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('dlg2').hide();"/>
     </h:form>
 </p:dialog>
 </body>

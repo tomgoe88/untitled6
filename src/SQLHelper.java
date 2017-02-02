@@ -9,10 +9,14 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.sql.DriverManager;
+import java.util.Locale;
 
 
 /**
@@ -125,8 +129,8 @@ public class SQLHelper{
                     "TerminID int NOT NULL AUTO_INCREMENT, " +
                     "MitarbeiterMacherID int, " +
                     "KundenID INT , " +
-                    "Terminstart DATETIME, " +
-                    "Terminende DATETIME, " +
+                    "Terminstart VARCHAR (200), " +
+                    "Terminende VARCHAR (200), " +
                     "Terminart VARCHAR (200), " +
                     "Beschreibung TEXT, " +
                     "MitarbeiterSchreiberID int, " +
@@ -146,8 +150,8 @@ public class SQLHelper{
                     "CREATE TABLE IF NOT EXISTS arbeitszeiten( " +
                     "ArbeitszeitID int NOT NULL AUTO_INCREMENT, " +
                     "MitarbeiterID int, " +
-                    "Schichtbeginn DATETIME, " +
-                    "Schichtende DATETIME, " +
+                    "Schichtbeginn VARCHAR (200), " +
+                    "Schichtende VARCHAR (200), " +
                     "PRIMARY KEY (ArbeitszeitID), " +
                     "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID)" +
                     ")";
@@ -244,7 +248,7 @@ public class SQLHelper{
         }
         return kunden;
     }
-    public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, Date start, Date end , int eintrager){
+    public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, String start, String end , int eintrager){
         con = getInstance();
         if(con != null) {
 
@@ -288,8 +292,20 @@ public class SQLHelper{
 
                 while (result.next()) {
                     FullCalendarEventBean temp = new FullCalendarEventBean();
-                    temp.setStart(result.getDate("Terminstart"));
-                    temp.setEnd(result.getDate("Terminende"));
+                    String terminstart=result.getString("Terminstart");
+                    String terminende=result.getString("Terminende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(terminstart);
+                        end=dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setStart(start);
+                    temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
                     String terminart= result.getString("Terminart");
                     String vorname=result.getString("vorname");
@@ -330,8 +346,21 @@ public class SQLHelper{
 
                 while (result.next()) {
                     FullCalendarEventBean temp = new FullCalendarEventBean();
-                    temp.setStart(result.getDate("Schichtbeginn"));
-                    temp.setEnd(result.getDate("Schichtende"));
+                    String schichtbeginn=result.getString("Schichtbeginn");
+                    String schichtende=result.getString("Schichtende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                         start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setStart(start);
+                    temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
                     temp.setTitle("Arbeiteszeit");
                     temp.setRendering("background");
@@ -347,7 +376,7 @@ public class SQLHelper{
 
         return fb;
     }
-    public static void newArbeitszeit(int mitarbeiterID, Date schichtbeginn, Date schichtende){
+    public static void newArbeitszeit(int mitarbeiterID, String schichtbeginn, String schichtende){
         con = getInstance();
         if(con != null) {
 

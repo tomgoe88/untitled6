@@ -53,7 +53,13 @@ public class Mitarbeiter extends FullCalendarEventList {
     public String getArbeitszeiten() {
         FullCalendarEventList fk= new FullCalendarEventList();
         fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
-        return fk.toJson();
+        if(fk.getList()!= null){
+            arbeitszeiten=fk.toJson();
+        } else{
+            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            arbeitszeiten=fk.toJson();
+        }
+        return arbeitszeiten;
     }
 
     public void setArbeitszeiten(String arbeitszeiten) {
@@ -87,7 +93,12 @@ public class Mitarbeiter extends FullCalendarEventList {
     public String getTem() {
         this.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
         this.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
-        tem= this.toJson();
+        if(this.getList()!=null){
+            tem= this.toJson();
+        }else{
+            this.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            tem=this.toJson();
+        }
         return tem;
     }
 

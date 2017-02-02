@@ -42,14 +42,16 @@ public class FullCalendarEventBean implements Serializable {
 
     protected String toJavascriptDate(Date date){
         StringBuilder buf = new StringBuilder("new Date(");
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        buf.append(cal.get(Calendar.YEAR)).append(",");
-        buf.append(cal.get(Calendar.MONTH)).append(",");
-        buf.append(cal.get(Calendar.DAY_OF_MONTH)).append(",");
-        buf.append(cal.get(Calendar.HOUR_OF_DAY)).append(",");
-        buf.append(cal.get(Calendar.MINUTE)).append(",");
-        buf.append(cal.get(Calendar.SECOND));
+        if(date!= null){
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            buf.append(cal.get(Calendar.YEAR)).append(",");
+            buf.append(cal.get(Calendar.MONTH)).append(",");
+            buf.append(cal.get(Calendar.DAY_OF_MONTH)).append(",");
+            buf.append(cal.get(Calendar.HOUR_OF_DAY)).append(",");
+            buf.append(cal.get(Calendar.MINUTE)).append(",");
+            buf.append(cal.get(Calendar.SECOND));
+        }
         buf.append(")");
         return buf.toString();
     }
@@ -77,7 +79,7 @@ public class FullCalendarEventBean implements Serializable {
             buf.append("durationEditable:").append(durationEditable).append(",");
         }
         if (color != null) {
-            buf.append("color:'").append(color).append("',");
+            buf.append("color:'#").append(color).append("',");
         }
         if (rendering != null) {
             buf.append("rendering:'").append(rendering).append("',");
