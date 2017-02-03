@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
 </h:head>
-<body>
+<h:body>
 <h:form>
     <b:navBar>
         <b:navbarLinks>
@@ -27,26 +27,30 @@
         </b:navbarLinks>
     </b:navBar>
 </h:form>
-<h:form id="cal">
+
 <b:container fluid="true">
+    <h:form id="mitburger">
     <b:row>
         <b:column>
-            <p:dataTable value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
+            <p:panelGrid columns="3">
+            <ui:repeat value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
                 <p:column label="Mitarbeiternummer">
                     <h:outputText value="#{arbeiter.mitarbeiterID}"/>
                 </p:column>
                 <p:column label="Name">
                     <h:outputText value="#{arbeiter.name}"/>
                 </p:column>
-                <p:column label="Farbe">
-                    <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"/>
+                <p:column label="Farbe" style="background-color: \##{arbeiter.farbe}">
+                    <h:outputText value="Farbe"></h:outputText>
                 </p:column>
-            </p:dataTable>
+            </ui:repeat>
+            </p:panelGrid>
         </b:column>
     </b:row>
     <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();"/>
+    </h:form>
 </b:container>
-</h:form>
+
 <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
     <h:form id="deng">
         <p:panelGrid columns="2">
@@ -56,9 +60,11 @@
             <b:inputText id="mnach" name="mitarbeiternachname"/>
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
+        <b/>
+            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern"  update="@form"  oncomplete="PF('dlg2').hide();"/>
         </p:panelGrid>
-        <p:commandButton update="cal" value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('dlg2').hide();"/>
+
     </h:form>
 </p:dialog>
-</body>
+</h:body>
 </html>

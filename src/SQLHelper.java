@@ -136,8 +136,8 @@ public class SQLHelper{
                     "MitarbeiterSchreiberID int, " +
                     "PRIMARY KEY (TerminID), " +
                     "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
-                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID), " +
-                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) " +
+                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID) ON DELETE CASCADE ON UPDATE CASCADE, " +
+                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE  " +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
         } catch (SQLException e){
@@ -153,7 +153,7 @@ public class SQLHelper{
                     "Schichtbeginn VARCHAR (200), " +
                     "Schichtende VARCHAR (200), " +
                     "PRIMARY KEY (ArbeitszeitID), " +
-                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID)" +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
                     ")";
             con.createStatement().executeUpdate(tableArbeitszeiten);
         } catch (SQLException e){
@@ -170,8 +170,8 @@ public class SQLHelper{
                     "Terminende VARCHAR (200), " +
                     "MitarbeiterSperrerID int, " +
                     "PRIMARY KEY (SperrID), " +
-                    "FOREIGN KEY (MitarbeiterGesperrtID) REFERENCES mitarbeiter(MitarbeiterID), " +
-                    "FOREIGN KEY (MitarbeiterSperrerID) REFERENCES mitarbeiter(MitarbeiterID) " +
+                    "FOREIGN KEY (MitarbeiterGesperrtID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE , " +
+                    "FOREIGN KEY (MitarbeiterSperrerID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
                     ")";
             con.createStatement().executeUpdate(tableSperrzeiten);
         } catch (SQLException e){

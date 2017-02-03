@@ -12,6 +12,8 @@ import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -22,7 +24,7 @@ import sun.security.jca.GetInstance;
  * @author Jutom
  */
 @ManagedBean
-@ApplicationScoped
+@ViewScoped
 public class KalenderHelfer {
     private int currentWeek;
     private String tempColor;
@@ -265,7 +267,7 @@ public class KalenderHelfer {
                 }
             }
         } else {
-            mitarbeit=getMitarbeiter().get(0);
+            mitarbeit=null;//getMitarbeiter().get(0);
         }
         return mitarbeit;
     }
@@ -490,12 +492,8 @@ public class KalenderHelfer {
     public void newWorktime(){
         Date workstart;
         Date workend;
+        SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
 
-        for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getMitarbeiterID()==getMa()){
-                SQLHelper.newArbeitszeit(m.getMitarbeiterID(),start.toString(),end.toString());
-            }
-        }
     }
 
     public String getTest() {
