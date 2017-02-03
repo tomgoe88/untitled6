@@ -487,6 +487,10 @@ public class KalenderHelfer {
             }
 
         }
+        vorname=null;
+        nachname=null;
+        tele=null;
+        beschreibung=null;
 
     }
     public void newWorktime(){

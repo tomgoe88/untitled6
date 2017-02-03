@@ -19,7 +19,7 @@
     <script type="text/javascript" src="de.js"></script>
 </h:head>
 <h:body>
-<h:form>
+<h:form  >
     <b:navBar>
         <b:navbarLinks>
             <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
@@ -29,22 +29,22 @@
 </h:form>
 
 <b:container fluid="true">
-    <h:form id="mitburger">
+    <h:form  id="mitburger" >
     <b:row>
         <b:column>
-            <p:panelGrid columns="3">
-            <ui:repeat value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
+
+            <p:dataTable value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
                 <p:column label="Mitarbeiternummer">
                     <h:outputText value="#{arbeiter.mitarbeiterID}"/>
                 </p:column>
                 <p:column label="Name">
                     <h:outputText value="#{arbeiter.name}"/>
                 </p:column>
-                <p:column label="Farbe" style="background-color: \##{arbeiter.farbe}">
-                    <h:outputText value="Farbe"></h:outputText>
+                <p:column label="Farbe" >
+                    <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"></h:outputText>
                 </p:column>
-            </ui:repeat>
-            </p:panelGrid>
+            </p:dataTable>
+
         </b:column>
     </b:row>
     <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();"/>
@@ -61,7 +61,9 @@
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
         <b/>
-            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern"  update="@form"  oncomplete="PF('dlg2').hide();"/>
+            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern"    oncomplete="PF('dlg2').hide();">
+                <p:ajax update="mitburger"/>
+            </p:commandButton>
         </p:panelGrid>
 
     </h:form>

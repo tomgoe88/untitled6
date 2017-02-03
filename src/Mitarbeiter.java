@@ -91,14 +91,15 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public String getTem() {
-        this.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
-        this.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
-        this.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
-        if(this.getList()!=null){
-            tem= this.toJson();
+        FullCalendarEventList fk= new FullCalendarEventList();
+        fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
+        fk.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
+        fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
+        if(fk.getList()!=null){
+            tem= fk.toJson();
         }else{
-            this.getList().addAll(new ArrayList<FullCalendarEventBean>());
-            tem=this.toJson();
+            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            tem=fk.toJson();
         }
         return tem;
     }
