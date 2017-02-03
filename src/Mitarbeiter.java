@@ -92,6 +92,7 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     public String getTem() {
         this.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
+        this.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
         this.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         if(this.getList()!=null){
             tem= this.toJson();

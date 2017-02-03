@@ -39,7 +39,7 @@
                                 locale="de"
                                 pattern="dd.MM.yyyy"
                                                     >
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleDateSelect}" update="cal terminWidget"/>
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget"/>
                     </p:calendar>
                 </h:form>
             </b:panel>
@@ -58,9 +58,9 @@
                             <b:row>
                                 <b:column>
                                     <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
-                                    <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.helfer.q}">
-                                        <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                                                       itemValue="#{mi.name}"/>
+                                    <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}">
+                                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
+                                                       itemValue="#{mi.mitarbeiterID}"/>
                                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="#{null}"/>
                                     </b:selectOneMenu>
                                 </b:column>
@@ -73,27 +73,27 @@
                                 <b:column>
                                     <b:fullCalendar lang="de"
                                                     defaultView="agendaDay"
-                                                    events="#{kalenderHelfer.helfer.mitarbeit.tem}"
+                                                    events="#{kalenderHelfer.mitarbeit.tem}"
                                                     eventClick="
                                                     function(calEvent, jsEvent, view) {
                                                     test(calEvent);
                                                     }"
-                                                    rendered="#{kalenderHelfer.helfer.mitarbeit!=null}"
+                                                    rendered="#{kalenderHelfer.mitarbeit!=null}"
                                                     dayClick="
                                                     function(date, jsEvent, view) {
                                                     selectDate(date);
                                                     PF('eventDialog').show();
 
                                                     }"
-                                                    defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
+                                                    defaultDate="#{kalenderHelfer.theDefaultDate}">
 
                                     </b:fullCalendar>
                                 </b:column>
                             </b:row>
-                            <b:row rendered="#{kalenderHelfer.helfer.mitarbeit==null}">
+                            <b:row rendered="#{kalenderHelfer.mitarbeit==null}">
                                 <b:column>
                                     <b:row>
-                                        <ui:repeat value="#{kalenderHelfer.helfer.mitarbeiter}"
+                                        <ui:repeat value="#{kalenderHelfer.mitarbeiter}"
                                                    var="mit">
                                             <b:column span="3"  >
                                                 <b:label text="#{mit.name}"/>
@@ -115,7 +115,7 @@
                                                         function(calEvent, jsEvent, view) {
                                                         test(calEvent);
                                                         }"
-                                                        defaultDate="#{kalenderHelfer.helfer.theDefaultDate}">
+                                                        defaultDate="#{kalenderHelfer.theDefaultDate}">
                                                 </b:fullCalendar>
                                             </b:column>
                                         </ui:repeat>
@@ -148,11 +148,8 @@
 <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
     <h:form id="terminWidget">
         <p:panelGrid id="eventDetails">
-            <b:selectOneMenu value="#{kalenderHelfer.helfer.ma}">
-                <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                               itemValue="#{mi.name}"/>
-            </b:selectOneMenu>
-            <b:selectOneMenu value="#{kalenderHelfer.helfer.terminart}">
+            <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
+            <b:selectOneMenu value="#{kalenderHelfer.terminart}">
                 <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
                 <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
                 <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
@@ -173,14 +170,14 @@
             <h:outputText id="beschreibung" value="Beschreibung: "/>
             <b:inputText name="beschreibung" for="beschreibung"/>
             <b/>
-            <b:selectOneMenu value="#{kalenderHelfer.helfer.eintrager}">
-                <f:selectItems value="#{kalenderHelfer.helfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
-                               itemValue="#{mitarb.name}"/>
+            <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
+                <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
+                               itemValue="#{mitarb.mitarbeiterID}"/>
             </b:selectOneMenu>
             <b/>
             <h:outputText id="Start" value="Terminbeginn: "/>
-            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" value="#{kalenderHelfer.helfer.start}" >
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleStartDate}"/>
+            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" value="#{kalenderHelfer.start}" >
+                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
             </p:calendar>
             <b/>
             <h:outputText id="End" value="Terminende: "/>
@@ -190,15 +187,15 @@
                     for="End"
                     pattern="MM/dd/yyyy HH:mm"
                     locale="de"
-                    value="#{kalenderHelfer.helfer.end}" >
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.helfer.handleEndDate}"/>
+                    value="#{kalenderHelfer.end}" >
+                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
             </p:calendar>
             <b/>
-            <p:commandButton action="#{kalenderHelfer.helfer.newTermin}" value="go for it" update="cal"
+            <p:commandButton action="#{kalenderHelfer.newTermin}" value="go for it" update="cal"
                              oncomplete="PF('eventDialog').hide();"/>
         </p:panelGrid>
         <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
-                          actionListener="#{kalenderHelfer.helfer.myDate}">
+                          actionListener="#{kalenderHelfer.myDate}">
             <pe:methodSignature parameters="java.lang.String"/>
             <pe:methodParam name="dateEvent">
             </pe:methodParam>
@@ -215,7 +212,7 @@
                     <h:outputLabel for="tec" value="Terminart: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="tec" id="tec" value="#{kalenderHelfer.helfer.eingetragenTerminart}"/>
+                    <h:outputText name="tec" id="tec" value="#{kalenderHelfer.eingetragenTerminart}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -223,7 +220,7 @@
                     <h:outputLabel for="tecvor" value="Vorname: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.helfer.eingetragenVorname}"/>
+                    <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.eingetragenVorname}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -231,7 +228,7 @@
                     <h:outputLabel for="tecnach" value="Nachname: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.helfer.eingetragenNachname}"/>
+                    <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.eingetragenNachname}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -239,7 +236,7 @@
                     <h:outputLabel for="tectel" value="Telefonnummer: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="telefon" id="tectel" value="#{kalenderHelfer.helfer.eingetrageneTelefonnummer}"/>
+                    <h:outputText name="telefon" id="tectel" value="#{kalenderHelfer.eingetrageneTelefonnummer}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -247,7 +244,7 @@
                     <h:outputLabel for="tecbe" value="Beschreibung: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.helfer.eignetrageneBeschreibung}"/>
+                    <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.eignetrageneBeschreibung}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -255,11 +252,11 @@
                     <h:outputLabel for="tecein" value="Eingetragen von: "/>
                 </b:column>
                 <b:column span="2">
-                    <h:outputText name="eintragerer" id="tecein" value="#{kalenderHelfer.helfer.eingetragenEintraeger}"/>
+                    <h:outputText name="eintragerer" id="tecein" value="#{kalenderHelfer.eingetragenEintraeger}"/>
                 </b:column>
             </b:row>
             <pe:remoteCommand id="myCommand" name="sendEvent" process="@this" update="ding"
-                              actionListener="#{kalenderHelfer.helfer.myEvent}">
+                              actionListener="#{kalenderHelfer.myEvent}">
                 <pe:methodSignature parameters="java.lang.String"/>
                 <pe:methodParam name="event">
                 </pe:methodParam>

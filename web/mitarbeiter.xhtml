@@ -31,7 +31,7 @@
 <b:container fluid="true">
     <b:row>
         <b:column>
-            <p:dataTable value="#{kalenderHelfer.helfer.mitarbeiter}" var="arbeiter">
+            <p:dataTable value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
                 <p:column label="Mitarbeiternummer">
                     <h:outputText value="#{arbeiter.mitarbeiterID}"/>
                 </p:column>
@@ -55,9 +55,9 @@
             <h:outputLabel for="mnach" value="Nachname "/>
             <b:inputText id="mnach" name="mitarbeiternachname"/>
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
-            <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" mode="inline" />
+            <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
         </p:panelGrid>
-        <p:commandButton update="cal" value="Speichern" action="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('dlg2').hide();"/>
+        <p:commandButton update="cal" value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('dlg2').hide();"/>
     </h:form>
 </p:dialog>
 </body>

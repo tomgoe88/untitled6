@@ -40,15 +40,15 @@ public class KalenderHelfer {
     private List<Mitarbeiter> mitarbeiter;
     private Date chooseDate;
     private FullCalendarEventBean calendarBean;
-    private String ma;
-    private String q;
+    private int ma;
+    private int q;
     private Mitarbeiter mitarbeit;
     private Date start;
     private Date end;
     private static KalenderHelfer instance= new KalenderHelfer();
     private KalenderHelfer helfer;
     private String terminart;
-    private String eintrager;
+    private int eintrager;
     private String text;
     private String eingetragenVorname;
     private String eingetragenTerminart;
@@ -189,11 +189,11 @@ public class KalenderHelfer {
         this.terminart = terminart;
     }
 
-    public String getEintrager() {
+    public int getEintrager() {
         return eintrager;
     }
 
-    public void setEintrager(String eintrager) {
+    public void setEintrager(int eintrager) {
         this.eintrager = eintrager;
     }
 
@@ -205,11 +205,11 @@ public class KalenderHelfer {
         KalenderHelfer.instance = instance;
     }
 
-    public String getMa() {
+    public int getMa() {
         return ma;
     }
 
-    public void setMa(String ma) {
+    public void setMa(int ma) {
         this.ma = ma;
     }
 
@@ -252,9 +252,10 @@ public class KalenderHelfer {
     }
 
     public Mitarbeiter getMitarbeit() {
-        if(q != null){
+        if(q != 0){
             for(Mitarbeiter m: getMitarbeiter()){
-                if(m.getName().equalsIgnoreCase(q)){
+              //  if(m.getName().equalsIgnoreCase(q)){
+                if(m.getMitarbeiterID()==q){
                     mitarbeit= m;
                     break;
                 }
@@ -284,11 +285,11 @@ public class KalenderHelfer {
         this.mitarbeit = mitarbeit;
     }
 
-    public String getQ() {
+    public int getQ() {
         return q;
     }
 
-    public void setQ(String q) {
+    public void setQ(int q) {
         this.q = q;
     }
 
@@ -474,26 +475,15 @@ public class KalenderHelfer {
             }
         }
 
+        SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
 
-        for(Mitarbeiter m2:this.mitarbeiter){
-            if(eintrager.equalsIgnoreCase(m2.getName())){
-                sEintrager=m2.getMitarbeiterID();
-            }
-        }
+
+
         for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getName().equalsIgnoreCase(getMa())){
-                SQLHelper.neuerTermin(m.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), sEintrager);
-       /*         this.calendarBean= new FullCalendarEventBean(title, start);
-                calendarBean.setEnd(end);
-                calendarBean.setColor(m.getFarbe());
-                m.getList().add(calendarBean);
-            } else {
-                FullCalendarEventBean kb= new FullCalendarEventBean("In dieser Zeit liegt ein Termin bei "+getMa(),start);
-                kb.setEnd(end);
-                kb.setColor(tempColor);
-                //kb.setRendering("background");
-                m.getList().add(kb);*/
+            if(m.getMitarbeiterID()!=mitarbeit.getMitarbeiterID()){
+                SQLHelper.newSperrzeit(m.getMitarbeiterID(),start.toString(),end.toString(),mitarbeit.getMitarbeiterID());
             }
+
         }
 
     }
@@ -502,7 +492,7 @@ public class KalenderHelfer {
         Date workend;
 
         for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getName().equalsIgnoreCase(getMa())){
+            if(m.getMitarbeiterID()==getMa()){
                 SQLHelper.newArbeitszeit(m.getMitarbeiterID(),start.toString(),end.toString());
             }
         }
@@ -522,7 +512,7 @@ public class KalenderHelfer {
     //beim Speicher des Termins
     public void addTermin(){
         for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getName().equalsIgnoreCase(getMa())){
+            if(m.getMitarbeiterID()==getMa()){
                 m.getCalendarList().getList().add(calendarBean);
             }
         }

@@ -161,6 +161,24 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+        try {
+            String tableSperrzeiten="" +
+                    "CREATE TABLE IF NOT EXISTS sperrzeiten( " +
+                    "SperrID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterGesperrtID int, " +
+                    "Terminstart VARCHAR (200), " +
+                    "Terminende VARCHAR (200), " +
+                    "MitarbeiterSperrerID int, " +
+                    "PRIMARY KEY (SperrID), " +
+                    "FOREIGN KEY (MitarbeiterGesperrtID) REFERENCES mitarbeiter(MitarbeiterID), " +
+                    "FOREIGN KEY (MitarbeiterSperrerID) REFERENCES mitarbeiter(MitarbeiterID) " +
+                    ")";
+            con.createStatement().executeUpdate(tableSperrzeiten);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
     }
 
     public static List<Mitarbeiter> getMitarbeiterListe(){
@@ -438,6 +456,77 @@ public class SQLHelper{
             }
         }
         return max;
+    }
+    public static List<FullCalendarEventBean> getSperrZeiten(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT sperrzeiten.Terminstart, sperrzeiten.Terminende, M2.kalenderfarbe, M2.vorname AS sperrer " +
+                                "FROM sperrzeiten " +
+                                "INNER JOIN mitarbeiter M1 ON sperrzeiten.MitarbeiterGesperrtID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON sperrzeiten.MitarbeiterSperrerID = M2.MitarbeiterID " +
+                                "WHERE sperrzeiten.MitarbeiterGesperrtID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+                    String terminstart=result.getString("Terminstart");
+                    String terminende=result.getString("Terminende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(terminstart);
+                        end=dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    String vornameSperrer= result.getString("sperrer");
+                    title= "Hier hat "+vornameSperrer+" bereits einen Termin";
+                    temp.setTitle(title);
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET Sperrzeit //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static void newSperrzeit(int mitarbeiterGesperrtID, String sperrbeginn, String sperrende, int mitarbeiterSperrerID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO sperrzeiten(MitarbeiterGesperrtID, Terminstart, Terminende, MitarbeiterSperrerID) VALUES(" +
+                                "'"+mitarbeiterGesperrtID+"','"+sperrbeginn+"','"+sperrende+"','"+mitarbeiterSperrerID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
     }
 
 }
