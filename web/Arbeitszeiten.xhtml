@@ -24,6 +24,7 @@
 <h:form>
     <b:navBar>
         <b:navbarLinks>
+            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
             <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
             <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
         </b:navbarLinks>
@@ -31,9 +32,9 @@
 </h:form>
 <h:form id="cal">
 <b:container fluid="true">
-    <b:row>
+    <b:row rendered="false">
         <b:column>
-            <b:panel look="primary" collapsible="true" title="Day">
+            <b:panel look="success" collapsible="true" title="Day">
                 <h:form>
                     <p:calendar showTodayButton="true" showOn="button"
                                 locale="de"
@@ -63,12 +64,8 @@
             <b:column span="12">
                 <b:label text="#{mit.name}"/>
                 <b:fullCalendar
-
-                        calendarHeader
-                                ="{left:'title'}"
-                        weekMode="false"
                         lang="de"
-                        defaultView="agendaDay"
+                        defaultView="agendaWeek"
                         events="#{kalenderHelfer.mitarbeit.tem}"
 
                         dayClick="
@@ -104,7 +101,7 @@
             </p:calendar>
             <b/>
             <p:commandButton action="#{kalenderHelfer.newWorktime}" value="go for it" update="cal"
-                             oncomplete="PF('eventDialog').hide();"/>
+                             oncomplete="PF('arbeitszeitWidget').hide();"/>
         </p:panelGrid>
         <pe:remoteCommand id="arbeitszeitComand" name="dateSelect" process="@this" update="arbeitszeitfenster"
                           actionListener="#{kalenderHelfer.myWorkDate}">

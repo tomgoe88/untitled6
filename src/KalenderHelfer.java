@@ -34,7 +34,7 @@ public class KalenderHelfer {
     private int kundenID;
     private  int sEintrager;
     private Date defaultDate;
-
+    private int terminID;
     private Date changeDate;
     private Date currentDate;
     private String changedDate;
@@ -71,8 +71,7 @@ public class KalenderHelfer {
      * Creates a new instance of KalenderHelfer
      */
     public KalenderHelfer() {
-        mitarbeiter = new ArrayList<Mitarbeiter>();
-        mitarbeiter.addAll(SQLHelper.getMitarbeiterListe());
+
     }
 
 
@@ -95,7 +94,19 @@ public class KalenderHelfer {
         this.eingetrageneTelefonnummer=terminspilt[3];
         this.eignetrageneBeschreibung=terminspilt[4];
         this.eingetragenEintraeger=terminspilt[5];
+        this.terminID= Integer.parseInt(terminspilt[6]);
         this.text= texten;
+    }
+    public void deleteAppointment(){
+        SQLHelper.deleteTermin(terminID);
+    }
+
+    public int getTerminID() {
+        return terminID;
+    }
+
+    public void setTerminID(int terminID) {
+        this.terminID = terminID;
     }
 
     public int getsEintrager() {
@@ -297,8 +308,8 @@ public class KalenderHelfer {
 
     public List<Mitarbeiter> getMitarbeiter() {
         //hier muss eine Select-Abfrage für die Mitarbeiter an diesem Tag gemacht werden
-
-
+        mitarbeiter = new ArrayList<Mitarbeiter>();
+        mitarbeiter.addAll(SQLHelper.getMitarbeiterListe());
         return mitarbeiter;
     }
 

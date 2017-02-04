@@ -299,7 +299,7 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
+                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
                                 "FROM termin " +
                                 "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
                                 "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
@@ -331,7 +331,8 @@ public class SQLHelper{
                     String tele=result.getString("telefonnummer");
                     String beschreibung = result.getString("Beschreibung");
                     String eintrager=result.getString("eintrager");
-                    title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
+                    int terminID=result.getInt("TerminID");
+                    title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager+" ; "+terminID;
                     temp.setTitle(title);
                     fb.add(temp);
 
@@ -520,6 +521,23 @@ public class SQLHelper{
                 String sql=
                         "INSERT INTO sperrzeiten(MitarbeiterGesperrtID, Terminstart, Terminende, MitarbeiterSperrerID) VALUES(" +
                                 "'"+mitarbeiterGesperrtID+"','"+sperrbeginn+"','"+sperrende+"','"+mitarbeiterSperrerID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void deleteTermin(int terminID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM termin WHERE TerminID='"+terminID+"'";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());

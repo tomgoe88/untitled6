@@ -25,15 +25,16 @@
 <h:form>
     <b:navBar>
         <b:navbarLinks>
+            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
             <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
             <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
         </b:navbarLinks>
     </b:navBar>
 </h:form>
 <b:container fluid="true">
-    <b:row>
+    <b:row rendered="false">
         <b:column>
-            <b:panel look="primary" collapsible="true" title="Day">
+            <b:panel look="success" collapsible="true" title="Day">
                 <h:form>
                     <p:calendar showTodayButton="true" showOn="button"
                                 locale="de"
@@ -48,13 +49,13 @@
 
     <b:row>
         <b:column span="12">
-            <b:panel look="primary" collapsible="true" title="Kalender">
+            <b:panel look="success" collapsible="true" title="Kalender">
 
 
                 <b:container fluid="true">
                     <!-- so sie die Möglichkeit aus, alle Mitarbeiter mit den Terminen nebeneinander anzuzeige anzugezeigen-->
                     <h:form id="cal">
-                        <b:panel look="Primary">
+                        <b:panel look="success">
                             <b:row>
                                 <b:column>
                                     <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
@@ -72,7 +73,7 @@
                             <b:row>
                                 <b:column>
                                     <b:fullCalendar lang="de"
-                                                    defaultView="agendaDay"
+                                                    defaultView="agendaWeek"
                                                     events="#{kalenderHelfer.mitarbeit.tem}"
                                                     eventClick="
                                                     function(calEvent, jsEvent, view) {
@@ -85,12 +86,14 @@
                                                     PF('eventDialog').show();
 
                                                     }"
-                                                    defaultDate="#{kalenderHelfer.theDefaultDate}">
+                                                    defaultDate="#{kalenderHelfer.theDefaultDate}"
+                                                    businessHours="{start:'6:00', end:'23:30', dow: [1, 2]}"
+                                                    scrollTime="06:00:00">
 
                                     </b:fullCalendar>
                                 </b:column>
                             </b:row>
-                            <b:row rendered="#{kalenderHelfer.mitarbeit==null}">
+                            <b:row rendered="false">
                                 <b:column>
                                     <b:row>
                                         <ui:repeat value="#{kalenderHelfer.mitarbeiter}"
@@ -132,12 +135,12 @@
     </b:row>
     <b:row>
         <b:column span="6">
-            <b:panel look="primary" collapsible="true" title="Memos">
+            <b:panel look="success" collapsible="true" title="Memos">
 
             </b:panel>
         </b:column>
         <b:column span="6">
-            <b:panel look="primary" collapsible="true" title="Aufgaben">
+            <b:panel look="success" collapsible="true" title="Aufgaben">
 
             </b:panel>
         </b:column>
@@ -262,6 +265,7 @@
                 </pe:methodParam>
             </pe:remoteCommand>
             <script type="text/javascript" src="form.js"></script>
+            <b:commandButton value="Löschen" action="#{kalenderHelfer.deleteAppointment}" update="cal" oncomplete="PF('testVar').hide();"/>
         </b:container>
     </h:form>
 </p:dialog>
