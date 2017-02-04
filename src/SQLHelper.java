@@ -169,8 +169,10 @@ public class SQLHelper{
                     "Terminstart VARCHAR (200), " +
                     "Terminende VARCHAR (200), " +
                     "MitarbeiterSperrerID int, " +
+                    "TerminID int, " +
                     "PRIMARY KEY (SperrID), " +
                     "FOREIGN KEY (MitarbeiterGesperrtID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE , " +
+                    "FOREIGN KEY (TerminID) REFERENCES termin(TerminID) ON DELETE CASCADE ON UPDATE CASCADE , " +
                     "FOREIGN KEY (MitarbeiterSperrerID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
                     ")";
             con.createStatement().executeUpdate(tableSperrzeiten);
@@ -458,6 +460,33 @@ public class SQLHelper{
         }
         return max;
     }
+    public static int getMaxTerminID(){
+        //TODO: mit Operator Max die Maxnummer der tabelle heruasfinden
+        con = getInstance();
+        int max=0;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT MAX(TerminID) AS maxID FROM termin";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    max = result.getInt("maxID");
+                }
+            } catch (SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return max;
+    }
     public static List<FullCalendarEventBean> getSperrZeiten(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
 
@@ -511,7 +540,7 @@ public class SQLHelper{
 
         return fb;
     }
-    public static void newSperrzeit(int mitarbeiterGesperrtID, String sperrbeginn, String sperrende, int mitarbeiterSperrerID){
+    public static void newSperrzeit(int mitarbeiterGesperrtID, String sperrbeginn, String sperrende, int mitarbeiterSperrerID, int terminid){
         con = getInstance();
         if(con != null) {
 
@@ -519,8 +548,8 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO sperrzeiten(MitarbeiterGesperrtID, Terminstart, Terminende, MitarbeiterSperrerID) VALUES(" +
-                                "'"+mitarbeiterGesperrtID+"','"+sperrbeginn+"','"+sperrende+"','"+mitarbeiterSperrerID+"')";
+                        "INSERT INTO sperrzeiten(MitarbeiterGesperrtID, Terminstart, Terminende, MitarbeiterSperrerID, TerminID) VALUES(" +
+                                "'"+mitarbeiterGesperrtID+"','"+sperrbeginn+"','"+sperrende+"','"+mitarbeiterSperrerID+"','"+terminid+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());

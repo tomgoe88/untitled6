@@ -465,7 +465,7 @@ public class KalenderHelfer {
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-
+        int terminidmax= SQLHelper.getMaxTerminID()+1;
         if(SQLHelper.kunden().size()!=0){
             for(Kunde k: SQLHelper.kunden()){
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
@@ -494,7 +494,7 @@ public class KalenderHelfer {
 
         for ( Mitarbeiter m: this.mitarbeiter){
             if(m.getMitarbeiterID()!=mitarbeit.getMitarbeiterID()){
-                SQLHelper.newSperrzeit(m.getMitarbeiterID(),start.toString(),end.toString(),mitarbeit.getMitarbeiterID());
+                SQLHelper.newSperrzeit(m.getMitarbeiterID(),start.toString(),end.toString(),mitarbeit.getMitarbeiterID(),terminidmax);
             }
 
         }
