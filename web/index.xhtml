@@ -141,7 +141,14 @@
                 </b:row>
                 <b:row >
                     <b:column span="6">
-
+                        <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
+                            <b:dataTableColumn>
+                                <h:outputText value="#{aufga.beschreibung}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <b:commandButton value="Erledigen" actionListener="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>
                     </b:column>
                     <b:column span="6">
 

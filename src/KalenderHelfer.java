@@ -64,6 +64,7 @@ public class KalenderHelfer {
     int day;
     int jetday;
     private GregorianCalendar kalender= new GregorianCalendar();
+    private int aufgabeId;
 
 
 
@@ -81,6 +82,14 @@ public class KalenderHelfer {
 
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public int getAufgabeId() {
+        return aufgabeId;
+    }
+
+    public void setAufgabeId(int aufgabeId) {
+        this.aufgabeId = aufgabeId;
     }
 
     public String getText() {
@@ -579,6 +588,14 @@ public class KalenderHelfer {
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
         aufgaben =SQLHelper.getAufgaben(defaultDate.toString());
         return aufgaben;
+    }
+    //TODO Methoden erstellen um aufgaben zu erledigen mit  public static void newAufgabe(int aufgabenID, int mitarbeiterID){ in der xHtml muss dann mit einem SelectItem der Mitarbeiter ausgesucht werden
+   public void aufgabeErledigen(int aufgabenid){
+        this.aufgabeId= aufgabenid;  //diese Methode kommt beim Klick in der tabelle, danahch wird ein Dialog geöffnet
+   }
+
+    public void aufgabeErledigt(){
+       // TODO  public static void newAufgabe(int aufgabenID, int mitarbeiterID){ in der xHtml muss dann mit einem SelectItem der
     }
 
 

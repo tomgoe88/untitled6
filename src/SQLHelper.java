@@ -196,6 +196,21 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableAufgaben="" +
+                    "CREATE TABLE IF NOT EXISTS aufgabenErledigt( " +
+                    "AufgabenErledigtID int NOT NULL AUTO_INCREMENT, " +
+                    "AufgabenID int, " +
+                    "MitarbeiterID int, " +
+                    "FOREIGN KEY (AufgabenID) REFERENCES aufgaben(AufgabenID) ON DELETE CASCADE ON UPDATE CASCADE , " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
+                    ")";
+            con.createStatement().executeUpdate(tableAufgaben);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableMemo="" +
                     "CREATE TABLE IF NOT EXISTS memo( " +
                     "MemoID int NOT NULL AUTO_INCREMENT, " +
@@ -620,6 +635,24 @@ public class SQLHelper{
         }
 
     }
+    public static void newAufgabe(int aufgabenID, int mitarbeiterID){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO aufgabenErledigt(AufgabenID, MitarbeiterID) VALUES('"+aufgabenID+"','"+mitarbeiterID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+    }
     public static void newMemo(String beschreibung){
         con = getInstance();
         if(con != null) {
@@ -667,10 +700,9 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-                    Boolean erledig= Boolean.parseBoolean(result.getString("Erledigt"));
+
                     aufgabe.setAufgabeID(result.getInt("AufgabenID"));
                     aufgabe.setBeschreibung(result.getString("Beschreibung"));
-                    aufgabe.setErledig(erledig);
                     aufgabe.setAufgabendatum(erledigung);
                     aufgaben.add(aufgabe);
 
