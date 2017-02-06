@@ -575,6 +575,11 @@ public class KalenderHelfer {
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiternachname");
         SQLHelper.newMitarbeiter(vorname, nachname, tempColor);
     }
+    public List<Aufgabe> getAufgaben(){
+        List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
+        aufgaben =SQLHelper.getAufgaben(defaultDate.toString());
+        return aufgaben;
+    }
 
 
 

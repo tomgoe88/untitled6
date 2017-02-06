@@ -181,6 +181,32 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+        try {
+            String tableAufgaben="" +
+                    "CREATE TABLE IF NOT EXISTS aufgaben( " +
+                    "AufgabenID int NOT NULL AUTO_INCREMENT, " +
+                    "Beschreibung TEXT, " +
+                    "Aufgabedatum VARCHAR (200), " +
+                    "Erledigt VARCHAR (45)" +
+                    ")";
+            con.createStatement().executeUpdate(tableAufgaben);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
+            String tableMemo="" +
+                    "CREATE TABLE IF NOT EXISTS memo( " +
+                    "MemoID int NOT NULL AUTO_INCREMENT, " +
+                    "Beschreibung TEXT " +
+                    ")";
+            con.createStatement().executeUpdate(tableMemo);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
     }
 
     public static List<Mitarbeiter> getMitarbeiterListe(){
@@ -367,6 +393,7 @@ public class SQLHelper{
 
                 while (result.next()) {
                     FullCalendarEventBean temp = new FullCalendarEventBean();
+
                     String schichtbeginn=result.getString("Schichtbeginn");
                     String schichtende=result.getString("Schichtende");
                     DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
@@ -575,5 +602,117 @@ public class SQLHelper{
             }
         }
     }
+    public static void newAufgabe(String beschreibung, String erledigungsDatum){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO aufgaben(Beschreibung, Aufgabedatum) VALUES('"+beschreibung+"','"+erledigungsDatum+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+    }
+    public static void newMemo(String beschreibung){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO memo(Beschreibung) VALUES('"+beschreibung+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+    }
+    public static List<Aufgabe> getAufgaben(String aufgabenDatum){
+        con= getInstance();
+        List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM aufgaben WHERE Aufgabendatum ='"+aufgabenDatum+"'";
+
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    Aufgabe aufgabe= new Aufgabe();
+                    String erledigt=result.getString("Aufgabedatum");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date erledigung=null;
+
+                    try {
+                        erledigung= dateFormat.parse(erledigt);
+
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    Boolean erledig= Boolean.parseBoolean(result.getString("Erledigt"));
+                    aufgabe.setAufgabeID(result.getInt("AufgabenID"));
+                    aufgabe.setBeschreibung(result.getString("Beschreibung"));
+                    aufgabe.setErledig(erledig);
+                    aufgabe.setAufgabendatum(erledigung);
+                    aufgaben.add(aufgabe);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET Sperrzeit //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return aufgaben;
+    }
+    public static List<Memo> getMemo(){
+        List<Memo> memos = new ArrayList<Memo>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM memo";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    Memo memo= new Memo();
+                    memo.setMemoID(result.getInt("MemoID"));
+                    memo.setBeschreibung(result.getString("Beschreibung"));
+                    memos.add(memo);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET Sperrzeit //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return memos;
+    }
+    //TODO Aufgabe updaten
+    public static void updateAufgabe(){}
 
 }

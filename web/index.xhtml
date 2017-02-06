@@ -23,7 +23,7 @@
 
 <body>
 <h:form>
-    <b:navBar>
+    <b:navBar >
         <b:navbarLinks>
             <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
             <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
@@ -32,20 +32,7 @@
     </b:navBar>
 </h:form>
 <b:container fluid="true">
-    <b:row rendered="false">
-        <b:column>
-            <b:panel look="success" collapsible="true" title="Day">
-                <h:form>
-                    <p:calendar showTodayButton="true" showOn="button"
-                                locale="de"
-                                pattern="dd.MM.yyyy"
-                                                    >
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget"/>
-                    </p:calendar>
-                </h:form>
-            </b:panel>
-        </b:column>
-    </b:row>
+
 
     <b:row>
         <b:column span="12">
@@ -88,7 +75,8 @@
                                                     }"
                                                     defaultDate="#{kalenderHelfer.theDefaultDate}"
                                                     businessHours="{start:'6:00', end:'23:30', dow: [1, 2]}"
-                                                    scrollTime="06:00:00">
+                                                    scrollTime="06:00:00"
+                                                    >
 
                                     </b:fullCalendar>
                                 </b:column>
@@ -118,7 +106,7 @@
                                                         function(calEvent, jsEvent, view) {
                                                         test(calEvent);
                                                         }"
-                                                        defaultDate="#{kalenderHelfer.theDefaultDate}">
+                                                       >
                                                 </b:fullCalendar>
                                             </b:column>
                                         </ui:repeat>
@@ -134,14 +122,32 @@
 
     </b:row>
     <b:row>
-        <b:column span="6">
-            <b:panel look="success" collapsible="true" title="Memos">
+        <b:column span="12">
+            <b:panel look="success" collapsible="true" title="Aufgaben und Memos">
+            <b:container fluid="true">
+                <b:row >
+                    <b:column>
 
-            </b:panel>
-        </b:column>
-        <b:column span="6">
-            <b:panel look="success" collapsible="true" title="Aufgaben">
+                            <h:form>
+                                <p:calendar showTodayButton="true" showOn="button"
+                                            locale="de"
+                                            pattern="dd.MM.yyyy"
+                                >
+                                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget"/>
+                                </p:calendar>
+                            </h:form>
 
+                    </b:column>
+                </b:row>
+                <b:row >
+                    <b:column span="6">
+
+                    </b:column>
+                    <b:column span="6">
+
+                    </b:column>
+                </b:row>
+            </b:container>
             </b:panel>
         </b:column>
     </b:row>
