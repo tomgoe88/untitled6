@@ -65,6 +65,7 @@ public class KalenderHelfer {
     int jetday;
     private GregorianCalendar kalender= new GregorianCalendar();
     private int aufgabeId;
+    private int aufgabenErledigerID;
 
 
 
@@ -586,16 +587,48 @@ public class KalenderHelfer {
     }
     public List<Aufgabe> getAufgaben(){
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
-        aufgaben =SQLHelper.getAufgaben(defaultDate.toString());
+        String date;
+        if(defaultDate!= null){
+            date= defaultDate.toString();
+        } else {
+            date= new Date().toString();
+        }
+        aufgaben =SQLHelper.getAufgaben(date);
+        if(aufgaben.size()==0){
+            Aufgabe temp= new Aufgabe();
+            temp.setBeschreibung("-");
+            aufgaben.add(temp);
+        }
         return aufgaben;
     }
+
+    public int getAufgabenErledigerID() {
+        return aufgabenErledigerID;
+    }
+
+    public void setAufgabenErledigerID(int aufgabenErledigerID) {
+        this.aufgabenErledigerID = aufgabenErledigerID;
+    }
+
     //TODO Methoden erstellen um aufgaben zu erledigen mit  public static void newAufgabe(int aufgabenID, int mitarbeiterID){ in der xHtml muss dann mit einem SelectItem der Mitarbeiter ausgesucht werden
    public void aufgabeErledigen(int aufgabenid){
         this.aufgabeId= aufgabenid;  //diese Methode kommt beim Klick in der tabelle, danahch wird ein Dialog geöffnet
    }
 
     public void aufgabeErledigt(){
-       // TODO  public static void newAufgabe(int aufgabenID, int mitarbeiterID){ in der xHtml muss dann mit einem SelectItem der
+       SQLHelper.updateAufgabe(aufgabeId);
+       SQLHelper.newAufgabeErledigt(aufgabeId,aufgabenErledigerID);
+
+    }
+    public void neueAufgabe(){
+        String aufgabena =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("aufgabenname");
+        String date;
+        if(defaultDate!= null){
+            date= defaultDate.toString();
+        } else {
+            date= new Date().toString();
+        }
+        SQLHelper.newAufgabe(aufgabena, date);
     }
 
 

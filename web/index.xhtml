@@ -125,35 +125,44 @@
         <b:column span="12">
             <b:panel look="success" collapsible="true" title="Aufgaben und Memos">
             <b:container fluid="true">
+                <h:form>
                 <b:row >
-                    <b:column>
 
-                            <h:form>
+                    <b:column span="4">
+
+
                                 <p:calendar showTodayButton="true" showOn="button"
                                             locale="de"
                                             pattern="dd.MM.yyyy"
                                 >
                                     <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget"/>
                                 </p:calendar>
-                            </h:form>
+
 
                     </b:column>
+                    <b:column span="1"/>
+                    <b:column span="4">
+
+                    </b:column>
+                    <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();"/>
                 </b:row>
                 <b:row >
                     <b:column span="6">
-                        <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
-                            <b:dataTableColumn>
+                        <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
+                            <p:column>
                                 <h:outputText value="#{aufga.beschreibung}"/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <b:commandButton value="Erledigen" actionListener="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"/>
-                            </b:dataTableColumn>
-                        </b:dataTable>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Erledigen" action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}" oncomplete="PF('AufgabeErledigt').show();"/>
+                            </p:column>
+                        </p:dataTable>
                     </b:column>
                     <b:column span="6">
 
                     </b:column>
+
                 </b:row>
+            </h:form>
             </b:container>
             </b:panel>
         </b:column>
@@ -280,6 +289,24 @@
             <script type="text/javascript" src="form.js"></script>
             <b:commandButton value="Löschen" action="#{kalenderHelfer.deleteAppointment}" update="cal" oncomplete="PF('testVar').hide();"/>
         </b:container>
+    </h:form>
+</p:dialog>
+<p:dialog id="aufgabenErledigtID" widgetVar="AufgabeErledigt" header="Erledigt" showEffect="clip" hideEffect="clip">
+    <h:form id="erledigungsForm">
+        <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
+            <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
+                           itemValue="#{erlediger.mitarbeiterID}"/>
+        </b:selectOneMenu>
+        <p:commandButton action="#{kalenderHelfer.aufgabeErledigt}" oncomplete="PF('AufgabeErledigt').hide();"/>
+    </h:form>
+</p:dialog>
+<p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
+    <h:form id="aufgabenForm">
+        <b:panelGrid columns="1">
+            <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
+            <b:inputText id="aufgabe" name="aufgabenname"/>
+            <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}" oncomplete="PF('NeueAufgabe').hide();"/>
+        </b:panelGrid>
     </h:form>
 </p:dialog>
 

@@ -187,26 +187,28 @@ public class SQLHelper{
                     "AufgabenID int NOT NULL AUTO_INCREMENT, " +
                     "Beschreibung TEXT, " +
                     "Aufgabedatum VARCHAR (200), " +
-                    "Erledigt VARCHAR (45)" +
+                    "Erledigt VARCHAR (45), " +
+                    "PRIMARY KEY (AufgabenID) " +
                     ")";
             con.createStatement().executeUpdate(tableAufgaben);
         } catch (SQLException e){
-            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("Aufgabem SQLException: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
-            String tableAufgaben="" +
+            String tableAufgabenErledigt="" +
                     "CREATE TABLE IF NOT EXISTS aufgabenErledigt( " +
                     "AufgabenErledigtID int NOT NULL AUTO_INCREMENT, " +
                     "AufgabenID int, " +
                     "MitarbeiterID int, " +
-                    "FOREIGN KEY (AufgabenID) REFERENCES aufgaben(AufgabenID) ON DELETE CASCADE ON UPDATE CASCADE , " +
+                    "PRIMARY KEY (AufgabenErledigtID), " +
+                    "FOREIGN KEY (AufgabenID) REFERENCES aufgaben(AufgabenID), " +
                     "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
                     ")";
-            con.createStatement().executeUpdate(tableAufgaben);
+            con.createStatement().executeUpdate(tableAufgabenErledigt);
         } catch (SQLException e){
-            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("Erledigt SQLException: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
@@ -214,11 +216,12 @@ public class SQLHelper{
             String tableMemo="" +
                     "CREATE TABLE IF NOT EXISTS memo( " +
                     "MemoID int NOT NULL AUTO_INCREMENT, " +
-                    "Beschreibung TEXT " +
+                    "Beschreibung TEXT, " +
+                    "PRIMARY KEY (MemoID) " +
                     ")";
             con.createStatement().executeUpdate(tableMemo);
         } catch (SQLException e){
-            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("Memo SQLException: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
@@ -625,7 +628,7 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO aufgaben(Beschreibung, Aufgabedatum) VALUES('"+beschreibung+"','"+erledigungsDatum+"')";
+                        "INSERT INTO aufgaben(Beschreibung, Aufgabedatum, Erledigt) VALUES('"+beschreibung+"','"+erledigungsDatum+"','false')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
@@ -635,7 +638,7 @@ public class SQLHelper{
         }
 
     }
-    public static void newAufgabe(int aufgabenID, int mitarbeiterID){
+    public static void newAufgabeErledigt(int aufgabenID, int mitarbeiterID){
         con = getInstance();
         if(con != null) {
             // Abfrage-Statement erzeugen.
@@ -682,7 +685,7 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT * FROM aufgaben WHERE Aufgabendatum ='"+aufgabenDatum+"'";
+                        "SELECT * FROM aufgaben WHERE Aufgabedatum ='"+aufgabenDatum+"' AND Erledigt = 'false'";
 
                 ResultSet result = query.executeQuery(sql);
                 String title;
@@ -693,14 +696,14 @@ public class SQLHelper{
                     DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                     //DateFormat dateFormat=DateFormat.getDateTimeInstance();
                     Date erledigung=null;
-
+                    Boolean isErledigt = Boolean.parseBoolean(result.getString("Erledigt"));
                     try {
                         erledigung= dateFormat.parse(erledigt);
 
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    aufgabe.setErledig(isErledigt);
                     aufgabe.setAufgabeID(result.getInt("AufgabenID"));
                     aufgabe.setBeschreibung(result.getString("Beschreibung"));
                     aufgabe.setAufgabendatum(erledigung);
@@ -744,7 +747,23 @@ public class SQLHelper{
         }
         return memos;
     }
-    //TODO Aufgabe updaten
-    public static void updateAufgabe(){}
+
+    public static void updateAufgabe(int aufgabenID){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update aufgaben SET Erledigt='true' WHERE AufgabenID='"+aufgabenID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
 
 }
