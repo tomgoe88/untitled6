@@ -8,6 +8,7 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Calendar;
 import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
@@ -15,6 +16,8 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
+import org.primefaces.component.calendar.*;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import sun.security.jca.GetInstance;
@@ -591,7 +594,13 @@ public class KalenderHelfer {
         if(defaultDate!= null){
             date= defaultDate.toString();
         } else {
-            date= new Date().toString();
+            Calendar c= Calendar.getInstance();
+            c.setTime(new Date());
+            c.set(Calendar.HOUR_OF_DAY, 1);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
+            date= c.getTime().toString();
         }
         aufgaben =SQLHelper.getAufgaben(date);
         if(aufgaben.size()==0){
@@ -626,7 +635,13 @@ public class KalenderHelfer {
         if(defaultDate!= null){
             date= defaultDate.toString();
         } else {
-            date= new Date().toString();
+            Calendar c= Calendar.getInstance();
+            c.setTime(new Date());
+            c.set(Calendar.HOUR_OF_DAY, 1);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
+            date= c.getTime().toString();
         }
         SQLHelper.newAufgabe(aufgabena, date);
     }
