@@ -77,6 +77,50 @@
                 </b:fullCalendar>
             </b:column>
     </b:row>
+    <b:row>
+        <b:column span="12">
+            <b:panel look="success" collapsible="true" title="Aufgaben">
+                <b:container fluid="true">
+                    <h:form id="aufgabenformer">
+                        <b:row >
+
+                            <b:column span="4">
+
+
+                                <p:calendar showTodayButton="true" showOn="button"
+                                            locale="de"
+                                            pattern="dd.MM.yyyy"
+                                >
+                                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget aufgabenformer"/>
+                                </p:calendar>
+
+
+                            </b:column>
+                            <b:column span="1"/>
+                            <b:column span="4">
+
+                            </b:column>
+                            <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();"/>
+                        </b:row>
+                        <b:row >
+                            <b:column span="6">
+                                <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
+                                    <p:column>
+                                        <h:outputText value="#{aufga.beschreibung}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </b:column>
+                            <b:column span="6">
+
+                            </b:column>
+
+                        </b:row>
+                    </h:form>
+                </b:container>
+            </b:panel>
+        </b:column>
+    </b:row>
 </b:container>
 </h:form>
 <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
@@ -123,6 +167,15 @@
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
         </b:panelGrid>
         <p:commandButton value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('mitarbeiter').hide();"/>
+    </h:form>
+</p:dialog>
+<p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
+    <h:form id="aufgabenForm">
+        <b:panelGrid columns="1">
+            <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
+            <b:inputText id="aufgabe" name="aufgabenname"/>
+            <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"  oncomplete="PF('NeueAufgabe').hide();"/>
+        </b:panelGrid>
     </h:form>
 </p:dialog>
 </body>

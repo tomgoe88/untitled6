@@ -144,7 +144,7 @@
                     <b:column span="4">
 
                     </b:column>
-                    <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();"/>
+
                 </b:row>
                 <b:row >
                     <b:column span="6">
@@ -300,15 +300,7 @@
         <p:commandButton action="#{kalenderHelfer.aufgabeErledigt}" update="aufgabenformer" oncomplete="PF('AufgabeErledigt').hide();"/>
     </h:form>
 </p:dialog>
-<p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
-    <h:form id="aufgabenForm">
-        <b:panelGrid columns="1">
-            <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
-            <b:inputText id="aufgabe" name="aufgabenname"/>
-            <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"  oncomplete="PF('NeueAufgabe').hide();"/>
-        </b:panelGrid>
-    </h:form>
-</p:dialog>
+
 
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </body>
