@@ -14,19 +14,17 @@
 <h:head>
     <title>Facelet Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
-
-
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
 </h:head>
 
 <body>
 <h:form>
-    <b:navBar >
-        <b:navbarLinks>
+    <b:navBar inverse="true" >
+        <b:navbarLinks  >
             <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
             <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
             <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
@@ -55,7 +53,7 @@
                                     </b:selectOneMenu>
                                 </b:column>
                                 <b:column>
-                                    <p:commandButton value="go for it" update="cal"/>
+                                    <p:commandButton value="go for it" update="cal" styleClass="btn"/>
                                     <b/>
                                 </b:column>
                             </b:row>
@@ -219,7 +217,7 @@
             </p:calendar>
             <b/>
             <p:commandButton action="#{kalenderHelfer.newTermin}" value="go for it" update="cal"
-                             oncomplete="PF('eventDialog').hide();"/>
+                             oncomplete="PF('eventDialog').hide();" styleClass="btn"/>
         </p:panelGrid>
         <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
                           actionListener="#{kalenderHelfer.myDate}">
@@ -299,7 +297,7 @@
             <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
                            itemValue="#{erlediger.mitarbeiterID}"/>
         </b:selectOneMenu>
-        <p:commandButton action="#{kalenderHelfer.aufgabeErledigt}" update="aufgabenformer" oncomplete="PF('AufgabeErledigt').hide();"/>
+        <p:commandButton action="#{kalenderHelfer.aufgabeErledigt}" update="aufgabenformer" oncomplete="PF('AufgabeErledigt').hide();" styleClass="btn"/>
     </h:form>
 </p:dialog>
 

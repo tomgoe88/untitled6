@@ -48,7 +48,7 @@
 
         </b:column>
     </b:row>
-    <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();"/>
+    <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();" styleClass="btn"/>
     </h:form>
 </b:container>
 
@@ -62,7 +62,7 @@
             <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
             <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
         <b/>
-            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg2').hide();">
+            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg2').hide();" styleClass="btn">
             </p:commandButton>
         </p:panelGrid>
 
