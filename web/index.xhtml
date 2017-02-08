@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="theme.css"/>
-    <link rel="stylesheet" href="css/bootstrap-grid.min.css"/>
     <script type="text/javascript" src="de.js"></script>
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
 
@@ -26,13 +25,13 @@
 
 <body>
 <h:form>
-    <p:menubar>
-        <p:menuitem value="Terminplaner" url="/index.xhtml"/>
-        <p:submenu label="Administration">
-            <p:menuitem value="Mitarbeiter" url="/mitarbeiter.xhtml"/>
-            <p:menuitem value="Arbeitszeiten" url="/Arbeitszeiten.xhtml"/>
-        </p:submenu>
-    </p:menubar>
+    <b:navBar >
+        <b:navbarLinks>
+            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
+            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
+            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
+        </b:navbarLinks>
+    </b:navBar>
 </h:form>
 <b:container fluid="true">
 

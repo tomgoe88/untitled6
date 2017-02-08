@@ -20,13 +20,13 @@
 </h:head>
 <h:body>
 <h:form  >
-    <p:menubar>
-        <p:menuitem value="Terminplaner" url="/index.xhtml"/>
-        <p:submenu label="Administration">
-            <p:menuitem value="Mitarbeiter" url="/mitarbeiter.xhtml"/>
-            <p:menuitem value="Arbeitszeiten" url="/Arbeitszeiten.xhtml"/>
-        </p:submenu>
-    </p:menubar>
+    <b:navBar >
+        <b:navbarLinks>
+            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
+            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
+            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
+        </b:navbarLinks>
+    </b:navBar>
 </h:form>
 
 <b:container fluid="true">
