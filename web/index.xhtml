@@ -15,21 +15,24 @@
     <title>Facelet Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css"/>
     <script type="text/javascript" src="de.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
 
 
 </h:head>
 
 <body>
 <h:form>
-    <b:navBar >
-        <b:navbarLinks>
-            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
-            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
-            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
-        </b:navbarLinks>
-    </b:navBar>
+    <p:menubar>
+        <p:menuitem value="Terminplaner" url="/index.xhtml"/>
+        <p:submenu label="Administration">
+            <p:menuitem value="Mitarbeiter" url="/mitarbeiter.xhtml"/>
+            <p:menuitem value="Arbeitszeiten" url="/Arbeitszeiten.xhtml"/>
+        </p:submenu>
+    </p:menubar>
 </h:form>
 <b:container fluid="true">
 
@@ -134,7 +137,7 @@
                                 <p:calendar showTodayButton="true" showOn="button"
                                             locale="de"
                                             pattern="dd.MM.yyyy"
-                                >
+                                            styleClass="embed-responsive-item">
                                     <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal terminWidget aufgabenformer"/>
                                 </p:calendar>
 
@@ -147,13 +150,13 @@
 
                 </b:row>
                 <b:row >
-                    <b:column span="6">
-                        <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
+                    <b:column span="6" >
+                        <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga" styleClass="table-responsive">
                             <p:column>
                                 <h:outputText value="#{aufga.beschreibung}"/>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="Erledigen" action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}" oncomplete="PF('AufgabeErledigt').show();"/>
+                                <p:commandButton value="Erledigen" action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}" oncomplete="PF('AufgabeErledigt').show();" styleClass="btn"/>
                             </p:column>
                         </p:dataTable>
                     </b:column>
@@ -170,7 +173,7 @@
 </b:container>
 
 
-<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip" >
     <h:form id="terminWidget">
         <p:panelGrid id="eventDetails">
             <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
