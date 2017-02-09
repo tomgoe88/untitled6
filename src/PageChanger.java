@@ -8,7 +8,7 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 public class PageChanger {
     private String page;
-    private String ifMobile ="true";
+    private String ifMobile;
     private String pageIndex;
     private String pageMitarbeiter;
     private String pageArbeitszeiten;
@@ -29,9 +29,14 @@ public class PageChanger {
     }
 
     public String getPageArbeitszeiten(){
-        if(ifMobile.equalsIgnoreCase("true")|| ifMobile==null){
-            page="ArbeitszeitenMobile";
-        } else {
+        if(ifMobile!=null){
+            if(ifMobile.equalsIgnoreCase("true")|| ifMobile==null){
+                page="indexMobile";
+            } else {
+                page="index";
+            }
+        }
+        if(page==null){
             page="Arbeitszeiten";
         }
         return "/"+page+".xhtml";
@@ -44,9 +49,15 @@ public class PageChanger {
 
 
         public String getPageIndex(){
+        if(ifMobile!=null){
             if(ifMobile.equalsIgnoreCase("true")|| ifMobile==null){
                 page="indexMobile";
             } else {
+                page="index";
+            }
+        }
+
+            if(page==null){
                 page="index";
             }
             return "/"+page+".xhtml";

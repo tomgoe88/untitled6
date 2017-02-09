@@ -25,16 +25,18 @@
 <h:body>
     <ui:composition>
     <h:form  id="bar">
-        <p:menubar>
-            <p:menuitem value="Terminplaner" onclick="testMobile();"  url="#{pageChanger.pageIndex}" />
+        <b:navBar>
+            <b:navbarLinks>
+            <b:navLink value="Terminplaner" oncomplete="testMobile();" href="#{pageChanger.pageIndex}" />
 
-            <p:submenu id="sub" label="Administration" style="float:right">
-                <p:menuitem value="Arbeitszeiten" onclick="testMobile();" url="#{pageChanger.pageArbeitszeiten}" />
-                <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
-                <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}" />
-                <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}"/>
-            </p:submenu>
-        </p:menubar>
+            <b:dropMenu  value="Administration" >
+                <b:navLink value="Arbeitszeiten" oncomplete="testMobile();" href="#{pageChanger.pageArbeitszeiten}" />
+                <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
+                <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
+                <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
+            </b:dropMenu>
+            </b:navbarLinks>
+        </b:navBar>
         <pe:remoteCommand id="mobile" name="checkPhone" process="@this" update="bar"
                           actionListener="#{pageChanger.checkMobile}">
             <pe:methodSignature parameters="java.lang.String"/>
