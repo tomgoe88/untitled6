@@ -48,6 +48,6 @@
     </context-param>
     <context-param>
         <param-name>BootsFaces_USETHEME</param-name>
-        <param-value>bootstrap</param-value>
+        <param-value>true</param-value>
     </context-param>
 </web-app>

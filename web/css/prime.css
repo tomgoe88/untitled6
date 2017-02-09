@@ -1,0 +1,23 @@
+body{
+    height: 100%;
+}
+
+
+.ui-menubar,.ui-menu-child,.ui-menu {
+    height: 100px !important;
+    background: #99CC00 !important;
+
+}
+ul li.ui-menuitem-active>a{
+    background-image: none !important;
+    background-color:red !important;
+}
+
+li ul li.ui-menuitem-active>a{
+    background-image: none !important;
+    background-color:green !important;
+}
+.ui-menuitem {
+    background: #99CC00 !important;
+}
+

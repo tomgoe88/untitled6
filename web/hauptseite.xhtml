@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+</h:head>
+<h:body>
+    <ui:composition>
+    <h:form  id="bar">
+        <p:menubar>
+            <p:menuitem value="Terminplaner" onclick="testMobile();"  url="#{pageChanger.pageIndex}" />
+
+            <p:submenu id="sub" label="Administration" style="float:right">
+                <p:menuitem value="Arbeitszeiten" onclick="testMobile();" url="#{pageChanger.pageArbeitszeiten}" />
+                <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
+                <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}" />
+                <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}"/>
+            </p:submenu>
+        </p:menubar>
+        <pe:remoteCommand id="mobile" name="checkPhone" process="@this" update="bar"
+                          actionListener="#{pageChanger.checkMobile}">
+            <pe:methodSignature parameters="java.lang.String"/>
+            <pe:methodParam name="dateEvent">
+            </pe:methodParam>
+        </pe:remoteCommand>
+
+    </h:form>
+    </ui:composition>
+    <h:form id="includeBody">
+
+    </h:form>
+
+
+</h:body>
+</html>

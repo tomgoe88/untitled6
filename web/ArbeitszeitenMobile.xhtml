@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+</h:head>
+<body>
+<ui:insert name="header">
+    <ui:include src="/hauptseite.xhtml"/>
+</ui:insert>
+
+<ui:composition>
+    <h:form id="cal">
+        <b:container fluid="true">
+            <b:row rendered="false">
+                <b:column>
+                    <b:panel look="success" collapsible="true" title="Day">
+                        <h:form>
+                            <p:calendar showTodayButton="true" showOn="button"
+                                        locale="de"
+                                        pattern="dd.MM.yyyy"
+                            >
+                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal arbeitszeitfenster"/>
+                            </p:calendar>
+                        </h:form>
+                    </b:panel>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column>
+                    <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
+                    <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
+                                       itemValue="#{mi.mitarbeiterID}"/>
+                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                    </b:selectOneMenu>
+                </b:column>
+                <b:column>
+                    <p:commandButton value="go for it" update="cal" styleClass="btn"/>
+                    <b/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column span="12">
+                    <b:label text="#{mit.name}"/>
+                    <b:fullCalendar
+                            lang="de"
+                            defaultView="agendaDay"
+                            events="#{kalenderHelfer.mitarbeit.tem}"
+
+                            dayClick="
+                                                        function(date, jsEvent, view) {
+                                                        selectDate(date);
+                                                        PF('arbeitszeitWidget').show();
+                                                        }"
+                            defaultDate="#{kalenderHelfer.theDefaultDate}">
+                    </b:fullCalendar>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column span="12">
+                    <b:panel look="success" collapsible="true" title="Aufgaben">
+                        <b:container fluid="true">
+                            <h:form id="aufgabenformer">
+                                <b:row >
+
+                                    <b:column span="4">
+
+
+                                        <p:calendar showTodayButton="true" showOn="button"
+                                                    locale="de"
+                                                    pattern="dd.MM.yyyy"
+                                        >
+                                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal aufgabenformer"/>
+                                        </p:calendar>
+
+
+                                    </b:column>
+                                    <b:column span="1"/>
+                                    <b:column span="4">
+
+                                    </b:column>
+                                    <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();" styleClass="btn"/>
+                                </b:row>
+                                <b:row >
+                                    <b:column span="6">
+                                        <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
+                                            <p:column>
+                                                <h:outputText value="#{aufga.beschreibung}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </b:column>
+                                    <b:column span="6">
+
+                                    </b:column>
+
+                                </b:row>
+                            </h:form>
+                        </b:container>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:form>
+    <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
+        <h:form id="arbeitszeitfenster">
+            <p:panelGrid id="eventDetails">
+                <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
+                <h:outputText id="Start" value="Schichtbeginn: "/>
+                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
+                            value="#{kalenderHelfer.start}">
+                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
+                </p:calendar>
+                <b/>
+                <h:outputText id="End" value="Schichtende: "/>
+                <p:calendar
+                        widgetVar="endDate"
+                        name="end"
+                        for="End"
+                        pattern="MM/dd/yyyy HH:mm"
+                        locale="de"
+                        value="#{kalenderHelfer.end}">
+                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
+                </p:calendar>
+                <b/>
+                <p:commandButton action="#{kalenderHelfer.newWorktime}" value="go for it" update="cal"
+                                 oncomplete="PF('arbeitszeitWidget').hide();" styleClass="btn"/>
+            </p:panelGrid>
+            <pe:remoteCommand id="arbeitszeitComand" name="dateSelect" process="@this" update="arbeitszeitfenster"
+                              actionListener="#{kalenderHelfer.myWorkDate}">
+                <pe:methodSignature parameters="java.lang.String"/>
+                <pe:methodParam name="dateEvent">
+                </pe:methodParam>
+            </pe:remoteCommand>
+            <script type="text/javascript" src="selectdate.js"></script>
+        </h:form>
+    </p:dialog>
+    <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
+        <h:form id="deng">
+            <b:panelGrid columns="2">
+                <h:outputLabel for="mvor" value="Voranme "/>
+                <b:inputText id="mvor" name="mitarbeitervorname"/>
+                <h:outputLabel for="mnach" value="Nachname "/>
+                <b:inputText id="mnach" name="mitarbeiternachname"/>
+                <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
+                <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
+            </b:panelGrid>
+            <p:commandButton value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('mitarbeiter').hide();" styleClass="btn"/>
+        </h:form>
+    </p:dialog>
+    <p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
+        <h:form id="aufgabenForm">
+            <b:panelGrid columns="1">
+                <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
+                <b:inputText id="aufgabe" name="aufgabenname"/>
+                <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"  oncomplete="PF('NeueAufgabe').hide();"/>
+            </b:panelGrid>
+        </h:form>
+    </p:dialog>
+</ui:composition>
+</body>
+</html>

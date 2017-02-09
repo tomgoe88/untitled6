@@ -16,9 +16,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
 </h:head>
 <h:body>
     <h:form  >
@@ -30,7 +32,9 @@
             </b:navbarLinks>
         </b:navBar>
     </h:form>
-
+    <ui:composition>
+        <h:outputText value="Hallo"/>
+    </ui:composition>
 
 </h:body>
 </html>

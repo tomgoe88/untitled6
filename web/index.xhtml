@@ -16,27 +16,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
 </h:head>
 
 <body>
-<h:form>
-    <b:navBar inverse="true" >
-        <b:navbarLinks  >
-            <b:navLink value="Terminplaner" href="/index.xhtml"></b:navLink>
-            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
-            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
-        </b:navbarLinks>
-    </b:navBar>
-</h:form>
+<ui:insert name="header">
+    <ui:include src="/hauptseite.xhtml"/>
+</ui:insert>
+
+<ui:composition>
 <b:container fluid="true">
 
 
     <b:row>
         <b:column span="12">
-            <b:panel look="success" collapsible="true" title="Kalender">
+            <b:panel look="blue"  collapsible="true" title="Kalender">
 
 
                 <b:container fluid="true">
@@ -303,6 +301,7 @@
 
 
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+</ui:composition>
 </body>
 </html>
 
