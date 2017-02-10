@@ -26,19 +26,32 @@
     <ui:composition>
     <h:form  id="bar">
 
-        <p:menubar>
-            <p:menuitem value="Terminplaner"    url="#{pageChanger.pageIndex}" />
+        <p:menubar styleClass="container-fluid list-group" rendered="false">
+            <p:menuitem value="Terminplaner"     url="#{pageChanger.pageIndex}"  />
 
-            <p:submenu id="sub" label="Administration" style="float:right">
-                <p:menuitem value="Arbeitszeiten" url="#{pageChanger.pageArbeitszeiten}" />
+            <p:submenu id="sub" label="Administration" style="float:right;" styleClass="list-group">
+                <p:menuitem value="Arbeitszeiten" url="#{pageChanger.pageArbeitszeiten}"  />
                 <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
-                <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}" />
-                <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}"/>
+                <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}"  />
+                <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}" />
             </p:submenu>
         </p:menubar>
+        <b:navBar>
+            <b:navbarLinks>
+                <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
+
+                <b:dropMenu drop="true"  value="Administration" >
+                    <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" />
+                    <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
+                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
+                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
+                </b:dropMenu>
+            </b:navbarLinks>
+        </b:navBar>
 
 
     </h:form>
+
     </ui:composition>
     <h:form id="includeBody">
         <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
@@ -48,8 +61,6 @@
             </pe:methodParam>
         </pe:remoteCommand>
     </h:form>
-
-
 
 </body>
 

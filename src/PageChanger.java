@@ -43,6 +43,7 @@ public class PageChanger {
     }
 
     public String getPageMitarbeiter() {
+        page= "mitarbeiter";
         return "/"+page+".xhtml";
 
     }
