@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
 </h:head>
-<body onload="testMobile()">
+<h:body onload="testMobile()">
     <ui:composition>
     <h:form  id="bar">
 
@@ -39,19 +39,13 @@
         <b:navBar>
             <b:navbarLinks>
                 <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
-
-                <b:dropMenu drop="true"  value="Administration" >
                     <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" />
                     <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
                     <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
                     <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
-                </b:dropMenu>
             </b:navbarLinks>
         </b:navBar>
-
-
     </h:form>
-
     </ui:composition>
     <h:form id="includeBody">
         <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
@@ -60,8 +54,12 @@
             <pe:methodParam name="dateEvent">
             </pe:methodParam>
         </pe:remoteCommand>
-    </h:form>
+        <p:dialog widgetVar="admin" id="admin" >
 
-</body>
+        </p:dialog>
+    </h:form>
+    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+</h:body>
 
 </html>
