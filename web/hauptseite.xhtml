@@ -22,34 +22,35 @@
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
 </h:head>
-<h:body>
+<body onload="testMobile()">
     <ui:composition>
     <h:form  id="bar">
-        <b:navBar>
-            <b:navbarLinks>
-            <b:navLink value="Terminplaner" oncomplete="testMobile();" href="#{pageChanger.pageIndex}" />
 
-            <b:dropMenu  value="Administration" >
-                <b:navLink value="Arbeitszeiten" oncomplete="testMobile();" href="#{pageChanger.pageArbeitszeiten}" />
-                <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
-                <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
-                <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
-            </b:dropMenu>
-            </b:navbarLinks>
-        </b:navBar>
-        <pe:remoteCommand id="mobile" name="checkPhone" process="@this" update="bar"
+        <p:menubar>
+            <p:menuitem value="Terminplaner"    url="#{pageChanger.pageIndex}" />
+
+            <p:submenu id="sub" label="Administration" style="float:right">
+                <p:menuitem value="Arbeitszeiten" url="#{pageChanger.pageArbeitszeiten}" />
+                <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
+                <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}" />
+                <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}"/>
+            </p:submenu>
+        </p:menubar>
+
+
+    </h:form>
+    </ui:composition>
+    <h:form id="includeBody">
+        <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
                           actionListener="#{pageChanger.checkMobile}">
             <pe:methodSignature parameters="java.lang.String"/>
             <pe:methodParam name="dateEvent">
             </pe:methodParam>
         </pe:remoteCommand>
-
-    </h:form>
-    </ui:composition>
-    <h:form id="includeBody">
-
     </h:form>
 
 
-</h:body>
+
+</body>
+
 </html>

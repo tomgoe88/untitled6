@@ -31,14 +31,14 @@ public class PageChanger {
     public String getPageArbeitszeiten(){
         if(ifMobile!=null){
             if(ifMobile.equalsIgnoreCase("true")|| ifMobile==null){
-                page="indexMobile";
+                page="ArbeitszeitenMobile";
             } else {
-                page="index";
+                page="Arbeitszeiten";
             }
         }
-        if(page==null){
-            page="Arbeitszeiten";
-        }
+//        if(page==null){
+//            page="Arbeitszeiten";
+//        }
         return "/"+page+".xhtml";
     }
 
@@ -57,9 +57,9 @@ public class PageChanger {
             }
         }
 
-            if(page==null){
-                page="index";
-            }
+//            if(page==null){
+//                page="index";
+//            }
             return "/"+page+".xhtml";
         }
 
