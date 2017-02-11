@@ -14,55 +14,31 @@
 <h:head>
     <title>Facelet Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+    <link href="css/flexnav.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <link href="css/page.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <link href="css/font-awesome.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="//use.typekit.net/qyb8ood.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 </h:head>
-<body>
-<h:form>
-    <b:navBar>
-        <b:navbarLinks>
-            <b:navLink value="Mitarbeiter" href="/mitarbeiter.xhtml"></b:navLink>
-            <b:navLink value="Arbeitszeiten" href="/Arbeitszeiten.xhtml"></b:navLink>
-        </b:navbarLinks>
-    </b:navBar>
-</h:form>
-<h:form id="cal">
-    <b:container fluid="true">
-        <b:row>
-            <b:column>
-                <b:dataTable value="#{kalenderHelfer.helfer.mitarbeiter}" var="mitarbeiter">
-                    <b:dataTableColumn label="Mitarbeiternummer">
-                        <h:outputText value="#{mitarbeiter.mitarbeiterID}"/>
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Name">
-                        <h:outputText value="#{mitarbeiter.name}"/>
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Name">
-                        <h:outputText value="Farbe" style="background-color: \##{mitarbeiter.farbe}"/>
-                    </b:dataTableColumn>
-                </b:dataTable>
-            </b:column>
-        </b:row>
+<h:body class="home-page" onload="testMobile()">
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
 
-    </b:container>
+    <script type="text/javascript" src="js/jquery-3.1.1.js"/>
+    <script type="text/javascript" src="js/jquery.flexnav.min.js"/>
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $('.flexnav').flexNav();
+        })
+    </script>
+</h:body>
 
-    <p:panelGrid columns="1">
-        <p:commandButton value="Neuer Mitarbeiter" type="button" ></p:commandButton>
-    </p:panelGrid>
-</h:form>
-<p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
-    <h:form id="deng">
-        <b:panelGrid columns="2">
-            <h:outputLabel for="mvor" value="Voranme "/>
-            <b:inputText id="mvor" name="mitarbeitervorname"/>
-            <h:outputLabel for="mnach" value="Nachname "/>
-            <b:inputText id="mnach" name="mitarbeiternachname"/>
-            <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
-            <p:colorPicker id="mfarb" value="#{kalenderHelfer.helfer.tempColor}" mode="inline" />
-        </b:panelGrid>
-        <p:commandButton value="Speichern" actionListener="#{kalenderHelfer.helfer.newWorker}" oncomplete="PF('mitarbeiter').hide();"/>
-    </h:form>
-</p:dialog>
-</body>
 </html>

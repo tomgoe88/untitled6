@@ -27,47 +27,47 @@
         <ui:include src="/hauptseite.xhtml"/>
     </ui:insert>
 
-<ui:composition>
-<b:container fluid="true">
-    <h:form  id="mitburger" >
-    <b:row>
-        <b:column>
+    <ui:composition>
+        <b:container fluid="true">
+            <h:form  id="mitburger" >
+                <b:row>
+                    <b:column>
 
-            <p:dataTable value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
-                <p:column label="Mitarbeiternummer">
-                    <h:outputText value="#{arbeiter.mitarbeiterID}"/>
-                </p:column>
-                <p:column label="Name">
-                    <h:outputText value="#{arbeiter.name}"/>
-                </p:column>
-                <p:column label="Farbe" >
-                    <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"></h:outputText>
-                </p:column>
-            </p:dataTable>
+                        <p:dataTable value="#{kalenderHelfer.mitarbeiter}" var="arbeiter">
+                            <p:column label="Mitarbeiternummer">
+                                <h:outputText value="#{arbeiter.mitarbeiterID}"/>
+                            </p:column>
+                            <p:column label="Name">
+                                <h:outputText value="#{arbeiter.name}"/>
+                            </p:column>
+                            <p:column label="Farbe" >
+                                <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"></h:outputText>
+                            </p:column>
+                        </p:dataTable>
 
-        </b:column>
-    </b:row>
-    <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();" styleClass="btn"/>
-    </h:form>
-</b:container>
+                    </b:column>
+                </b:row>
+                <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();" styleClass="btn"/>
+            </h:form>
+        </b:container>
 
-<p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
-    <h:form id="deng">
-        <p:panelGrid columns="2">
-            <h:outputLabel for="mvor" value="Voranme "/>
-            <b:inputText id="mvor" name="mitarbeitervorname"/>
-            <h:outputLabel for="mnach" value="Nachname "/>
-            <b:inputText id="mnach" name="mitarbeiternachname"/>
-            <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
-            <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
-        <b/>
-            <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg2').hide();" styleClass="btn">
-            </p:commandButton>
-        </p:panelGrid>
+        <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
+            <h:form id="deng">
+                <p:panelGrid columns="2">
+                    <h:outputLabel for="mvor" value="Voranme "/>
+                    <b:inputText id="mvor" name="mitarbeitervorname"/>
+                    <h:outputLabel for="mnach" value="Nachname "/>
+                    <b:inputText id="mnach" name="mitarbeiternachname"/>
+                    <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
+                    <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
+                    <b/>
+                    <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg2').hide();" styleClass="btn">
+                    </p:commandButton>
+                </p:panelGrid>
 
-    </h:form>
-</p:dialog>
-</ui:composition>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
     <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </h:body>
 </html>

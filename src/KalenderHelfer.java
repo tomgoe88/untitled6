@@ -523,6 +523,12 @@ public class KalenderHelfer {
         SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
 
     }
+    public void newUrlaub(){
+        Date workstart;
+        Date workend;
+        SQLHelper.newUrlaubszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+
+    }
 
     public String getTest() {
         if(calendarBean!=null){
@@ -559,6 +565,14 @@ public class KalenderHelfer {
         Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
         c2.add(Calendar.HOUR_OF_DAY,8);
         c2.add(Calendar.MINUTE,30);
+        start= calendar.getTime();
+        end=c2.getTime();
+    }
+    public void myUrlaubDate(String date){
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
         start= calendar.getTime();
         end=c2.getTime();
     }

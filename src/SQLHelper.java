@@ -162,6 +162,22 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableUrlaubszeiten="" +
+                    "CREATE TABLE IF NOT EXISTS urlaubszeit( " +
+                    "UrlaubszeitID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterID int, " +
+                    "Urlaubszeitbeginn VARCHAR (200), " +
+                    "Urlaubszeitende VARCHAR (200), " +
+                    "PRIMARY KEY (UrlaubszeitID), " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
+                    ")";
+            con.createStatement().executeUpdate(tableUrlaubszeiten);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableSperrzeiten="" +
                     "CREATE TABLE IF NOT EXISTS sperrzeiten( " +
                     "SperrID int NOT NULL AUTO_INCREMENT, " +
@@ -757,6 +773,74 @@ public class SQLHelper{
                 query = con.createStatement();
                 String sql=
                         "Update aufgaben SET Erledigt='true' WHERE AufgabenID='"+aufgabenID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static List<FullCalendarEventBean> getUrlaubszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM urlaubszeit " +
+                                "INNER JOIN mitarbeiter ON urlaubszeit.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE urlaubszeit.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Urlaubszeitbeginn");
+                    String schichtende=result.getString("Urlaubszeitende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Urlaub");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static void newUrlaubszeit(int mitarbeiterID, String urlaubsbeginn, String urlaubsende){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO urlaubszeit(MitarbeiterID, Urlaubszeitbeginn, Urlaubszeitende) VALUES(" +
+                                "'"+mitarbeiterID+"','"+urlaubsbeginn+"','"+urlaubsende+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());

@@ -27,6 +27,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     private FullCalendarEventList calendarList;
     private int MitarbeiterID;
     private String arbeitszeiten;
+    private String urlaubszeiten;
 
     public Mitarbeiter(){
 
@@ -62,8 +63,26 @@ public class Mitarbeiter extends FullCalendarEventList {
         return arbeitszeiten;
     }
 
+
     public void setArbeitszeiten(String arbeitszeiten) {
         this.arbeitszeiten = arbeitszeiten;
+    }
+
+    public String getUrlaubszeiten() {
+        FullCalendarEventList fk= new FullCalendarEventList();
+        fk.getList().addAll(SQLHelper.getUrlaubszeiten(MitarbeiterID));
+        if(fk.getList()!= null){
+            urlaubszeiten=fk.toJson();
+        } else{
+            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            urlaubszeiten=fk.toJson();
+        }
+
+        return urlaubszeiten;
+    }
+
+    public void setUrlaubszeiten(String urlaubszeiten) {
+        this.urlaubszeiten = urlaubszeiten;
     }
 
     public int getMitarbeiterID() {
@@ -95,6 +114,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
+        fk.getList().addAll( SQLHelper.getUrlaubszeiten(MitarbeiterID));
         if(fk.getList()!=null){
             tem= fk.toJson();
         }else{
