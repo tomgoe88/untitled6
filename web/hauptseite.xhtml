@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
+    <link rel="stylesheet" href="css/page.css"/>
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/menu-element.js"></script>
     <script type="text/javascript" src="primefaces-omega.js"></script>
@@ -35,7 +36,7 @@
             <p:menu  >
                 <p:menuitem value="Terminplaner"     url="#{pageChanger.pageIndex}"  />
 
-                <p:submenu id="sub" label="Administration" style="float:right;" styleClass="list-group">
+                <p:submenu id="sub" label="Administration"  >
                     <p:menuitem value="Arbeitszeiten" url="#{pageChanger.pageArbeitszeiten}"  />
                     <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
                     <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}"  />
@@ -52,10 +53,8 @@
                 </b:navbarLinks>
             </b:navBar>
         </h:form>
-    </ui:composition>
-    </div>
-    </div>
-    <div class="col-xl-10"></div>
+
+
     <h:form id="includeBody">
         <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
                           actionListener="#{pageChanger.checkMobile}">
@@ -67,6 +66,10 @@
 
         </p:dialog>
     </h:form>
+    </ui:composition>ui
+    </div>
+    </div>
+    <div class="col-xl-10"></div>
     <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 
 </h:body>
