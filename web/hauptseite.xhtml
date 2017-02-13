@@ -20,20 +20,26 @@
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
-    <link rel="stylesheet" href="css/prime.css"/>
-    <link rel="stylesheet" href="css/page.css"/>
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/menu-element.js"></script>
     <script type="text/javascript" src="primefaces-omega.js"></script>
 </h:head>
 <h:body onload="testMobile()">
-    <div class="container-fluid">
-    <div class="col-xl-2">
+
     <ui:composition>
 
         <h:form  id="bar">
+            <b:navBar  brand="Palestro">
+                <b:navbarLinks >
+                    <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
+                    <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" />
+                    <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
+                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
+                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
+                </b:navbarLinks>
+            </b:navBar>
 
-            <p:menu  >
+            <p:menu  rendered="false">
                 <p:menuitem value="Terminplaner"     url="#{pageChanger.pageIndex}"  />
 
                 <p:submenu id="sub" label="Administration"  >
@@ -43,16 +49,9 @@
                     <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}" />
                 </p:submenu>
             </p:menu>
-            <b:navBar rendered="false">
-                <b:navbarLinks>
-                    <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
-                    <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" />
-                    <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
-                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
-                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
-                </b:navbarLinks>
-            </b:navBar>
+
         </h:form>
+    </ui:composition>
 
 
     <h:form id="includeBody">
@@ -66,10 +65,6 @@
 
         </p:dialog>
     </h:form>
-    </ui:composition>ui
-    </div>
-    </div>
-    <div class="col-xl-10"></div>
     <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 
 </h:body>
