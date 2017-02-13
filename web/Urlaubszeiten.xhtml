@@ -24,11 +24,16 @@
 
 </h:head>
 <h:body>
-<ui:insert name="header">
-    <ui:include src="/hauptseite.xhtml"/>
-</ui:insert>
+    <div class="container-fluid">
+    <div class="col-xl-2">
+        <ui:insert name="header">
+            <ui:include src="/hauptseite.xhtml"/>
+        </ui:insert>
+    </div>
+    <div class="col-xl-10">
 
-<ui:composition>
+
+
     <h:form id="cal">
         <b:container fluid="true">
             <b:row rendered="false">
@@ -79,6 +84,8 @@
 
         </b:container>
     </h:form>
+    </div>
+    </div>
     <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip">
         <h:form id="urlaubszeitfenster">
             <p:panelGrid id="eventDetails">
@@ -134,7 +141,7 @@
             </b:panelGrid>
         </h:form>
     </p:dialog>
-</ui:composition>
+
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 
 

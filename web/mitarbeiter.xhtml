@@ -23,11 +23,15 @@
     <link rel="stylesheet" href="css/prime.css"/>
 </h:head>
 <h:body>
-    <ui:insert name="header">
-        <ui:include src="/hauptseite.xhtml"/>
-    </ui:insert>
+    <div class="container-fluid">
+    <div class="col-xl-2">
+        <ui:insert name="header">
+            <ui:include src="/hauptseite.xhtml"/>
+        </ui:insert>
+    </div>
+    <div class="col-xl-10">
 
-    <ui:composition>
+
         <b:container fluid="true">
             <h:form  id="mitburger" >
                 <b:row>
@@ -50,6 +54,8 @@
                 <p:commandButton value="Neuer Mitarbeiter" oncomplete="PF('dlg2').show();" styleClass="btn"/>
             </h:form>
         </b:container>
+        </div>
+        </div>
 
         <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
             <h:form id="deng">
@@ -67,7 +73,7 @@
 
             </h:form>
         </p:dialog>
-    </ui:composition>
+
     <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </h:body>
 </html>

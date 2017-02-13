@@ -24,10 +24,14 @@
 </h:head>
 
 <body>
-<ui:insert name="header">
-    <ui:include src="/hauptseite.xhtml"/>
-</ui:insert>
-<ui:composition>
+<div class="container-fluid">
+<div class="col-xl-2">
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
+</div>
+<div class="col-xl-10">
+
     <b:container fluid="true">
 
 
@@ -124,7 +128,8 @@
             </b:column>
         </b:row>
     </b:container>
-
+    </div>
+    </div>
 
     <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip" >
         <h:form id="terminWidget">
@@ -259,7 +264,7 @@
 
 
 
-</ui:composition>
+
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </body>
 </html>
