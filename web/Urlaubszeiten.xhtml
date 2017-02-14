@@ -49,16 +49,13 @@
             </b:row>
             <b:row>
                 <b:column>
-                    <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
-                    <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}">
+                    <h:outputLabel value="Mitarbeiter:  " for="mitauswahl"/>
+                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}"  style="width: 200px">
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                        itemValue="#{mi.mitarbeiterID}"/>
                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                    </b:selectOneMenu>
-                </b:column>
-                <b:column>
-                    <p:commandButton value="go for it" update="cal" styleClass="btn"/>
-                    <b/>
+                        <p:ajax event="valueChange" update="cal"/>
+                    </p:selectOneMenu>
                 </b:column>
             </b:row>
             <b:row>

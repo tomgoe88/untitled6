@@ -41,18 +41,15 @@
 
                             <b:row>
                                 <b:column>
-                                    <h:outputLabel value="Mitarbeiter: " for="mitauswahl"/>
-                                    <b:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}">
-                                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi"
-                                                       itemLabel="#{mi.name}"
+                                    <h:outputLabel value="Mitarbeiter:  " for="mitauswahl"/>
+                                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}"  styleClass="custom-select">
+                                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                                        itemValue="#{mi.mitarbeiterID}"/>
                                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                                    </b:selectOneMenu>
+                                        <p:ajax event="valueChange" update="cal"/>
+                                    </p:selectOneMenu>
                                 </b:column>
-                                <b:column>
-                                    <p:commandButton value="go for it" update="cal" styleClass="btn"/>
-                                    <b/>
-                                </b:column>
+
                             </b:row>
                             <b:row>
                                 <b:column>
