@@ -17,6 +17,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import net.bootsfaces.C;
 import org.primefaces.component.calendar.*;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -29,6 +30,7 @@ import sun.security.jca.GetInstance;
 @ManagedBean
 @ViewScoped
 public class KalenderHelfer {
+    private int temp=0;
     private int currentWeek;
     private String tempColor;
     private String currentMonth;
@@ -69,7 +71,10 @@ public class KalenderHelfer {
     private GregorianCalendar kalender= new GregorianCalendar();
     private int aufgabeId;
     private int aufgabenErledigerID;
-
+    private int wochenArbeitszeit;
+    private boolean woechentlich;
+    private Calendar work1;
+    private Calendar work2;
 
 
     /**
@@ -86,6 +91,22 @@ public class KalenderHelfer {
 
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public boolean isWoechentlich() {
+        return woechentlich;
+    }
+
+    public void setWoechentlich(boolean woechentlich) {
+        this.woechentlich = woechentlich;
+    }
+
+    public int getTemp() {
+        return temp;
+    }
+
+    public void setTemp(int temp) {
+        this.temp = temp;
     }
 
     public int getAufgabeId() {
@@ -113,6 +134,9 @@ public class KalenderHelfer {
     public void deleteAppointment(){
         SQLHelper.deleteTermin(terminID);
     }
+    public void onChange(){
+        wochenArbeitszeit=temp;
+    }
 
     public int getTerminID() {
         return terminID;
@@ -120,6 +144,14 @@ public class KalenderHelfer {
 
     public void setTerminID(int terminID) {
         this.terminID = terminID;
+    }
+
+    public int getWochenArbeitszeit() {
+        return wochenArbeitszeit;
+    }
+
+    public void setWochenArbeitszeit(int wochenArbeitszeit) {
+        this.wochenArbeitszeit = wochenArbeitszeit;
     }
 
     public int getsEintrager() {
@@ -520,7 +552,21 @@ public class KalenderHelfer {
     public void newWorktime(){
         Date workstart;
         Date workend;
-        SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+        if(woechentlich==false){
+            SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+        } else {
+            int i=0;
+            while(i<wochenArbeitszeit){
+                SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+                work1.add(Calendar.DAY_OF_WEEK, 7);
+                start= work1.getTime();
+                work2.add(Calendar.DAY_OF_WEEK,7);
+                end=work2.getTime();
+                i++;
+            }
+        }
+
+
 
     }
     public void newUrlaub(){
@@ -559,14 +605,14 @@ public class KalenderHelfer {
         end=c2.getTime();
     }
     public void myWorkDate(String date){
-        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        work1= javax.xml.bind.DatatypeConverter.parseDateTime(date);
         final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
                 "Date: " + date);
-        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
-        c2.add(Calendar.HOUR_OF_DAY,8);
-        c2.add(Calendar.MINUTE,30);
-        start= calendar.getTime();
-        end=c2.getTime();
+        work2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
+        work2.add(Calendar.HOUR_OF_DAY,8);
+        work2.add(Calendar.MINUTE,30);
+        start= work1.getTime();
+        end=work2.getTime();
     }
     public void myUrlaubDate(String date){
         Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);

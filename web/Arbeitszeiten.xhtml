@@ -127,7 +127,7 @@
 
     <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
         <h:form id="arbeitszeitfenster">
-            <p:panelGrid id="eventDetails">
+            <p:panelGrid columns="3" id="eventDetails">
                 <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
                 <h:outputText id="Start" value="Schichtbeginn: "/>
                 <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
@@ -146,6 +146,14 @@
                     <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
                 </p:calendar>
                 <b/>
+                <h:outputText id="value" value="Wöchentlich wiederholen? "/>
+                <p:selectBooleanButton id="value1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein" style="width:60px" />
+
+                <div class="knob-container ui-corner-all">
+                    <p:knob value="#{kalenderHelfer.temp}">
+                        <p:ajax listener="#{kalenderHelfer.onChange}"/>
+                    </p:knob>
+                </div>
                 <p:commandButton action="#{kalenderHelfer.newWorktime}" value="go for it" update="cal"
                                  oncomplete="PF('arbeitszeitWidget').hide();" styleClass="btn"/>
             </p:panelGrid>
