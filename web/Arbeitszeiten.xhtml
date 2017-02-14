@@ -48,9 +48,9 @@
                 </b:column>
             </b:row>
             <b:row>
-                <b:column>
-                    <h:outputLabel value="Mitarbeiter:  " for="mitauswahl"/>
-                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}"  styleClass="custom-select">
+                <b:column span="12">
+
+                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                        itemValue="#{mi.mitarbeiterID}"/>
                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
