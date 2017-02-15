@@ -63,8 +63,7 @@
                 </b:column>
 
             </b:row>
-            <b:row>
-                <b:column span="12">
+
                     <b:label text="#{mit.name}"/>
                     <b:fullCalendar
                             lang="de"
@@ -78,8 +77,7 @@
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
-                </b:column>
-            </b:row>
+
             <b:row>
                 <b:column span="12">
                     <b:panel look="success" collapsible="true" title="Aufgaben">
@@ -127,7 +125,7 @@
         </b:container>
     </h:form>
 
-    <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip">
+    <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
         <h:form id="arbeitszeitfenster">
             <p:panelGrid id="eventDetails">
                 <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
@@ -179,7 +177,7 @@
             <p:commandButton value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('mitarbeiter').hide();" styleClass="btn"/>
         </h:form>
     </p:dialog>
-    <p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
+    <p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip" responsive="true">
         <h:form id="aufgabenForm">
             <b:panelGrid columns="1">
                 <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>

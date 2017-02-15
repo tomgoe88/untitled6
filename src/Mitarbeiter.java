@@ -5,6 +5,10 @@
  */
 
 
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,9 +32,27 @@ public class Mitarbeiter extends FullCalendarEventList {
     private int MitarbeiterID;
     private String arbeitszeiten;
     private String urlaubszeiten;
+    private String password;
+    private boolean admin;
 
     public Mitarbeiter(){
 
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public Mitarbeiter(String name, String farbe) {
@@ -123,6 +145,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         }
         return tem;
     }
+
 
     public void setTem(String tem) {
         this.tem = tem;

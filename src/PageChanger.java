@@ -1,5 +1,8 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jutom on 08.02.2017.
@@ -15,6 +18,7 @@ public class PageChanger {
     private String pageHauptseite;
     private String pageUrlaubszeiten;
     private String pageKursplaner;
+    private List<Mitarbeiter> mitarbeiter;
 
 
     public String getIfMobile() {
@@ -46,6 +50,17 @@ public class PageChanger {
         page= "mitarbeiter";
         return "/"+page+".xhtml";
 
+    }
+    public List<Mitarbeiter> getMitarbeiter() {
+        //hier muss eine Select-Abfrage für die Mitarbeiter an diesem Tag gemacht werden
+        mitarbeiter = new ArrayList<Mitarbeiter>();
+        mitarbeiter.addAll(SQLHelper.getMitarbeiterListe());
+        return mitarbeiter;
+    }
+    public String checkPassword(){
+        String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("benutzername");
+        String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("secret");
+        return "/hauptseite.xhtml";
     }
 
 

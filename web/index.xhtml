@@ -34,7 +34,7 @@
 
             <b:row>
                 <b:column span="12">
-                    <b:panel look="success" collapsible="true" title="Kalender">
+
 
 
                         <h:form id="cal">
@@ -51,8 +51,7 @@
                                 </b:column>
 
                             </b:row>
-                            <b:row>
-                                <b:column>
+
                                     <b:fullCalendar lang="de"
                                                     defaultView="agendaWeek"
                                                     events="#{kalenderHelfer.mitarbeit.tem}"
@@ -72,8 +71,7 @@
                                     >
 
                                     </b:fullCalendar>
-                                </b:column>
-                            </b:row>
+
                             <b:row rendered="false">
                                 <b:column>
                                     <b:row>
@@ -110,7 +108,7 @@
                         </h:form>
 
 
-                    </b:panel>
+
                 </b:column>
 
             </b:row>
@@ -169,7 +167,7 @@
 
 
 
-<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="terminWidget">
         <p:panelGrid id="eventDetails">
             <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
@@ -229,7 +227,7 @@
     </h:form>
 </p:dialog>
 
-<p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip">
+<p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="ding">
         <b:container>
             <b:row>
@@ -292,7 +290,7 @@
         </b:container>
     </h:form>
 </p:dialog>
-<p:dialog id="aufgabenErledigtID" widgetVar="AufgabeErledigt" header="Erledigt" showEffect="clip" hideEffect="clip">
+<p:dialog id="aufgabenErledigtID" widgetVar="AufgabeErledigt" header="Erledigt" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="erledigungsForm">
         <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
             <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"

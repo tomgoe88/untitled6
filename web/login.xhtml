@@ -20,22 +20,38 @@
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
-    <link rel="stylesheet" href="css/prime.css"/>
-
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script type="text/javascript" src="js/menu-element.js"></script>
+    <script type="text/javascript" src="primefaces-omega.js"></script>
 </h:head>
-<body  onload="testMobile()">
-<f:view renderKitId="PRIMEFACES_MOBILE">
-    <h:form id="cal">
-    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
-        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                       itemValue="#{mi.mitarbeiterID}"/>
-        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-        <p:ajax event="valueChange" update="cal"/>
-    </p:selectOneMenu>
-        <p:schedule  value="#{kalenderHelfer.mitarbeit.terminee}"></p:schedule>
+<h:body onload="testMobile()">
 
+
+
+
+        <h:form  id="bar">
+            <h:outputLabel value="Name: "></h:outputLabel>
+            <b:inputText name="benutzername" />
+            <h:outputLabel value="Password: "></h:outputLabel>
+            <b:inputSecret name="secret" />
+
+        </h:form>
+
+
+
+    <h:form id="includeBody">
+        <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
+                          actionListener="#{pageChanger.checkMobile}">
+            <pe:methodSignature parameters="java.lang.String"/>
+            <pe:methodParam name="dateEvent">
+            </pe:methodParam>
+        </pe:remoteCommand>
+        <p:dialog widgetVar="admin" id="admin" >
+
+        </p:dialog>
     </h:form>
-</f:view>
-</body>
+    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+</h:body>
 
 </html>

@@ -48,7 +48,7 @@ public class KalenderHelfer {
     private Date chooseDate;
     private FullCalendarEventBean calendarBean;
     private int ma;
-    private int q;
+    private int q=1;
     private Mitarbeiter mitarbeit;
     private Date start;
     private Date end;
@@ -75,6 +75,7 @@ public class KalenderHelfer {
     private boolean woechentlich;
     private Calendar work1;
     private Calendar work2;
+    private boolean adminbool;
 
 
     /**
@@ -84,6 +85,13 @@ public class KalenderHelfer {
 
     }
 
+    public boolean isAdminbool() {
+        return adminbool;
+    }
+
+    public void setAdminbool(boolean adminbool) {
+        this.adminbool = adminbool;
+    }
 
     public TimeZone getTimeZone() {
         return TimeZone.getDefault();
@@ -644,10 +652,14 @@ public class KalenderHelfer {
     }
 
     public void newWorker(){
+        int macidd=0;
         String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeitervorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiternachname");
         SQLHelper.newMitarbeiter(vorname, nachname, tempColor);
+        macidd= SQLHelper.getMaxMitarbeiterID();
+        SQLHelper.newPassword(macidd,null,Boolean.toString(adminbool));
     }
+
     public List<Aufgabe> getAufgaben(){
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
         String date;

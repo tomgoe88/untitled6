@@ -6,6 +6,13 @@
  */
 
 
+
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
+
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.sql.*;
@@ -103,6 +110,22 @@ public class SQLHelper{
                     "PRIMARY KEY (MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableMitarbeiter);
+        } catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
+            String tableAnmeldung="" +
+                    "CREATE TABLE IF NOT EXISTS anmeldung( " +
+                    "AnmeldeID int NOT NULL AUTO_INCREMENT, " +
+                    "kennwort VARCHAR(45), " +
+                    "admin VARCHAR(45), " +
+                    "MitarbeiterID int, "+
+                    "PRIMARY KEY (AnmeldeID), " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
+                    ")";
+            con.createStatement().executeUpdate(tableAnmeldung);
         } catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
@@ -398,6 +421,67 @@ public class SQLHelper{
                     temp.setTitle(title);
                     fb.add(temp);
 
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static ScheduleModel rimeEvents(int mitarbeiter){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        ScheduleModel  fb= new DefaultScheduleModel();
+
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
+                                "FROM termin " +
+                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
+                                "INNER JOIN kunde ON termin.KundenID = kunde.KundenID " +
+                                "WHERE termin.MitarbeiterMacherID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    ScheduleEvent temp ;
+                    String terminstart=result.getString("Terminstart");
+                    String terminende=result.getString("Terminende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(terminstart);
+                        end=dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                   // temp.getStartDate(start);
+                    //temp.(end);
+                    //temp.setColor(result.getString("kalenderfarbe"));
+                    String terminart= result.getString("Terminart");
+                    String vorname=result.getString("vorname");
+                    String nachname =result.getString("nachname");
+                    String tele=result.getString("telefonnummer");
+                    String beschreibung = result.getString("Beschreibung");
+                    String eintrager=result.getString("eintrager");
+                    int terminID=result.getInt("TerminID");
+                    title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager+" ; "+terminID;
+                  //  temp.setTitle(title);
+                  //  fb.add(temp);
+                temp= new DefaultScheduleEvent(title,start,end);
                 }
             } catch (SQLException e) {
                 System.out.println("SET TERMIN //SQLException: " + e.getMessage());
@@ -841,6 +925,130 @@ public class SQLHelper{
                 String sql=
                         "INSERT INTO urlaubszeit(MitarbeiterID, Urlaubszeitbeginn, Urlaubszeitende) VALUES(" +
                                 "'"+mitarbeiterID+"','"+urlaubsbeginn+"','"+urlaubsende+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static String getPassword(int mitarbeiterID){
+        con = getInstance();
+        String password= null;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM anmeldung " +
+                                "WHERE anmeldung.MitarbeiterID = '"+mitarbeiterID+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+
+                   password=result.getString("kennwort");
+
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Passwort //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return password;
+    }
+    public static Boolean admin(int mitarbeiterID){
+        con = getInstance();
+        String password= null;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM anmeldung " +
+                                "WHERE anmeldung.MitarbeiterID = '"+mitarbeiterID+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+
+                    password=result.getString("admin");
+
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Passwort //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return Boolean.parseBoolean(password);
+    }
+    public static void newPassword(int mitarbeiterID, String password, String admin){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO anmeldung(MitarbeiterID, kennwort, admin) VALUES(" +
+                                "'"+mitarbeiterID+"','"+password+"','"+admin+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static int getMaxMitarbeiterID(){
+        //TODO: mit Operator Max die Maxnummer der tabelle heruasfinden
+        con = getInstance();
+        int max=0;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT MAX(MitarbeiterID) AS maxID FROM mitarbeiter";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    max = result.getInt("maxID");
+                }
+            } catch (SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return max;
+    }
+    public static void updatePassword(int mitarbeiterID, String password){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update anmeldung SET kennwort='"+password+"' WHERE MitarbeiterID='"+mitarbeiterID+"'";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());

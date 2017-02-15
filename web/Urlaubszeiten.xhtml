@@ -58,8 +58,7 @@
                     </p:selectOneMenu>
                 </b:column>
             </b:row>
-            <b:row>
-                <b:column span="12">
+
                     <b:label text="#{mit.name}"/>
                     <b:fullCalendar
                             lang="de"
@@ -73,13 +72,12 @@
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
-                </b:column>
-            </b:row>
+
 
         </b:container>
     </h:form>
 
-    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip">
+    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
         <h:form id="urlaubszeitfenster">
             <p:panelGrid id="eventDetails">
                 <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
