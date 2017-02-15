@@ -40,6 +40,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public String getPassword() {
+        password=SQLHelper.getPassword(MitarbeiterID);
         return password;
     }
 
@@ -48,6 +49,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public boolean isAdmin() {
+        admin=SQLHelper.admin(MitarbeiterID);
         return admin;
     }
 

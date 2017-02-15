@@ -1,3 +1,4 @@
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -58,9 +59,28 @@ public class PageChanger {
         return mitarbeiter;
     }
     public String checkPassword(){
+        String login=null;
         String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("benutzername");
         String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("secret");
-        return "/hauptseite.xhtml";
+        for(Mitarbeiter m:getMitarbeiter()){
+            if(m.getName().equalsIgnoreCase(vorname)){
+                if(m.getPassword()!=null){
+                    if(m.getPassword().equalsIgnoreCase(password)){
+                        login="hauptseite";
+                        break;
+                    }
+                    else {
+                        FacesContext.getCurrentInstance().addMessage("Achtung", new FacesMessage("Bitte geben sie das korrekte Passwort ein"));
+                        login="login";
+                        break;
+                    }
+                } else {
+//TODO: einfügen, dass nach dem Kennwort gefragt wird, am besten ein Form feld über renderung
+                    login="login";
+                }
+            }
+        }
+        return login;
     }
 
 
