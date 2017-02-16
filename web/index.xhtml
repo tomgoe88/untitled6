@@ -181,10 +181,12 @@
             </b:selectOneMenu>
             <b/>
             <h:outputText id="vorname" value="Vorname: "/>
-            <b:inputText name="vorname" for="vorname"/>
+            <b:inputText name="vorname" for="vorname" typeahead="true"
+                         typeahead-values="#{kalenderHelfer.kundenNames}"/>
             <b/>
             <h:outputText id="nachname" value="Nachname: "/>
-            <b:inputText name="nachname" for="nachname"/>
+            <b:inputText name="nachname" for="nachname" typeahead="true"
+                         typeahead-values="#{kalenderHelfer.kundeNachname}"/>
             <b/>
             <h:outputText id="tele" value="Telefonnummer: "/>
             <b:inputText name="tele" for="tele"/>

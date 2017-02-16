@@ -21,6 +21,7 @@ import net.bootsfaces.C;
 import org.primefaces.component.calendar.*;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.mobile.component.page.Page;
 import sun.security.jca.GetInstance;
 
 /**
@@ -48,7 +49,7 @@ public class KalenderHelfer {
     private Date chooseDate;
     private FullCalendarEventBean calendarBean;
     private int ma;
-    private int q=1;
+    private int q=0;
     private Mitarbeiter mitarbeit;
     private Date start;
     private Date end;
@@ -318,6 +319,9 @@ public class KalenderHelfer {
     }
 
     public Mitarbeiter getMitarbeit() {
+        if(q==0){
+            q=PageChanger.getTempMitarbeiter().getMitarbeiterID();
+        }
         if(q != 0){
             for(Mitarbeiter m: getMitarbeiter()){
               //  if(m.getName().equalsIgnoreCase(q)){
@@ -720,7 +724,20 @@ public class KalenderHelfer {
     public void deleteMitarbeiter(int mitarbeiterID){
         SQLHelper.deleteMitarbeiter(mitarbeiterID);
     }
-
+    public List<String> getKundenNames(){
+        List<String> kundenanee= new ArrayList<String>();
+        for(Kunde k: SQLHelper.kunden()){
+            kundenanee.add(k.getVorname());
+        }
+        return kundenanee;
+    }
+    public List<String> getKundeNachname(){
+        List<String> kundenanee= new ArrayList<String>();
+        for(Kunde k: SQLHelper.kunden()){
+            kundenanee.add(k.getNachname());
+        }
+        return kundenanee;
+    }
 
 
 
