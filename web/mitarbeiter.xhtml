@@ -45,6 +45,9 @@
                             <p:column label="Farbe" >
                                 <h:outputText value="Farbe" style="background-color: \##{arbeiter.farbe}"></h:outputText>
                             </p:column>
+                            <p:column label="Löschen" >
+                                <p:commandButton value="Löschen" action="#{kalenderHelfer.deleteMitarbeiter(arbeiter.mitarbeiterID)}" update="mitburger"/>
+                            </p:column>
                         </p:dataTable>
 
                     </b:column>

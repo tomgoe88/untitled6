@@ -19,6 +19,10 @@ public class PageChanger {
     private String pageHauptseite;
     private String pageUrlaubszeiten;
     private String pageKursplaner;
+    private static boolean tempBool= false;
+    private boolean passwordBool;
+    private Mitarbeiter angemeldet;
+    private  static Mitarbeiter tempMitarbeiter;
     private List<Mitarbeiter> mitarbeiter;
 
 
@@ -52,6 +56,41 @@ public class PageChanger {
         return "/"+page+".xhtml";
 
     }
+
+    public static boolean isTempBool() {
+        return tempBool;
+    }
+
+    public static void setTempBool(boolean tempBool) {
+        PageChanger.tempBool = tempBool;
+    }
+
+    public boolean isPasswordBool() {
+        passwordBool= tempBool;
+        return passwordBool;
+    }
+
+    public void setPasswordBool(boolean passwordBool) {
+        this.passwordBool = passwordBool;
+    }
+
+    public Mitarbeiter getAngemeldet() {
+        angemeldet=tempMitarbeiter;
+        return angemeldet;
+    }
+
+    public void setAngemeldet(Mitarbeiter angemeldet) {
+        this.angemeldet = angemeldet;
+    }
+
+    public static Mitarbeiter getTempMitarbeiter() {
+        return tempMitarbeiter;
+    }
+
+    public static void setTempMitarbeiter(Mitarbeiter tempMitarbeiter) {
+        PageChanger.tempMitarbeiter = tempMitarbeiter;
+    }
+
     public List<Mitarbeiter> getMitarbeiter() {
         //hier muss eine Select-Abfrage für die Mitarbeiter an diesem Tag gemacht werden
         mitarbeiter = new ArrayList<Mitarbeiter>();
@@ -64,8 +103,14 @@ public class PageChanger {
         String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("secret");
         for(Mitarbeiter m:getMitarbeiter()){
             if(m.getName().equalsIgnoreCase(vorname)){
-                if(m.getPassword()!=null){
+                String temp= m.getPassword();
+                if(temp.equalsIgnoreCase("null")){
+                    tempBool=true;
+                    login="login";
+                    break;
+                } else {
                     if(m.getPassword().equalsIgnoreCase(password)){
+                        tempMitarbeiter= m;
                         login="hauptseite";
                         break;
                     }
@@ -74,9 +119,6 @@ public class PageChanger {
                         login="login";
                         break;
                     }
-                } else {
-//TODO: einfügen, dass nach dem Kennwort gefragt wird, am besten ein Form feld über renderung
-                    login="login";
                 }
             }
         }
@@ -121,6 +163,20 @@ public class PageChanger {
     public String getPage() {
 
         return "/"+page+".xhtml";
+    }
+    public String updatePassword(){
+        String login="login";
+        String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("loginname");
+        String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("loginKennwort");
+        for(Mitarbeiter m: getMitarbeiter()){
+            if(m.getName().equalsIgnoreCase(vorname)){
+                SQLHelper.updatePassword(m.getMitarbeiterID(),password);
+                tempBool=false;
+                login="hauptseite";
+                break;
+            }
+        }
+        return login;
     }
 
     public void setPage(String page) {

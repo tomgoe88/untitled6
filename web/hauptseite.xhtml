@@ -33,10 +33,10 @@
             <b:navBar  brand="Palestro">
                 <b:navbarLinks >
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
-                    <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" />
-                    <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" />
-                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
-                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}"/>
+                    <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                 </b:navbarLinks>
             </b:navBar>
 

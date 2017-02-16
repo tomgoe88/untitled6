@@ -30,11 +30,25 @@
 
 
         <h:form  id="bar">
-            <h:outputLabel value="Name: "></h:outputLabel>
-            <b:inputText name="benutzername" />
-            <h:outputLabel value="Password: "></h:outputLabel>
-            <b:inputSecret name="secret" />
-            <b:commandButton action="#{pageChanger.checkPassword}"/>
+            <p:panelGrid  columns="2" rendered="#{pageChanger.passwordBool==false}">
+                <h:outputLabel value="Loginmaske"/>
+                <b/>
+                <h:outputLabel value="Name: "></h:outputLabel>
+                <b:inputText name="benutzername" />
+                <h:outputLabel value="Password: "></h:outputLabel>
+                <b:inputSecret name="secret" />
+                <p:commandButton label="Login" action="#{pageChanger.checkPassword}" update="bar"/>
+            </p:panelGrid>
+            <p:panelGrid columns="2" rendered="#{pageChanger.passwordBool==true}">
+                <h:outputLabel value="Passworteingabe"/>
+                <b/>
+                <h:outputLabel value="Name: "></h:outputLabel>
+                <b:inputText name="loginname" />
+                <h:outputLabel value="Password: "></h:outputLabel>
+                <b:inputSecret name="loginKennwort" />
+                <p:commandButton label="Bestätigen" action="#{pageChanger.updatePassword}"/>
+            </p:panelGrid>
+
         </h:form>
 
 

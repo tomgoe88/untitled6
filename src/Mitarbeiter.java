@@ -63,6 +63,10 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.farbe= farbe;
 
     }
+    @Override
+    public String toString(){
+        return this.getName()+" Passwort:  "+getPassword();
+    }
 
 
     public List<String> getTest(){

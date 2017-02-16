@@ -720,6 +720,23 @@ public class SQLHelper{
             }
         }
     }
+    public static void deleteMitarbeiter(int mitarbeiterID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM mitarbeiter WHERE MitarbeiterID='"+mitarbeiterID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
     public static void newAufgabe(String beschreibung, String erledigungsDatum){
         con = getInstance();
         if(con != null) {

@@ -717,6 +717,9 @@ public class KalenderHelfer {
         }
         SQLHelper.newAufgabe(aufgabena, date);
     }
+    public void deleteMitarbeiter(int mitarbeiterID){
+        SQLHelper.deleteMitarbeiter(mitarbeiterID);
+    }
 
 
 
