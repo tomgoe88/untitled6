@@ -30,7 +30,7 @@
     <ui:composition>
 
         <h:form  id="bar">
-            <b:navBar  brand="Palestro">
+            <b:navBar  brand="Palestro" rendered="#{pageChanger.angemeldet!=null}">
                 <b:navbarLinks >
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
                     <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
