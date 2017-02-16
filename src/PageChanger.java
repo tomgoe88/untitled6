@@ -105,6 +105,7 @@ public class PageChanger {
             if(m.getName().equalsIgnoreCase(vorname)){
                 String temp= m.getPassword();
                 if(temp.equalsIgnoreCase("null")){
+                    info();
                     tempBool=true;
                     login="login";
                     break;
@@ -115,7 +116,7 @@ public class PageChanger {
                         break;
                     }
                     else {
-                        FacesContext.getCurrentInstance().addMessage("Achtung", new FacesMessage("Bitte geben sie das korrekte Passwort ein"));
+                        warn();
                         login="login";
                         break;
                     }
@@ -177,6 +178,21 @@ public class PageChanger {
             }
         }
         return login;
+    }
+    public void info() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Weisen sie ein Kennwort zu!"));
+    }
+
+    public void warn() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Hinweis!", "Bitte geben sie das korrekte Passwort ein"));
+    }
+
+    public void error() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Contact admin."));
+    }
+
+    public void fatal() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", "System Error"));
     }
 
     public void setPage(String page) {

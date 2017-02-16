@@ -30,12 +30,17 @@
 
 <b:container fluid="true">
     <b:row>
+        <h:form>
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+        </h:form>
+    </b:row>
+    <b:row>
         <b:column span="3">
 
         </b:column>
         <b:column span="6">
             <h:form  id="bar">
-                <p:panelGrid  columns="2" rendered="#{pageChanger.passwordBool==false}" styleClass="col-lg-12" >
+                <p:panelGrid  columns="2" rendered="#{pageChanger.passwordBool==false}" styleClass="col-lg-12"  >
                     <h:outputLabel value="Loginmaske"/>
                     <b/>
                     <h:outputLabel value="Name: "></h:outputLabel>
