@@ -34,6 +34,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String urlaubszeiten;
     private String password;
     private boolean admin;
+    private List<Urlaub> urlaubList;
 
     public Mitarbeiter(){
 
@@ -55,6 +56,16 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public List<Urlaub> getUrlaubList() {
+        urlaubList= new ArrayList<Urlaub>();
+        urlaubList.addAll(SQLHelper.getUrlaubsList(MitarbeiterID));
+        return urlaubList;
+    }
+
+    public void setUrlaubList(List<Urlaub> urlaubList) {
+        this.urlaubList = urlaubList;
     }
 
     public Mitarbeiter(String name, String farbe) {

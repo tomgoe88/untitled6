@@ -1074,5 +1074,54 @@ public class SQLHelper{
             }
         }
     }
+    public static List<Urlaub> getUrlaubsList(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<Urlaub> fb= new ArrayList<Urlaub>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM urlaubszeit " +
+                                "INNER JOIN mitarbeiter ON urlaubszeit.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE urlaubszeit.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    Urlaub temp = new Urlaub();
+
+                    String schichtbeginn=result.getString("Urlaubszeitbeginn");
+                    String schichtende=result.getString("Urlaubszeitende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setUrlaubBeginn(start);
+                    temp.setUrlaubEnde(end);
+                   ;
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
 
 }
