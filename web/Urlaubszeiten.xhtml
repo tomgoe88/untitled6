@@ -72,8 +72,26 @@
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
-
-
+            <b:row>
+                <p:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub">
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
+                    </p:column>
+                    <p:column>
+                       <p:commandButton value="Löschen" action="#{kalenderHelfer.deleteUrlaub(mitarbeiterurlaub.urlaubsID)}" update="cal"/>
+                    </p:column>
+                </p:dataTable>
+            </b:row>
         </b:container>
     </h:form>
 

@@ -8,9 +8,18 @@ import java.util.Date;
 @ManagedBean
 @ViewScoped
 public class Urlaub {
+    private int urlaubsID;
     private Date urlaubBeginn;
     private Date urlaubEnde;
     private int urlaubstage;
+
+    public int getUrlaubsID() {
+        return urlaubsID;
+    }
+
+    public void setUrlaubsID(int urlaubsID) {
+        this.urlaubsID = urlaubsID;
+    }
 
     public Date getUrlaubBeginn() {
         return urlaubBeginn;
@@ -29,6 +38,7 @@ public class Urlaub {
     }
 
     public int getUrlaubstage() {
+        urlaubstage= (int)( (urlaubEnde.getTime() - urlaubBeginn.getTime()) / (1000 * 60 * 60 * 24));
         return urlaubstage;
     }
 

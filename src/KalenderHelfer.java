@@ -738,6 +738,9 @@ public class KalenderHelfer {
         }
         return kundenanee;
     }
+    public void deleteUrlaub(int urlaubsID){
+        SQLHelper.deleteUrlaub(urlaubsID);
+    }
 
 
 

@@ -1106,7 +1106,7 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    temp.setUrlaubsID(result.getInt("UrlaubszeitID"));
                     temp.setUrlaubBeginn(start);
                     temp.setUrlaubEnde(end);
                    ;
@@ -1122,6 +1122,23 @@ public class SQLHelper{
         }
 
         return fb;
+    }
+    public static void deleteUrlaub(int urlaubsID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM urlaubszeit WHERE UrlaubszeitID='"+urlaubsID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
     }
 
 }
