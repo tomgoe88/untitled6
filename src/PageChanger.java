@@ -102,15 +102,15 @@ public class PageChanger {
         String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("benutzername");
         String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("secret");
         for(Mitarbeiter m:getMitarbeiter()){
-            if(m.getName().equalsIgnoreCase(vorname)){
+            if(m.getName().equals(vorname)){
                 String temp= m.getPassword();
-                if(temp.equalsIgnoreCase("null")){
+                if(temp.equals("null")){
                     info();
                     tempBool=true;
                     login="login";
                     break;
                 } else {
-                    if(m.getPassword().equalsIgnoreCase(password)){
+                    if(m.getPassword().equals(password)){
                         tempMitarbeiter= m;
                         login="hauptseite";
                         break;
@@ -170,7 +170,7 @@ public class PageChanger {
         String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("loginname");
         String password =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("loginKennwort");
         for(Mitarbeiter m: getMitarbeiter()){
-            if(m.getName().equalsIgnoreCase(vorname)){
+            if(m.getName().equals(vorname)){
                 SQLHelper.updatePassword(m.getMitarbeiterID(),password);
                 tempBool=false;
                 login="hauptseite";

@@ -9,7 +9,8 @@
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 
-      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html"
+      xmlns:ng="http://xmlns.jcp.org/jsf/passthrough">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
     <title>Facelet Title</title>
@@ -44,19 +45,39 @@
                     <h:outputLabel value="Loginmaske"/>
                     <b/>
                     <h:outputLabel value="Name: "></h:outputLabel>
-                    <b:inputText name="benutzername" />
+                    <b:inputText name="benutzername">
+                        <f:facet name="append">
+                            <b:icon name="user"></b:icon>
+                        </f:facet>
+                    </b:inputText>
                     <h:outputLabel value="Password: "></h:outputLabel>
-                    <b:inputSecret name="secret" />
-                    <p:commandButton label="Login" action="#{pageChanger.checkPassword}" update="bar"/>
+                    <b:inputSecret id="kennw" name="secret" >
+
+                        <f:facet name="append">
+                            <b:icon name="lock"></b:icon>
+                        </f:facet>
+                    </b:inputSecret>
+                    <p:commandButton value="Login" styleClass="btn" label="Login" action="#{pageChanger.checkPassword}" update="bar"/>
+
                 </p:panelGrid>
                 <p:panelGrid columns="2" rendered="#{pageChanger.passwordBool==true}" styleClass="col-lg-12" >
                     <h:outputLabel value="Passworteingabe"/>
                     <b/>
                     <h:outputLabel value="Name: "></h:outputLabel>
-                    <b:inputText name="loginname" />
+                    <b:inputText name="loginname" >
+                        <f:facet name="append">
+                            <b:icon name="user"></b:icon>
+                        </f:facet>
+                    </b:inputText>
                     <h:outputLabel value="Password: "></h:outputLabel>
-                    <b:inputSecret name="loginKennwort" />
-                    <p:commandButton label="Bestätigen" action="#{pageChanger.updatePassword}"/>
+                    <b:inputSecret id="kenn" name="loginKennwort" >
+
+                        <f:facet name="append">
+                            <b:icon name="lock"></b:icon>
+                        </f:facet>
+                    </b:inputSecret>
+                    <p:commandButton value="Bestätigen" styleClass="btn" label="Bestätigen" action="#{pageChanger.updatePassword}"/>
+
                 </p:panelGrid>
             </h:form>
         </b:column>

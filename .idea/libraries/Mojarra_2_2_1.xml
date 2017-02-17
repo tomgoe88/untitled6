@@ -13,6 +13,7 @@
       <root url="jar://I:/Java_Bibiliotheken/gson-2.2.2.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/common-lang3.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/angularFaces-core-2.1.12.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

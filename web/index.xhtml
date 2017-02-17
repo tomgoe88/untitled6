@@ -189,7 +189,11 @@
                          typeahead-values="#{kalenderHelfer.kundeNachname}"/>
             <b/>
             <h:outputText id="tele" value="Telefonnummer: "/>
-            <b:inputText name="tele" for="tele"/>
+            <b:inputText id="teleid" name="tele" for="tele">
+                <f:validateRegex pattern="[0-9]+" />
+                <f:ajax event="keyup" render="messages" />
+            </b:inputText>
+            <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
             <b/>
             <h:outputText id="beschreibung" value="Beschreibung: "/>
             <b:inputText name="beschreibung" for="beschreibung"/>

@@ -50,4 +50,5 @@
         <param-name>BootsFaces_USETHEME</param-name>
         <param-value>true</param-value>
     </context-param>
+
 </web-app>
