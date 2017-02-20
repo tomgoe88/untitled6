@@ -1189,5 +1189,22 @@ public class SQLHelper{
 
         return fb;
     }
+    public static void updatearbeitszeit(int arbeitszeitID, String arbeitsstart, String arbeitsende){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update arbeitszeiten SET Schichtbeginn='"+arbeitsstart+"', Schichtende='"+arbeitsende+"' WHERE ArbeitszeitID='"+arbeitszeitID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
 
 }

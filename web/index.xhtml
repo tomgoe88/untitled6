@@ -118,16 +118,16 @@
                                     <b:row>
                                         <ui:repeat value="#{kalenderHelfer.mitarbeiter}"
                                                    var="mit">
-                                            <b:column span="3">
+
                                                 <b:label text="#{mit.name}"/>
                                                 <b:fullCalendar
 
                                                         calendarHeader="false"
                                                         weekMode="false"
                                                         lang="de"
-                                                        defaultView="agendaDay"
+                                                        defaultView="#{kalenderHelfer.changeAgenda}"
                                                         events="#{mit.tem}"
-
+                                                        defaultDate="#{kalenderHelfer.theDefaultDate}"
                                                         dayClick="
                                                         function(date, jsEvent, view) {
                                                         selectDate(date);
@@ -139,7 +139,7 @@
                                                         }"
                                                 >
                                                 </b:fullCalendar>
-                                            </b:column>
+
                                         </ui:repeat>
                                     </b:row>
                                 </b:column>
