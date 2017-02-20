@@ -31,6 +31,7 @@ import sun.security.jca.GetInstance;
 @ManagedBean
 @ViewScoped
 public class KalenderHelfer {
+    private boolean wocheTag;
     private int temp=0;
     private int currentWeek;
     private String tempColor;
@@ -39,7 +40,7 @@ public class KalenderHelfer {
     private String theDefaultDate;
     private int kundenID;
     private  int sEintrager;
-    private Date defaultDate;
+    private Date defaultDate = new Date();
     private int terminID;
     private Date changeDate;
     private Date currentDate;
@@ -124,6 +125,23 @@ public class KalenderHelfer {
 
     public void setAufgabeId(int aufgabeId) {
         this.aufgabeId = aufgabeId;
+    }
+
+    public boolean isWocheTag() {
+        return wocheTag;
+    }
+
+    public void setWocheTag(boolean wocheTag) {
+        this.wocheTag = wocheTag;
+    }
+    public String getChangeAgenda(){
+        String change;
+        if(wocheTag == true){
+            change = "agendaWeek";
+        } else {
+            change="agendaDay";
+        }
+        return change;
     }
 
     public String getText() {
@@ -309,6 +327,19 @@ public class KalenderHelfer {
         //
         this.defaultDate= gc.getTime();// auch hier schauen, welches Datum raus komme
 
+    }
+    public void nextDay(){
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(defaultDate);
+        gc.add(Calendar.DAY_OF_MONTH,1);
+        this.defaultDate=gc.getTime();
+
+    }
+    public void preDay(){
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(defaultDate);
+        gc.add(Calendar.DAY_OF_MONTH,-1);
+        this.defaultDate=gc.getTime();
     }
 
 
@@ -664,28 +695,7 @@ public class KalenderHelfer {
         SQLHelper.newPassword(macidd,null,Boolean.toString(adminbool));
     }
 
-    public List<Aufgabe> getAufgaben(){
-        List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
-        String date;
-        if(defaultDate!= null){
-            date= defaultDate.toString();
-        } else {
-            Calendar c= Calendar.getInstance();
-            c.setTime(new Date());
-            c.set(Calendar.HOUR_OF_DAY, 1);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
 
-            date= c.getTime().toString();
-        }
-        aufgaben =SQLHelper.getAufgaben(date);
-        if(aufgaben.size()==0){
-            Aufgabe temp= new Aufgabe();
-            temp.setBeschreibung("-");
-            aufgaben.add(temp);
-        }
-        return aufgaben;
-    }
 
     public int getAufgabenErledigerID() {
         return aufgabenErledigerID;
@@ -709,6 +719,12 @@ public class KalenderHelfer {
         String aufgabena =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("aufgabenname");
         String date;
         if(defaultDate!= null){
+            Calendar c= Calendar.getInstance();
+            c.setTime(defaultDate);
+            c.set(Calendar.HOUR_OF_DAY, 1);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
             date= defaultDate.toString();
         } else {
             Calendar c= Calendar.getInstance();
@@ -740,6 +756,34 @@ public class KalenderHelfer {
     }
     public void deleteUrlaub(int urlaubsID){
         SQLHelper.deleteUrlaub(urlaubsID);
+    }
+    public List<Aufgabe> getAufgaben(){
+        List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
+        String date;
+        if(defaultDate!= null){
+            Calendar c= Calendar.getInstance();
+            c.setTime(defaultDate);
+            c.set(Calendar.HOUR_OF_DAY, 1);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
+            date= c.getTime().toString();
+        } else {
+            Calendar c= Calendar.getInstance();
+            c.setTime(new Date());
+            c.set(Calendar.HOUR_OF_DAY, 1);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
+            date= c.getTime().toString();
+        }
+        aufgaben =SQLHelper.getAufgaben(date);
+        if(aufgaben.size()==0){
+            Aufgabe temp= new Aufgabe();
+            temp.setBeschreibung("-");
+            aufgaben.add(temp);
+        }
+        return aufgaben;
     }
 
 

@@ -1140,5 +1140,54 @@ public class SQLHelper{
             }
         }
     }
+    public static List<Arbeitszeit> getArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<Arbeitszeit> fb= new ArrayList<Arbeitszeit>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM arbeitszeiten " +
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE arbeitszeiten.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    Arbeitszeit temp = new Arbeitszeit();
+
+                    String schichtbeginn=result.getString("Schichtbeginn");
+                    String schichtende=result.getString("Schichtende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setArbeitszeitID(result.getInt("ArbeitszeitID"));
+                    temp.setArbeitsstart(start);
+                    temp.setArbeitsende(end);
+
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
 
 }

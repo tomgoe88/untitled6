@@ -34,23 +34,49 @@
 
 
 
-    <h:form id="cal">
-        <b:container fluid="true">
-            <b:row rendered="false">
-                <b:column>
-                    <b:panel look="success" collapsible="true" title="Day">
-                        <h:form>
 
-                            <p:calendar showTodayButton="true" showOn="button"
-                                        locale="de"
-                                        pattern="dd.MM.yyyy"
-                            >
-                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal arbeitszeitfenster"/>
-                            </p:calendar>
-                        </h:form>
-                    </b:panel>
-                </b:column>
+        <b:container fluid="true">
+            <b:row>
+                <h:form id="navform">
+
+                    <b:column span="4">
+
+
+                        <p:calendar showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
+                                    update="cal aufgabenformer"/>
+                        </p:calendar>
+
+
+
+                    </b:column>
+
+                    <b:column span="1"/>
+                    <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
+                        <p:ajax update="cal aufgabenformer"/>
+                    </p:selectBooleanButton>
+
+                    <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal aufgabenformer"></p:commandButton>
+
+
+                    <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal aufgabenformer"></p:commandButton>
+                    <b/>
+
+
+                </h:form>
             </b:row>
+            <h:form id="cal">
+                <b:row>
+                    <b:column span="5">
+                        <h:outputText value="#{kalenderHelfer.defaultDate}">
+                            <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
+                        </h:outputText>
+                    </b:column>
+                </b:row>
             <b:row>
                 <b:column span="12">
 
@@ -67,7 +93,8 @@
                     <b:label text="#{mit.name}"/>
                     <b:fullCalendar
                             lang="de"
-                            defaultView="agendaDay"
+                            calendarHeader="false"
+                            defaultView="#{kalenderHelfer.changeAgenda}"
                             events="#{kalenderHelfer.mitarbeit.arbeitszeiten}"
 
                             dayClick="
@@ -77,7 +104,7 @@
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
-
+            </h:form>
             <b:row>
                 <b:column span="12">
                     <b:panel look="success" collapsible="true" title="Aufgaben">
@@ -85,22 +112,7 @@
                             <h:form id="aufgabenformer">
                                 <b:row >
 
-                                    <b:column span="4">
 
-                                        <pm:content>
-                                        <p:calendar showTodayButton="true" showOn="button"
-                                                    locale="de"
-                                                    pattern="dd.MM.yyyy"
-                                        >
-                                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}" update="cal aufgabenformer"/>
-                                        </p:calendar>
-                                        </pm:content>
-
-                                    </b:column>
-                                    <b:column span="1"/>
-                                    <b:column span="4">
-
-                                    </b:column>
                                     <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();" styleClass="btn"/>
                                 </b:row>
                                 <b:row >
@@ -122,8 +134,9 @@
                     </b:panel>
                 </b:column>
             </b:row>
+
         </b:container>
-    </h:form>
+
 
     <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
         <h:form id="arbeitszeitfenster">
