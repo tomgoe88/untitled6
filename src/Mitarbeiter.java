@@ -104,6 +104,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     public String getArbeitszeiten() {
         FullCalendarEventList fk= new FullCalendarEventList();
         fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
+        fk.getList().addAll(SQLHelper.getUrlaubszeiten(MitarbeiterID));
         if(fk.getList()!= null){
             arbeitszeiten=fk.toJson();
         } else{

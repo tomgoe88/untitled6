@@ -39,6 +39,20 @@ public class Urlaub {
 
     public int getUrlaubstage() {
         urlaubstage= (int)( (urlaubEnde.getTime() - urlaubBeginn.getTime()) / (1000 * 60 * 60 * 24));
+        int i=0;
+        int woche=0;
+        while(i<urlaubstage){
+            i++;
+            woche++;
+            if(woche==6){
+                urlaubstage--;
+            }
+            else if (woche==7){
+                urlaubstage--;
+                woche=0;
+            }
+
+        }
         return urlaubstage;
     }
 
