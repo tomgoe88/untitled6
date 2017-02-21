@@ -19,6 +19,7 @@ public class PageChanger {
     private String pageHauptseite;
     private String pageUrlaubszeiten;
     private String pageKursplaner;
+    private String pageMitarbeiterkonto;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -55,6 +56,15 @@ public class PageChanger {
         page= "mitarbeiter";
         return "/"+page+".xhtml";
 
+    }
+
+    public String getPageMitarbeiterkonto() {
+        page="Mitarbeiterkonto";
+        return  "/"+page+".xhtml";
+    }
+
+    public void setPageMitarbeiterkonto(String pageMitarbeiterkonto) {
+        this.pageMitarbeiterkonto = pageMitarbeiterkonto;
     }
 
     public static boolean isTempBool() {

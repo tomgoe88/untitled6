@@ -13,7 +13,7 @@ public class Arbeitszeit {
     private int arbeitszeitID;
     private Date arbeitsstart;
     private Date arbeitsende;
-    private int arbeitsdauer;
+    private String arbeitsdauer;
 
 
     public int getArbeitszeitID() {
@@ -40,11 +40,16 @@ public class Arbeitszeit {
         this.arbeitsende = arbeitsende;
     }
 
-    public int getArbeitsdauer() {
+    public String getArbeitsdauer() {
+        int zeit= (int)( (arbeitsende.getTime() - arbeitsstart.getTime()) / (1000));
+        int std=(int)zeit/3600;
+        int min=(int)(zeit-std*3600)/60;
+
+        arbeitsdauer=std+":"+min;
         return arbeitsdauer;
     }
 
-    public void setArbeitsdauer(int arbeitsdauer) {
+    public void setArbeitsdauer(String arbeitsdauer) {
         this.arbeitsdauer = arbeitsdauer;
     }
 
@@ -54,26 +59,30 @@ public class Arbeitszeit {
     public void addStundeStart(){
         Calendar gc = Calendar.getInstance();
         gc.setTime(arbeitsstart);
-        gc.add(Calendar.HOUR_OF_DAY, 1);
+        gc.add(Calendar.MINUTE, 10);
         arbeitsstart=gc.getTime();
+        updateArbeitszeit();
     }
     public void addStundeEnde(){
         Calendar gc = Calendar.getInstance();
         gc.setTime(arbeitsende);
-        gc.add(Calendar.HOUR_OF_DAY, 1);
+        gc.add(Calendar.MINUTE, 10);
         arbeitsende=gc.getTime();
+        updateArbeitszeit();
     }
     public void deleteStundeStart(){
         Calendar gc = Calendar.getInstance();
         gc.setTime(arbeitsstart);
-        gc.add(Calendar.HOUR_OF_DAY, -1);
+        gc.add(Calendar.MINUTE, -10);
         arbeitsstart=gc.getTime();
+        updateArbeitszeit();
     }
     public void deleteStundeEnde(){
         Calendar gc = Calendar.getInstance();
         gc.setTime(arbeitsende);
-        gc.add(Calendar.HOUR_OF_DAY, -1);
+        gc.add(Calendar.MINUTE, -10);
         arbeitsende=gc.getTime();
+        updateArbeitszeit();
     }
     public void updateArbeitszeit(){
         SQLHelper.updatearbeitszeit(arbeitszeitID,arbeitsstart.toString(),arbeitsende.toString());

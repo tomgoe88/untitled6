@@ -1152,8 +1152,7 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM arbeitszeiten " +
-                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID " +
-                                "WHERE arbeitszeiten.MitarbeiterID = '"+mitarbeiter+"'";
+                                "WHERE MitarbeiterID = '"+mitarbeiter+"'";
                 ResultSet result = query.executeQuery(sql);
 
 

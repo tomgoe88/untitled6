@@ -1,11 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+</h:head>
+<body>
+
+<ui:insert name="header">
+    <ui:include src="/hauptseite.xhtml"/>
+</ui:insert>
+<b:container fluid="true">
+    <h:form id="ma">
+    <b:row>
+        <b:column>
+            <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
+        </b:column>
+        <b:column>
+            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
+                <p:column>
+                    <h:outputText value="#{az.arbeitsstart}">
+                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{az.arbeitsstart}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+                    <p:commandButton value="weniger" action="#{az.deleteStundeStart}" update="ma"/>
+                    <p:commandButton value="mehr" action="#{az.addStundeStart}" update="ma"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{az.arbeitsende}">
+                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{az.arbeitsende}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+                    <p:commandButton value="weniger" action="#{az.deleteStundeEnde}" update="ma"/>
+                    <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
+                </p:column>
+            </p:dataTable>
+        </b:column>
+    </b:row>
+    </h:form>
+</b:container>
+
+
+</body>
 </html>
