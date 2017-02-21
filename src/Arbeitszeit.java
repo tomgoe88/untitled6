@@ -14,6 +14,7 @@ public class Arbeitszeit {
     private Date arbeitsstart;
     private Date arbeitsende;
     private String arbeitsdauer;
+    private Date filteredDate;
 
 
     public int getArbeitszeitID() {
@@ -47,6 +48,14 @@ public class Arbeitszeit {
 
         arbeitsdauer=std+":"+min;
         return arbeitsdauer;
+    }
+
+    public Date getFilteredDate() {
+        return filteredDate;
+    }
+
+    public void setFilteredDate(Date filteredDate) {
+        this.filteredDate = filteredDate;
     }
 
     public void setArbeitsdauer(String arbeitsdauer) {
@@ -87,4 +96,5 @@ public class Arbeitszeit {
     public void updateArbeitszeit(){
         SQLHelper.updatearbeitszeit(arbeitszeitID,arbeitsstart.toString(),arbeitsende.toString());
     }
+
 }

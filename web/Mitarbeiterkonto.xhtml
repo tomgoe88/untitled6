@@ -28,44 +28,67 @@
     <ui:include src="/hauptseite.xhtml"/>
 </ui:insert>
 <b:container fluid="true">
-    <h:form id="ma">
+
     <b:row>
+        <h:form>
         <b:column>
             <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
         </b:column>
         <b:column>
-            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
-                <p:column>
+            <h:outputLabel value="von: "/>
+            <p:calendar showTodayButton="true" showOn="button"
+                        locale="de"
+
+                        pattern="dd.MM.yyyy"
+                        styleClass="embed-responsive-item">
+                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDate}"
+                        update="ma"/>
+            </p:calendar>
+            <h:outputLabel value="bis: "/>
+            <p:calendar showTodayButton="true" showOn="button"
+                        locale="de"
+
+                        pattern="dd.MM.yyyy"
+                        styleClass="embed-responsive-item">
+                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDate}"
+                        update="ma"/>
+            </p:calendar>
+
+        </b:column>
+        </h:form>
+        <h:form id="ma">
+        <b:column>
+            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az" >
+
+                <p:column headerText="Tag">
                     <h:outputText value="#{az.arbeitsstart}">
                         <f:convertDateTime pattern="dd.MM.yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column>
+                <p:column headerText="Arbeitsbeginn">
                     <h:outputText value="#{az.arbeitsstart}">
                         <f:convertDateTime pattern="HH:mm"/>
                     </h:outputText>
                     <p:commandButton value="weniger" action="#{az.deleteStundeStart}" update="ma"/>
                     <p:commandButton value="mehr" action="#{az.addStundeStart}" update="ma"/>
                 </p:column>
-                <p:column>
-                    <h:outputText value="#{az.arbeitsende}">
-                        <f:convertDateTime pattern="dd.MM.yyyy"/>
-                    </h:outputText>
-                </p:column>
-                <p:column>
+                <p:column headerText="Arbeitsende">
                     <h:outputText value="#{az.arbeitsende}">
                         <f:convertDateTime pattern="HH:mm"/>
                     </h:outputText>
                     <p:commandButton value="weniger" action="#{az.deleteStundeEnde}" update="ma"/>
                     <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>
                 </p:column>
-                <p:column>
+                <p:column headerText="Stunden">
                     <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
                 </p:column>
             </p:dataTable>
+            <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
+            <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
         </b:column>
+        </h:form>
     </b:row>
-    </h:form>
+
 </b:container>
 
 

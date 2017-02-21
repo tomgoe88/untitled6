@@ -5,13 +5,12 @@
  */
 
 
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -36,7 +35,9 @@ public class Mitarbeiter extends FullCalendarEventList {
     private boolean admin;
     private List<Urlaub> urlaubList;
     private List<Arbeitszeit> arbeitszeitList;
-
+    private Date filteredDatestart=null;
+    private Date filterDateEnd=null;
+    private String arbeitsdauer;
     public Mitarbeiter(){
 
     }
@@ -55,6 +56,22 @@ public class Mitarbeiter extends FullCalendarEventList {
         return admin;
     }
 
+    public Date getFilteredDatestart() {
+        return filteredDatestart;
+    }
+
+    public void setFilteredDatestart(Date filteredDatestart) {
+        this.filteredDatestart = filteredDatestart;
+    }
+
+    public Date getFilterDateEnd() {
+        return filterDateEnd;
+    }
+
+    public void setFilterDateEnd(Date filterDateEnd) {
+        this.filterDateEnd = filterDateEnd;
+    }
+
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
@@ -64,15 +81,76 @@ public class Mitarbeiter extends FullCalendarEventList {
         urlaubList.addAll(SQLHelper.getUrlaubsList(MitarbeiterID));
         return urlaubList;
     }
+    public void filterDateStartDate(SelectEvent event) {
+        filteredDatestart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(filteredDatestart);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,1);
+        // }
+        //
+        this.filteredDatestart= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+    public void filterDateEndDate(SelectEvent event) {
+        filterDateEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(filterDateEnd);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,23);
+        // }
+        //
+        this.filterDateEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+
 
     public void setUrlaubList(List<Urlaub> urlaubList) {
         this.urlaubList = urlaubList;
     }
 
     public List<Arbeitszeit> getArbeitszeitList() {
+        int zeit=0;
+
         arbeitszeitList = new ArrayList<Arbeitszeit>();
         arbeitszeitList.addAll(SQLHelper.getArbeitszeiten(MitarbeiterID));
+        if(filteredDatestart!=null){
+            List<Arbeitszeit> tempList= new ArrayList<Arbeitszeit>();
+
+            for(Arbeitszeit a:arbeitszeitList){
+                if(!a.getArbeitsstart().before(filteredDatestart)&& !a.getArbeitsstart().after(filterDateEnd)){
+                    tempList.add(a);
+                }
+            }
+            arbeitszeitList=new ArrayList<Arbeitszeit>();
+            arbeitszeitList.addAll(tempList);
+            tempList=null;
+        }
+        Collections.sort(arbeitszeitList, new Comparator<Arbeitszeit>() {
+            public int compare(Arbeitszeit o1, Arbeitszeit o2) {
+                return o2.getArbeitsstart().compareTo(o1.getArbeitsstart());
+            }
+        });
+
+        for(Arbeitszeit az: arbeitszeitList){
+            int tempz=(int)( (az.getArbeitsende().getTime() - az.getArbeitsstart().getTime()) / (1000));
+            zeit=zeit+tempz;
+        }
+        int std=(int)zeit/3600;
+        int min=(int)(zeit-std*3600)/60;
+        arbeitsdauer=std+":"+min;
+
         return arbeitszeitList;
+    }
+    public String getArbeitsdauer() {
+
+        return arbeitsdauer;
     }
 
     public void setArbeitszeitList(List<Arbeitszeit> arbeitszeitList) {
