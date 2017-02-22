@@ -33,11 +33,15 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String urlaubszeiten;
     private String password;
     private boolean admin;
+    private static Date staticStart;
+    private static Date staticEnd;
     private List<Urlaub> urlaubList;
     private List<Arbeitszeit> arbeitszeitList;
-    private Date filteredDatestart=null;
-    private Date filterDateEnd=null;
+    private static Date filteredDatestart;
+    private static Date filterDateEnd;
     private String arbeitsdauer;
+    private static String tempArbeitsdauer;
+    private String arbeitdauer;
     public Mitarbeiter(){
 
     }
@@ -56,20 +60,53 @@ public class Mitarbeiter extends FullCalendarEventList {
         return admin;
     }
 
-    public Date getFilteredDatestart() {
+    public static Date getStaticStart() {
+        return staticStart;
+    }
+
+    public static String getTempArbeitsdauer() {
+        return tempArbeitsdauer;
+    }
+
+    public static void setTempArbeitsdauer(String tempArbeitsdauer) {
+        Mitarbeiter.tempArbeitsdauer = tempArbeitsdauer;
+    }
+
+    public String getArbeitdauer() {
+        arbeitdauer=tempArbeitsdauer;
+        return arbeitdauer;
+    }
+
+    public void setArbeitdauer(String arbeitdauer) {
+        this.arbeitdauer = arbeitdauer;
+    }
+
+    public static void setStaticStart(Date staticStart) {
+        Mitarbeiter.staticStart = staticStart;
+    }
+
+    public static Date getStaticEnd() {
+        return staticEnd;
+    }
+
+    public static void setStaticEnd(Date staticEnd) {
+        Mitarbeiter.staticEnd = staticEnd;
+    }
+
+    public static Date getFilteredDatestart() {
         return filteredDatestart;
     }
 
-    public void setFilteredDatestart(Date filteredDatestart) {
-        this.filteredDatestart = filteredDatestart;
+    public static void setFilteredDatestart(Date filteredDatestart) {
+        filteredDatestart = filteredDatestart;
     }
 
-    public Date getFilterDateEnd() {
+    public static Date getFilterDateEnd() {
         return filterDateEnd;
     }
 
-    public void setFilterDateEnd(Date filterDateEnd) {
-        this.filterDateEnd = filterDateEnd;
+    public static void setFilterDateEnd(Date filterDateEnd) {
+        filterDateEnd = filterDateEnd;
     }
 
     public void setAdmin(boolean admin) {
@@ -116,7 +153,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public List<Arbeitszeit> getArbeitszeitList() {
-        int zeit=0;
+
 
         arbeitszeitList = new ArrayList<Arbeitszeit>();
         arbeitszeitList.addAll(SQLHelper.getArbeitszeiten(MitarbeiterID));
@@ -138,17 +175,22 @@ public class Mitarbeiter extends FullCalendarEventList {
             }
         });
 
-        for(Arbeitszeit az: arbeitszeitList){
+
+
+        return arbeitszeitList;
+    }
+    public void setArbeitsdauer(String arbeitsdauer){
+        this.arbeitsdauer=arbeitsdauer;
+    }
+    public String getArbeitsdauer() {
+        int zeit=0;
+        for(Arbeitszeit az: getArbeitszeitList()){
             int tempz=(int)( (az.getArbeitsende().getTime() - az.getArbeitsstart().getTime()) / (1000));
             zeit=zeit+tempz;
         }
         int std=(int)zeit/3600;
         int min=(int)(zeit-std*3600)/60;
         arbeitsdauer=std+":"+min;
-
-        return arbeitszeitList;
-    }
-    public String getArbeitsdauer() {
 
         return arbeitsdauer;
     }
