@@ -20,7 +20,7 @@ public class PageChanger {
     private String pageUrlaubszeiten;
     private String pageKursplaner;
     private String pageMitarbeiterkonto;
-    private String pageArbeitszeitKonto;
+    private String pageKunde;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -64,13 +64,13 @@ public class PageChanger {
         return  "/"+page+".xhtml";
     }
 
-    public String getPageArbeitszeitKonto() {
-        page="ArbeitszeitKonto";
+    public String getPageKunde() {
+        page="Kunden";
         return  "/"+page+".xhtml";
     }
 
-    public void setPageArbeitszeitKonto(String pageArbeitszeitKonto) {
-        this.pageArbeitszeitKonto = pageArbeitszeitKonto;
+    public void setPageKunde(String pageKunde) {
+        this.pageKunde = pageKunde;
     }
 
     public void setPageMitarbeiterkonto(String pageMitarbeiterkonto) {

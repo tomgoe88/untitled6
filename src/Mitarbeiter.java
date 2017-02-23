@@ -33,8 +33,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String urlaubszeiten;
     private String password;
     private boolean admin;
-    private static Date staticStart;
-    private static Date staticEnd;
+    private Date staticStart=null;
+    private Date staticEnd=null;
     private List<Urlaub> urlaubList;
     private List<Arbeitszeit> arbeitszeitList;
     private static Date filteredDatestart;
@@ -60,9 +60,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         return admin;
     }
 
-    public static Date getStaticStart() {
-        return staticStart;
-    }
+
 
     public static String getTempArbeitsdauer() {
         return tempArbeitsdauer;
@@ -81,16 +79,20 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.arbeitdauer = arbeitdauer;
     }
 
-    public static void setStaticStart(Date staticStart) {
-        Mitarbeiter.staticStart = staticStart;
+    public  Date getStaticStart() {
+        return staticStart;
     }
 
-    public static Date getStaticEnd() {
+    public  void setStaticStart(Date staticStart) {
+        this.staticStart = staticStart;
+    }
+
+    public Date getStaticEnd() {
         return staticEnd;
     }
 
-    public static void setStaticEnd(Date staticEnd) {
-        Mitarbeiter.staticEnd = staticEnd;
+    public  void setStaticEnd(Date staticEnd) {
+        this.staticEnd = staticEnd;
     }
 
     public static Date getFilteredDatestart() {
@@ -146,6 +148,34 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.filterDateEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
+    public void filterDateStartDateMA(SelectEvent event) {
+        staticStart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(staticStart);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,1);
+        // }
+        //
+        this.staticStart= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+    public void filterDateEndDateMA(SelectEvent event) {
+        staticEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(staticEnd);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,23);
+        // }
+        //
+        this.staticEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
 
 
     public void setUrlaubList(List<Urlaub> urlaubList) {
@@ -157,11 +187,27 @@ public class Mitarbeiter extends FullCalendarEventList {
 
         arbeitszeitList = new ArrayList<Arbeitszeit>();
         arbeitszeitList.addAll(SQLHelper.getArbeitszeiten(MitarbeiterID));
-        if(filteredDatestart!=null){
-            List<Arbeitszeit> tempList= new ArrayList<Arbeitszeit>();
-
+        List<Arbeitszeit> tempList= new ArrayList<Arbeitszeit>();
+        if(staticStart==null){
+            if(filteredDatestart!=null){
+                if (filterDateEnd == null) {
+                    filterDateEnd=new Date();
+                }
+                for(Arbeitszeit a:arbeitszeitList){
+                    if(!a.getArbeitsstart().before(filteredDatestart)&& !a.getArbeitsstart().after(filterDateEnd)){
+                        tempList.add(a);
+                    }
+                }
+                arbeitszeitList=new ArrayList<Arbeitszeit>();
+                arbeitszeitList.addAll(tempList);
+                tempList=null;
+            }
+        } else {
+            if (staticEnd == null) {
+                staticEnd=new Date();
+            }
             for(Arbeitszeit a:arbeitszeitList){
-                if(!a.getArbeitsstart().before(filteredDatestart)&& !a.getArbeitsstart().after(filterDateEnd)){
+                if(!a.getArbeitsstart().before(staticStart)&& !a.getArbeitsstart().after(staticEnd)){
                     tempList.add(a);
                 }
             }
@@ -169,6 +215,8 @@ public class Mitarbeiter extends FullCalendarEventList {
             arbeitszeitList.addAll(tempList);
             tempList=null;
         }
+
+
         Collections.sort(arbeitszeitList, new Comparator<Arbeitszeit>() {
             public int compare(Arbeitszeit o1, Arbeitszeit o2) {
                 return o2.getArbeitsstart().compareTo(o1.getArbeitsstart());
@@ -312,13 +360,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.name = name;
     }
 
-    public List<Termine> getTermine() {
-        this.termine = new ArrayList<Termine>();
-        Termine t = new Termine();
-        t.setTermininfo("dies ist ein");
-        t.setUhrzeit(new Date());
-        return termine;
-    }
+
 
     public void setTermine(List<Termine> termine) {
         this.termine = termine;

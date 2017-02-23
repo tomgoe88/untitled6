@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+</h:head>
+
+<body>
+
+<ui:insert name="header">
+    <ui:include src="/hauptseite.xhtml"/>
+</ui:insert>
+
+<b:container fluid="true">
+    <h:form id="cal">
+    <b:row>
+        <b:column span="12">
+
+            <p:selectOneMenu id="mitauswahl" value="#{kundenController.q}" styleClass="col-lg-12" >
+                <f:selectItems value="#{kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
+                               itemValue="#{mi.kundeID}"/>
+                <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                <p:ajax event="valueChange" update="cal ma"/>
+            </p:selectOneMenu>
+        </b:column>
+
+    </b:row>
+    </h:form>
+    <b:row>
+        <h:form>
+            <b:column>
+                <h:outputLabel value="von: "/>
+                <p:calendar showTodayButton="true" showOn="button"
+                            locale="de"
+
+                            pattern="dd.MM.yyyy"
+                            styleClass="embed-responsive-item">
+                    <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateStartDateMA}"
+                            update="ma"/>
+                </p:calendar>
+                <h:outputLabel value="bis: "/>
+                <p:calendar showTodayButton="true" showOn="button"
+                            locale="de"
+
+                            pattern="dd.MM.yyyy"
+                            styleClass="embed-responsive-item">
+                    <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateEndDateMA}"
+                            update="ma"/>
+                </p:calendar>
+
+            </b:column>
+        </h:form>
+        <h:form id="ma">
+            <b:column>
+                <p:dataTable value="#{kundenController.kunde.termineList}" var="termi" >
+                    <p:column headerText="Terminart">
+                        <h:outputText value="#{termi.terminart}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="Tag">
+                        <h:outputText value="#{termi.terminstart}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Terminbeginn">
+                        <h:outputText value="#{termi.terminstart}">
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+
+                    </p:column>
+                    <p:column headerText="Terminende">
+                        <h:outputText value="#{termi.terminende}">
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+
+                    </p:column>
+                    <p:column headerText="Dauer">
+                        <h:outputText value="#{termi.termindauer}"></h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+            </b:column>
+        </h:form>
+    </b:row>
+</b:container>
+</body>
+</html>

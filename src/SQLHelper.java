@@ -1206,4 +1206,92 @@ public class SQLHelper{
         }
     }
 
+    public static List<Termine> getKundeTermine(int kundenid){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<Termine> fb= new ArrayList<Termine>();
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT *" +
+                                "FROM termin " +
+                                "WHERE KundenID = '"+kundenid+"'";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    Termine temp = new Termine();
+                    String terminstart=result.getString("Terminstart");
+                    String terminende=result.getString("Terminende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(terminstart);
+                        end=dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setTerminstart(start);
+                    temp.setTerminende(end);
+                    String terminart= result.getString("Terminart");
+                    temp.setTerminart(terminart);
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+
+    public static List<Kunde> getKundeList(){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<Kunde> fb= new ArrayList<Kunde>();
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT *" +
+                                "FROM kunde ";
+
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    Kunde temp = new Kunde();
+                    temp.setVorname(result.getString("vorname"));
+                    temp.setNachname(result.getString("nachname"));
+                    temp.setKundeID(result.getInt("KundenID"));
+                    temp.setTelefonnummer(result.getString("telefonnummer"));
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+
 }

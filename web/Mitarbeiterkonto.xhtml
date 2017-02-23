@@ -41,7 +41,7 @@
 
                         pattern="dd.MM.yyyy"
                         styleClass="embed-responsive-item">
-                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDate}"
+                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateMA}"
                         update="ma"/>
             </p:calendar>
             <h:outputLabel value="bis: "/>
@@ -50,7 +50,7 @@
 
                         pattern="dd.MM.yyyy"
                         styleClass="embed-responsive-item">
-                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDate}"
+                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateMA}"
                         update="ma"/>
             </p:calendar>
 
