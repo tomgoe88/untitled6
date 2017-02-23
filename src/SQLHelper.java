@@ -138,6 +138,7 @@ public class SQLHelper{
                     "vorname VARCHAR(45), " +
                     "nachname VARCHAR(45), " +
                     "telefonnummer VARCHAR (45), " +
+                    "email VARCHAR (45), " +
                     "PRIMARY KEY (KundenID)" +
                     ")";
             con.createStatement().executeUpdate(tableKunden);
@@ -160,7 +161,7 @@ public class SQLHelper{
                     "PRIMARY KEY (TerminID), " +
                     "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
                     "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID) ON DELETE CASCADE ON UPDATE CASCADE, " +
-                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE  " +
+                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
         } catch (SQLException e){
@@ -175,6 +176,7 @@ public class SQLHelper{
                     "MitarbeiterID int, " +
                     "Schichtbeginn VARCHAR (200), " +
                     "Schichtende VARCHAR (200), " +
+                    "Schichtart VARCHAR (200), " +
                     "PRIMARY KEY (ArbeitszeitID), " +
                     "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
                     ")";
@@ -542,7 +544,7 @@ public class SQLHelper{
 
         return fb;
     }
-    public static void newArbeitszeit(int mitarbeiterID, String schichtbeginn, String schichtende){
+    public static void newArbeitszeit(int mitarbeiterID, String schichtbeginn, String schichtende, String schichtart){
         con = getInstance();
         if(con != null) {
 
@@ -550,8 +552,8 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO arbeitszeiten(MitarbeiterID, Schichtbeginn, Schichtende) VALUES(" +
-                                "'"+mitarbeiterID+"','"+schichtbeginn+"','"+schichtende+"')";
+                        "INSERT INTO arbeitszeiten(MitarbeiterID, Schichtbeginn, Schichtende, Schichtart) VALUES(" +
+                                "'"+mitarbeiterID+"','"+schichtbeginn+"','"+schichtende+"','"+schichtart+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
@@ -560,7 +562,7 @@ public class SQLHelper{
             }
         }
     }
-    public static void neuerKunde (String vorname, String nachname,String telefonnummer ){
+    public static void neuerKunde (String vorname, String nachname,String telefonnummer, String email ){
         con = getInstance();
         if(con != null) {
 
@@ -568,8 +570,8 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO kunde(vorname, nachname, telefonnummer) VALUES(" +
-                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"')";
+                        "INSERT INTO kunde(vorname, nachname, telefonnummer, email) VALUES(" +
+                                "'"+vorname+"','"+nachname+"','"+telefonnummer+",'"+email+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
@@ -712,6 +714,23 @@ public class SQLHelper{
                 query = con.createStatement();
                 String sql=
                         "DELETE FROM termin WHERE TerminID='"+terminID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void deleteArbeitszeit(int arbeitszeitID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM arbeitszeiten WHERE ArbeitszeitID='"+arbeitszeitID+"'";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
@@ -1174,6 +1193,7 @@ public class SQLHelper{
                     temp.setArbeitszeitID(result.getInt("ArbeitszeitID"));
                     temp.setArbeitsstart(start);
                     temp.setArbeitsende(end);
+                    temp.setSchichtart(result.getString("Schichtart"));
 
 
                     fb.add(temp);
@@ -1242,6 +1262,7 @@ public class SQLHelper{
                     temp.setTerminstart(start);
                     temp.setTerminende(end);
                     String terminart= result.getString("Terminart");
+
                     temp.setTerminart(terminart);
                     fb.add(temp);
 
@@ -1281,6 +1302,7 @@ public class SQLHelper{
                     temp.setNachname(result.getString("nachname"));
                     temp.setKundeID(result.getInt("KundenID"));
                     temp.setTelefonnummer(result.getString("telefonnummer"));
+                    temp.setEmail(result.getString("email"));
                     fb.add(temp);
 
                 }
@@ -1292,6 +1314,36 @@ public class SQLHelper{
         }
 
         return fb;
+    }
+
+    public static int getSchichtAnzahl(int kundenid, String schichtart){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        int counter=0;
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT COUNT(*) AS Schichtanzahl FROM arbeitszeiten " +
+                                "WHERE MitarbeiterID = '"+kundenid+"' AND Schichtart = '"+schichtart+"' ";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    counter= result.getInt("Schichtanzahl");
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET Counter //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return counter;
     }
 
 }

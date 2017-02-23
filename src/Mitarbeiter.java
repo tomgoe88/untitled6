@@ -42,6 +42,10 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String arbeitsdauer;
     private static String tempArbeitsdauer;
     private String arbeitdauer;
+    private String spaetSchicht;
+    private String fruehSchicht;
+    private String mittelSchicht;
+    private String wochendendschicht;
     public Mitarbeiter(){
 
     }
@@ -364,6 +368,70 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     public void setTermine(List<Termine> termine) {
         this.termine = termine;
+    }
+
+    public String getSpaetSchicht() {
+        int i=0;
+        spaetSchicht="Spätschicht";
+        for(Arbeitszeit a:getArbeitszeitList()){
+            if(a.getSchichtart().equals(spaetSchicht)){
+                i++;
+            }
+        }
+        return ""+i;
+    }
+
+    public void setSpaetSchicht(String spaetSchicht) {
+        this.spaetSchicht = spaetSchicht;
+    }
+
+    public String getFruehSchicht() {
+
+        int i=0;
+        spaetSchicht="Frühschicht";
+        for(Arbeitszeit a:getArbeitszeitList()){
+            if(a.getSchichtart().equals(spaetSchicht)){
+                i++;
+            }
+        }
+        return ""+i;
+
+    }
+
+    public void setFruehSchicht(String fruehSchicht) {
+        this.fruehSchicht = fruehSchicht;
+    }
+
+    public String getMittelSchicht() {
+
+        int i=0;
+        spaetSchicht="Mittelschicht";
+        for(Arbeitszeit a:getArbeitszeitList()){
+            if(a.getSchichtart().equals(spaetSchicht)){
+                i++;
+            }
+        }
+        return ""+i;
+    }
+
+    public void setMittelSchicht(String mittelSchicht) {
+        this.mittelSchicht = mittelSchicht;
+    }
+
+    public String getWochendendschicht() {
+
+        int i=0;
+        spaetSchicht="Wochenendschicht";
+        for(Arbeitszeit a:getArbeitszeitList()){
+            if(a.getSchichtart().equals(spaetSchicht)){
+                i++;
+            }
+        }
+        return ""+i;
+    }
+
+    public void setWochendendschicht(String wochendendschicht) {
+        this.wochendendschicht = wochendendschicht;
     }
 
 }

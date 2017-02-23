@@ -158,6 +158,12 @@
                         value="#{kalenderHelfer.end}">
                     <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
                 </p:calendar>
+                <b:selectOneMenu value="#{kalenderHelfer.schichtart}">
+                    <f:selectItem value="Frühschicht" itemLabel="Frühschicht" itemValue="Frühschicht"/>
+                    <f:selectItem value="Mittelschicht" itemLabel="Mittelschicht" itemValue="Mittelschicht"/>
+                    <f:selectItem value="Spätschicht" itemLabel="Spätschicht" itemValue="Spätschicht"/>
+                    <f:selectItem value="Wochenendschicht" itemLabel="Wochenendschicht" itemValue="Wochenendschicht"/>
+                </b:selectOneMenu>
                 <b/>
                 <p:selectBooleanButton id="value1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein" style="width:60px" />
                 <div class="knob-container ui-corner-all">

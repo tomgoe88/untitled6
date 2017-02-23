@@ -15,6 +15,7 @@ public class Arbeitszeit {
     private Date arbeitsende;
     private String arbeitsdauer;
     private Date filteredDate;
+    private String schichtart;
 
 
     public int getArbeitszeitID() {
@@ -31,6 +32,14 @@ public class Arbeitszeit {
 
     public void setArbeitsstart(Date arbeitsstart) {
         this.arbeitsstart = arbeitsstart;
+    }
+
+    public String getSchichtart() {
+        return schichtart;
+    }
+
+    public void setSchichtart(String schichtart) {
+        this.schichtart = schichtart;
     }
 
     public Date getArbeitsende() {

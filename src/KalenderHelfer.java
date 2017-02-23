@@ -57,6 +57,7 @@ public class KalenderHelfer {
     private static KalenderHelfer instance= new KalenderHelfer();
     private KalenderHelfer helfer;
     private String terminart;
+    private String schichtart;
     private int eintrager;
     private String text;
     private String eingetragenVorname;
@@ -85,6 +86,14 @@ public class KalenderHelfer {
      */
     public KalenderHelfer() {
 
+    }
+
+    public String getSchichtart() {
+        return schichtart;
+    }
+
+    public void setSchichtart(String schichtart) {
+        this.schichtart = schichtart;
     }
 
     public boolean isAdminbool() {
@@ -551,6 +560,7 @@ public class KalenderHelfer {
         String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
+        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         int terminidmax= SQLHelper.getMaxTerminID()+1;
@@ -562,12 +572,12 @@ public class KalenderHelfer {
                 }
                 else{
                     kundenID=SQLHelper.getMaxKundenID()+1;
-                    SQLHelper.neuerKunde(vorname,nachname,tele);
+                    SQLHelper.neuerKunde(vorname,nachname,tele,email);
                     break;
                 }
             }
         }else {
-            SQLHelper.neuerKunde(vorname,nachname,tele);
+            SQLHelper.neuerKunde(vorname,nachname,tele, email);
             for(Kunde k: SQLHelper.kunden()) {
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())) {
                     kundenID = k.getKundeID();
@@ -596,11 +606,11 @@ public class KalenderHelfer {
         Date workstart;
         Date workend;
         if(woechentlich==false){
-            SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+            SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString(), schichtart);
         } else {
             int i=0;
             while(i<wochenArbeitszeit){
-                SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+                SQLHelper.newArbeitszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString(), schichtart);
                 work1.add(Calendar.DAY_OF_WEEK, 7);
                 start= work1.getTime();
                 work2.add(Calendar.DAY_OF_WEEK,7);
@@ -786,7 +796,9 @@ public class KalenderHelfer {
         return aufgaben;
     }
 
-
+    public void deleteArbeitszeit(int arbeitszeitID){
+        SQLHelper.deleteArbeitszeit(arbeitszeitID);
+    }
 
 
 

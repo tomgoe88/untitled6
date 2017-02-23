@@ -101,6 +101,7 @@
                                                         }"
                 defaultDate="#{kalenderHelfer.theDefaultDate}">
         </b:fullCalendar>
+
     </h:form>
 
     <b:row>
@@ -157,9 +158,26 @@
             </b:column>
         </h:form>
         <h:form id="ma">
+            <b:row>
+                <b:column>
+                    <h:outputLabel value="Frühschichten: "></h:outputLabel>
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.fruehSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Mittelschichten: "></h:outputLabel>
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.mittelSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Spätschichten: "></h:outputLabel>
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.spaetSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.wochendendschicht}"/>
+                </b:column>
+            </b:row>
             <b:column>
                 <p:dataTable value="#{kalenderHelfer.mitarbeit.arbeitszeitList}" var="az" >
-
+                    <p:column headerText="Schicht">
+                        <h:outputText value="#{az.schichtart}"></h:outputText>
+                    </p:column>
                     <p:column headerText="Tag">
                         <h:outputText value="#{az.arbeitsstart}">
                             <f:convertDateTime pattern="dd.MM.yyyy"/>
@@ -180,7 +198,10 @@
                         <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>
                     </p:column>
                     <p:column headerText="Stunden">
-                        <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
+                    <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
+                     </p:column>
+                    <p:column headerText="Löschen">
+                        <p:commandButton value="X" action="#{kalenderHelfer.deleteArbeitszeit(az.arbeitszeitID)}" update="ma"/>
                     </p:column>
                 </p:dataTable>
                 <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
@@ -211,6 +232,12 @@
                     value="#{kalenderHelfer.end}">
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
             </p:calendar>
+            <b:selectOneMenu value="#{kalenderHelfer.schichtart}">
+                <f:selectItem value="Frühschicht" itemLabel="Frühschicht" itemValue="Frühschicht"/>
+                <f:selectItem value="Mittelschicht" itemLabel="Mittelschicht" itemValue="Mittelschicht"/>
+                <f:selectItem value="Spätschicht" itemLabel="Spätschicht" itemValue="Spätschicht"/>
+                <f:selectItem value="Wochenendschicht" itemLabel="Wochenendschicht" itemValue="Wochenendschicht"/>
+            </b:selectOneMenu>
             <b/>
             <h:outputText id="value" value="Wöchentlich wiederholen? "/>
             <p:selectBooleanButton id="value1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein" style="width:60px" />

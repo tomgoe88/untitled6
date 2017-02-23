@@ -6,12 +6,14 @@ import java.util.*;
  * Created by Jutom on 27.01.2017.
  */
 public class Kunde {
-    int KundeID;
+   private int KundeID;
     private String vorname;
     private String nachname;
     private String telefonnummer;
+    private String email;
     private Date staticStart=null;
     private Date staticEnd=null;
+
     private List<Termine> termineList;
 
 
@@ -47,7 +49,15 @@ public class Kunde {
         this.telefonnummer = telefonnummer;
     }
 
-   public List<Termine> getTermineList() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Termine> getTermineList() {
         termineList = new ArrayList<Termine>();
         termineList.addAll(SQLHelper.getKundeTermine(KundeID));
         List<Termine> tempList= new ArrayList<Termine>();
@@ -76,6 +86,8 @@ public class Kunde {
 
         return termineList;
     }
+
+
 
     public void setTermineList(List<Termine> termineList) {
         this.termineList = termineList;

@@ -172,6 +172,9 @@
                     <f:validateRegex pattern="[0-9]+" />
                     <f:ajax event="keyup" render="messages" />
                 </b:inputText>
+                <h:outputText id="email" value="E-Mail: "/>
+                <b:inputText id="emailIN" name="emailInput" for="email">
+                </b:inputText>
                 <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
                 <b/>
                 <h:outputText id="beschreibung" value="Beschreibung: "/>

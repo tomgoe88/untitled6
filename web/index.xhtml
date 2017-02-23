@@ -215,6 +215,9 @@
                 <f:ajax event="keyup" render="messages" />
             </b:inputText>
             <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
+            <h:outputText id="email" value="E-Mail: "/>
+            <b:inputText id="emailIN" name="emailInput" for="email">
+            </b:inputText>
             <b/>
             <h:outputText id="beschreibung" value="Beschreibung: "/>
             <b:inputText name="beschreibung" for="beschreibung"/>

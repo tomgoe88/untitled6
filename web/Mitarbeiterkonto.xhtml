@@ -29,6 +29,7 @@
 </ui:insert>
 <b:container fluid="true">
 
+
     <b:row>
         <h:form>
         <b:column>
@@ -58,8 +59,25 @@
         </h:form>
         <h:form id="ma">
         <b:column>
+            <b:row>
+                <b:column>
+                    <h:outputLabel value="Frühschichten: "></h:outputLabel>
+                    <h:outputText value="#{pageChanger.angemeldet.fruehSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Mittelschichten: "></h:outputLabel>
+                    <h:outputText value="#{pageChanger.angemeldet.mittelSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Spätschichten: "></h:outputLabel>
+                    <h:outputText value="#{pageChanger.angemeldet.spaetSchicht}"/>
+                    <b/>
+                    <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
+                    <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
+                </b:column>
+            </b:row>
             <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az" >
-
+                <p:column headerText="Schicht">
+                    <h:outputText value="#{az.schichtart}"></h:outputText>
+                </p:column>
                 <p:column headerText="Tag">
                     <h:outputText value="#{az.arbeitsstart}">
                         <f:convertDateTime pattern="dd.MM.yyyy"/>
