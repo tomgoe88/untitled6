@@ -30,7 +30,7 @@
 </ui:insert>
 
 <b:container fluid="true">
-    <h:form id="cal">
+   <h:form id="obe">
     <b:row>
         <b:column span="12">
 
@@ -38,12 +38,15 @@
                 <f:selectItems value="#{kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
                                itemValue="#{mi.kundeID}"/>
                 <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                <p:ajax event="valueChange" update="cal ma"/>
+                <p:ajax event="valueChange" update="cal ma obe"/>
             </p:selectOneMenu>
         </b:column>
-
     </b:row>
+   </h:form>
 
+<b:tabView>
+    <b:tab title="Adressdaten">
+    <h:form id="cal">
     <b:row>
         <b:column>
             <h:outputLabel value="Telefonnummer: "></h:outputLabel>
@@ -53,8 +56,10 @@
             <h:outputText value="#{kundenController.kunde.email}"/>
         </b:column>
     </b:row>
-
     </h:form>
+    </b:tab>
+
+    <b:tab title="Termine">
     <b:row>
         <h:form>
             <b:column>
@@ -110,6 +115,8 @@
             </b:column>
         </h:form>
     </b:row>
+    </b:tab>
+</b:tabView>
 </b:container>
 </body>
 </html>

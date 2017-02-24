@@ -160,7 +160,7 @@ public class SQLHelper{
                     "MitarbeiterSchreiberID int, " +
                     "PRIMARY KEY (TerminID), " +
                     "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
-                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID) ON DELETE CASCADE ON UPDATE CASCADE, " +
+                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID), " +
                     "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableTermine);
@@ -571,7 +571,7 @@ public class SQLHelper{
                 query = con.createStatement();
                 String sql=
                         "INSERT INTO kunde(vorname, nachname, telefonnummer, email) VALUES(" +
-                                "'"+vorname+"','"+nachname+"','"+telefonnummer+",'"+email+"')";
+                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"','"+email+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());

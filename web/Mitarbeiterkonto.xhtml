@@ -28,53 +28,70 @@
     <ui:include src="/hauptseite.xhtml"/>
 </ui:insert>
 <b:container fluid="true">
-
-
     <b:row>
         <h:form>
-        <b:column>
-            <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
-        </b:column>
-        <b:column>
-            <h:outputLabel value="von: "/>
-            <p:calendar showTodayButton="true" showOn="button"
-                        locale="de"
-
-                        pattern="dd.MM.yyyy"
-                        styleClass="embed-responsive-item">
-                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateMA}"
-                        update="ma"/>
-            </p:calendar>
-            <h:outputLabel value="bis: "/>
-            <p:calendar showTodayButton="true" showOn="button"
-                        locale="de"
-
-                        pattern="dd.MM.yyyy"
-                        styleClass="embed-responsive-item">
-                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateMA}"
-                        update="ma"/>
-            </p:calendar>
-
-        </b:column>
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
         </h:form>
-        <h:form id="ma">
-        <b:column>
+    </b:row>
+    <b:tabView>
+        <b:tab title="Benutzerdaten">
             <b:row>
                 <b:column>
-                    <h:outputLabel value="Frühschichten: "></h:outputLabel>
-                    <h:outputText value="#{pageChanger.angemeldet.fruehSchicht}"/>
-                    <b/>
-                    <h:outputLabel value="Mittelschichten: "></h:outputLabel>
-                    <h:outputText value="#{pageChanger.angemeldet.mittelSchicht}"/>
-                    <b/>
-                    <h:outputLabel value="Spätschichten: "></h:outputLabel>
-                    <h:outputText value="#{pageChanger.angemeldet.spaetSchicht}"/>
-                    <b/>
-                    <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
-                    <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
+                    <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
                 </b:column>
             </b:row>
-            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az" >
+            <b:row>
+                <b:column>
+                    <p:commandButton value="Passwort ändern" oncomplete="PF('passwordchange').show();"></p:commandButton>
+                </b:column>
+            </b:row>
+        </b:tab>
+    <b:tab title="Arbeitszeiten">
+    <b:row>
+        <h:form>
+            <b:column>
+                <h:outputLabel value="von: "/>
+                <p:calendar showTodayButton="true" showOn="button"
+                            locale="de"
+
+                            pattern="dd.MM.yyyy"
+                            styleClass="embed-responsive-item">
+                    <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateMA}"
+                            update="ma"/>
+                </p:calendar>
+                <h:outputLabel value="bis: "/>
+                <p:calendar showTodayButton="true" showOn="button"
+                            locale="de"
+
+                            pattern="dd.MM.yyyy"
+                            styleClass="embed-responsive-item">
+                    <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateMA}"
+                            update="ma"/>
+                </p:calendar>
+
+            </b:column>
+        </h:form>
+    </b:row>
+
+
+    <h:form id="ma">
+        <b:row>
+            <b:column>
+                <h:outputLabel value="Frühschichten: "></h:outputLabel>
+                <h:outputText value="#{pageChanger.angemeldet.fruehSchicht}"/>
+                <b/>
+                <h:outputLabel value="Mittelschichten: "></h:outputLabel>
+                <h:outputText value="#{pageChanger.angemeldet.mittelSchicht}"/>
+                <b/>
+                <h:outputLabel value="Spätschichten: "></h:outputLabel>
+                <h:outputText value="#{pageChanger.angemeldet.spaetSchicht}"/>
+                <b/>
+                <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
+                <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
+            </b:column>
+        </b:row>
+        <b:row>
+            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
                 <p:column headerText="Schicht">
                     <h:outputText value="#{az.schichtart}"></h:outputText>
                 </p:column>
@@ -103,12 +120,24 @@
             </p:dataTable>
             <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
             <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
-        </b:column>
-        </h:form>
-    </b:row>
-
+        </b:row>
+    </h:form>
+    </b:tab>
+    </b:tabView>
 </b:container>
 
+<p:dialog id="passwordChange" widgetVar="passwordchange" header="Passwort ändern" showEffect="clip" hideEffect="clip">
+    <h:form id="passwordForm">
+        <b:panelGrid columns="1">
+            <h:outputText value="Altes Passwort: " for="altP"></h:outputText>
+            <b:inputSecret id="altP" name="altP"/>
+            <h:outputText value="Neues Passwort: " for="neuP"></h:outputText>
+            <b:inputSecret id="neuP" name="neuP"/>
+            <b:commandButton value="Passwort ändern" action="#{mitarbeiterController.changePassword}"
+                             oncomplete="PF('passwordchange').hide();"/>
+        </b:panelGrid>
+    </h:form>
+</p:dialog>
 
 </body>
 </html>

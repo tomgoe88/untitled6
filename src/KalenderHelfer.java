@@ -563,7 +563,7 @@ public class KalenderHelfer {
         String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-        int terminidmax= SQLHelper.getMaxTerminID()+1;
+
         if(SQLHelper.kunden().size()!=0){
             for(Kunde k: SQLHelper.kunden()){
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
@@ -587,6 +587,7 @@ public class KalenderHelfer {
         }
 
         SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
+        int terminidmax= SQLHelper.getMaxTerminID();
 
 
 
