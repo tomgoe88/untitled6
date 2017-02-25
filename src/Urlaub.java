@@ -1,6 +1,8 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Jutom on 17.02.2017.
@@ -38,21 +40,20 @@ public class Urlaub {
     }
 
     public int getUrlaubstage() {
-        urlaubstage= (int)( (urlaubEnde.getTime() - urlaubBeginn.getTime()) / (1000 * 60 * 60 * 24));
+        urlaubstage= (int)( (urlaubEnde.getTime() - urlaubBeginn.getTime()) / (1000 * 60 * 60 * 24))+1;
+        Calendar start=Calendar.getInstance();
+        start.setTime(urlaubBeginn);
         int i=0;
-        int woche=0;
+        int we=0;
         while(i<urlaubstage){
             i++;
-            woche++;
-            if(woche==6){
-                urlaubstage--;
+            if(start.get(Calendar.DAY_OF_WEEK)== Calendar.SATURDAY || start.get(Calendar.DAY_OF_WEEK)== Calendar.SUNDAY ){
+                we++;
             }
-            else if (woche==7){
-                urlaubstage--;
-                woche=0;
-            }
-
+            start.add(Calendar.DAY_OF_WEEK,1);
+            System.out.println(start.getTime().toString());
         }
+        urlaubstage=urlaubstage-we;
         return urlaubstage;
     }
 

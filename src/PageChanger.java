@@ -21,6 +21,7 @@ public class PageChanger {
     private String pageKursplaner;
     private String pageMitarbeiterkonto;
     private String pageKunde;
+    private String pageErledigteTermine;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -60,6 +61,15 @@ public class PageChanger {
     public String getPageKunde() {
         page="Kunden";
         return  "/"+page+".xhtml";
+    }
+
+    public String getPageErledigteTermine() {
+        page="ErledigteTermine";
+        return  "/"+page+".xhtml";
+    }
+
+    public void setPageErledigteTermine(String pageErledigteTermine) {
+        this.pageErledigteTermine = pageErledigteTermine;
     }
 
     public void setPageKunde(String pageKunde) {

@@ -170,6 +170,23 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableErledigteTermine="" +
+                    "CREATE TABLE IF NOT EXISTS terminerledigt( " +
+                    "ErledigtID int NOT NULL AUTO_INCREMENT, " +
+                    "Ergebnis VARCHAR(200), " +
+                    "Hinweis TEXT, " +
+                    "TerminID int, " +
+                    "PRIMARY KEY (ErledigtID), " +
+                    "FOREIGN KEY (TerminID) REFERENCES termin(TerminID) " +
+                    ")";
+            con.createStatement().executeUpdate(tableErledigteTermine);
+        } catch (SQLException e){
+            System.out.println("Terminerledigung //SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+
+        try {
             String tableArbeitszeiten="" +
                     "CREATE TABLE IF NOT EXISTS arbeitszeiten( " +
                     "ArbeitszeitID int NOT NULL AUTO_INCREMENT, " +
@@ -1344,6 +1361,100 @@ public class SQLHelper{
         }
 
         return counter;
+    }
+    public static void newTerminErledigt(String ergebnis, String hinweis, int terminID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO terminerledigt(Ergebnis, Hinweis, TerminID) VALUES(" +
+                                "'"+ergebnis+"','"+hinweis+"','"+terminID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void updateTermin( int terminID){
+        con = getInstance();
+        String beschreibung= "Dieser Termin ist abgeschlossen";
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update termin SET Beschreibung='"+beschreibung+"' WHERE TerminID = '"+terminID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Update Termin// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static List<ErledigteTermine> getErledigteTermine(){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<ErledigteTermine> fb= new ArrayList<ErledigteTermine>();
+
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM terminerledigt " +
+                                "INNER JOIN termin " +
+                                "ON terminerledigt.TerminID = termin.TerminID " +
+                                "INNER JOIN kunde " +
+                                "ON termin.KundenID = kunde.KundenID " +
+                                "INNER JOIN mitarbeiter " +
+                                "ON termin.MitarbeiterMacherID = mitarbeiter.MitarbeiterID " +
+                                "";
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    ErledigteTermine temp = new ErledigteTermine();
+                    String terminstart=result.getString("Terminstart");
+                    String terminende=result.getString("Terminende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(terminstart);
+                        end=dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setTerminstart(start);
+                    temp.setTerminende(end);
+                    String terminart= result.getString("Terminart");
+                    temp.setTerminart(terminart);
+                    temp.setErgebnis(result.getString("Ergebnis"));
+                    temp.setHinweis(result.getString("Hinweis"));
+                    temp.setKundeName(result.getString("kunde.vorname")+" "+result.getString("kunde.nachname"));
+                    temp.setMitarbeiterName(result.getString("mitarbeiter.vorname")+" "+result.getString("mitarbeiter.nachname"));
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
     }
 
 }

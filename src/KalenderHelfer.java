@@ -68,6 +68,7 @@ public class KalenderHelfer {
     private String eignetrageneBeschreibung;
     private TimeZone timeZone;
     private String termine;
+    private String ergebnis;
     int month;
     int day;
     int jetday;
@@ -79,7 +80,7 @@ public class KalenderHelfer {
     private Calendar work1;
     private Calendar work2;
     private boolean adminbool;
-
+    private boolean terminErledigtTest= false;
 
     /**
      * Creates a new instance of KalenderHelfer
@@ -140,6 +141,14 @@ public class KalenderHelfer {
         return wocheTag;
     }
 
+    public boolean isTerminErledigtTest() {
+        return terminErledigtTest;
+    }
+
+    public void setTerminErledigtTest(boolean terminErledigt) {
+        this.terminErledigtTest = terminErledigt;
+    }
+
     public void setWocheTag(boolean wocheTag) {
         this.wocheTag = wocheTag;
     }
@@ -153,10 +162,19 @@ public class KalenderHelfer {
         return change;
     }
 
+    public String getErgebnis() {
+        return ergebnis;
+    }
+
+    public void setErgebnis(String ergebnis) {
+        this.ergebnis = ergebnis;
+    }
+
     public String getText() {
         return text;
     }
     public void myEvent(String texten){
+        terminErledigtTest=false;
         String [] terminspilt= texten.split(" ; ");
         this.eingetragenTerminart= terminspilt[0];
         this.eingetragenVorname=terminspilt[1];
@@ -166,9 +184,18 @@ public class KalenderHelfer {
         this.eingetragenEintraeger=terminspilt[5];
         this.terminID= Integer.parseInt(terminspilt[6]);
         this.text= texten;
+        if(eignetrageneBeschreibung.equals("Dieser Termin ist abgeschlossen")){
+            this.terminErledigtTest=true;
+        }
     }
     public void deleteAppointment(){
         SQLHelper.deleteTermin(terminID);
+    }
+    public void terminErledigt(){
+        String hinweis=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hinweistext");
+
+        SQLHelper.newTerminErledigt(ergebnis,hinweis,terminID);
+        SQLHelper.updateTermin(terminID);
     }
     public void onChange(){
         wochenArbeitszeit=temp;
@@ -348,6 +375,19 @@ public class KalenderHelfer {
         GregorianCalendar gc= new GregorianCalendar();
         gc.setTime(defaultDate);
         gc.add(Calendar.DAY_OF_MONTH,-1);
+        this.defaultDate=gc.getTime();
+    }
+    public void nextWeek(){
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(defaultDate);
+        gc.add(Calendar.WEEK_OF_MONTH,1);
+        this.defaultDate=gc.getTime();
+
+    }
+    public void preWeek(){
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(defaultDate);
+        gc.add(Calendar.WEEK_OF_MONTH,-1);
         this.defaultDate=gc.getTime();
     }
 
@@ -624,9 +664,15 @@ public class KalenderHelfer {
 
     }
     public void newUrlaub(){
-        Date workstart;
-        Date workend;
-        SQLHelper.newUrlaubszeit(mitarbeit.getMitarbeiterID(),start.toString(),end.toString());
+        GregorianCalendar startDate= new GregorianCalendar();
+        GregorianCalendar endDate= new GregorianCalendar();
+        startDate.setTime(start);
+        endDate.setTime(end);
+        startDate.set(Calendar.HOUR_OF_DAY, 1);
+        endDate.set(Calendar.HOUR_OF_DAY,23);
+        Date starting= startDate.getTime();
+        Date ending=endDate.getTime();
+        SQLHelper.newUrlaubszeit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
 
     }
 

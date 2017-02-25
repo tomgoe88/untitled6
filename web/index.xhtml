@@ -58,6 +58,10 @@
 
 
                     <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal aufgabenformer"></p:commandButton>
+                    <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal aufgabenformer"></p:commandButton>
+
+
+                    <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal aufgabenformer"></p:commandButton>
                     <b/>
 
 
@@ -260,7 +264,7 @@
 <p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="ding">
         <b:container>
-            <b:row>
+            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
                 <b:column span="2">
                     <h:outputLabel for="tec" value="Terminart: "/>
                 </b:column>
@@ -268,7 +272,7 @@
                     <h:outputText name="tec" id="tec" value="#{kalenderHelfer.eingetragenTerminart}"/>
                 </b:column>
             </b:row>
-            <b:row>
+            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
                 <b:column span="2">
                     <h:outputLabel for="tecvor" value="Vorname: "/>
                 </b:column>
@@ -276,7 +280,7 @@
                     <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.eingetragenVorname}"/>
                 </b:column>
             </b:row>
-            <b:row>
+            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
                 <b:column span="2">
                     <h:outputLabel for="tecnach" value="Nachname: "/>
                 </b:column>
@@ -284,7 +288,7 @@
                     <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.eingetragenNachname}"/>
                 </b:column>
             </b:row>
-            <b:row>
+            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
                 <b:column span="2">
                     <h:outputLabel for="tectel" value="Telefonnummer: "/>
                 </b:column>
@@ -300,7 +304,7 @@
                     <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.eignetrageneBeschreibung}"/>
                 </b:column>
             </b:row>
-            <b:row>
+            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
                 <b:column span="2">
                     <h:outputLabel for="tecein" value="Eingetragen von: "/>
                 </b:column>
@@ -315,11 +319,31 @@
                 </pe:methodParam>
             </pe:remoteCommand>
             <script type="text/javascript" src="form.js"></script>
-            <b:commandButton value="Löschen" action="#{kalenderHelfer.deleteAppointment}" update="cal"
+            <b:commandButton value="Löschen" action="#{kalenderHelfer.deleteAppointment}" update="cal" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                             oncomplete="PF('testVar').hide();"/>
+            <b:commandButton value="Erledigen" update="cal" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                             oncomplete="PF('terminErledigt').show();
+                                        PF('testVar').hide();"/>
+            <b:commandButton value="OK" update="cal"
                              oncomplete="PF('testVar').hide();"/>
         </b:container>
     </h:form>
-</p:dialog>
+</p:dialog><p:dialog id="terminErlefigtID" widgetVar="terminErledigt" header="Termin erledigen" showEffect="clip" hideEffect="clip">
+            <h:form id="aufgabenForm">
+                <b:panelGrid columns="1">
+                    <h:outputText value="Ergebnis"></h:outputText>
+                    <b:selectOneMenu value="#{kalenderHelfer.ergebnis}">
+                        <f:selectItem value="Erfolgreich" itemLabel="Erfolgreich" itemValue="Erfolgreich"/>
+                        <f:selectItem value="Abgesagt" itemLabel="Abgesagt" itemValue="Abgesagt"/>
+                        <f:selectItem value="Verschoben" itemLabel="Verschoben" itemValue="Verschoben"/>
+                    </b:selectOneMenu>
+                    <h:outputText value="Hinweis: " for="hinweis"></h:outputText>
+                    <b:inputText id="hinweis" name="hinweistext"/>
+                    <b:commandButton value="anlegen" action="#{kalenderHelfer.terminErledigt}"  update="cal"
+                                     oncomplete="PF('terminErledigt').hide();"/>
+                </b:panelGrid>
+            </h:form>
+        </p:dialog>
 <p:dialog id="aufgabenErledigtID" widgetVar="AufgabeErledigt" header="Erledigt" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="erledigungsForm">
         <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
