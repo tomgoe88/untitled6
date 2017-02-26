@@ -239,16 +239,17 @@
 
 <p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
     <h:form id="arbeitszeitfenster">
-        <p:panelGrid columns="3" id="eventDetails">
-            <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
+        <p:panelGrid columns="2" id="eventDetails">
+            <h:outputLabel value="Termin für     :"/>
+            <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
             <h:outputText id="Start" value="Schichtbeginn: "/>
-            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
+            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" showOn="button"
                         value="#{kalenderHelfer.start}">
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
             </p:calendar>
-            <b/>
+
             <h:outputText id="End" value="Schichtende: "/>
-            <p:calendar
+            <p:calendar showOn="button"
                     widgetVar="endDate"
                     name="end"
                     for="End"
@@ -257,17 +258,17 @@
                     value="#{kalenderHelfer.end}">
                 <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
             </p:calendar>
+            <h:outputText value="Schicht: "/>
             <b:selectOneMenu value="#{kalenderHelfer.schichtart}">
                 <f:selectItem value="Frühschicht" itemLabel="Frühschicht" itemValue="Frühschicht"/>
                 <f:selectItem value="Mittelschicht" itemLabel="Mittelschicht" itemValue="Mittelschicht"/>
                 <f:selectItem value="Spätschicht" itemLabel="Spätschicht" itemValue="Spätschicht"/>
                 <f:selectItem value="Wochenendschicht" itemLabel="Wochenendschicht" itemValue="Wochenendschicht"/>
             </b:selectOneMenu>
-            <b/>
             <h:outputText id="value" value="Wöchentlich wiederholen? "/>
             <p:selectBooleanButton id="value1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein"
                                    style="width:60px"/>
-
+            <b/>
             <div class="knob-container ui-corner-all">
                 <p:knob value="#{kalenderHelfer.temp}">
                     <p:ajax listener="#{kalenderHelfer.onChange}"/>
@@ -304,6 +305,15 @@
         <b:panelGrid columns="1">
             <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
             <b:inputText id="aufgabe" name="aufgabenname"/>
+            <h:outputText id="af" value="Wöchentlich wiederholen? "/>
+            <p:selectBooleanButton id="af1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein"
+                                   style="width:60px"/>
+
+            <div class="knob-container ui-corner-all">
+                <p:knob value="#{kalenderHelfer.temp}">
+                    <p:ajax listener="#{kalenderHelfer.onChangeAufgabenlaenge}"/>
+                </p:knob>
+            </div>
             <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"
                              oncomplete="PF('NeueAufgabe').hide();"/>
         </b:panelGrid>

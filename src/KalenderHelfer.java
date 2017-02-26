@@ -76,6 +76,7 @@ public class KalenderHelfer {
     private int aufgabeId;
     private int aufgabenErledigerID;
     private int wochenArbeitszeit;
+    private int wochenAufgababen;
     private boolean woechentlich;
     private Calendar work1;
     private Calendar work2;
@@ -103,6 +104,14 @@ public class KalenderHelfer {
 
     public void setAdminbool(boolean adminbool) {
         this.adminbool = adminbool;
+    }
+
+    public int getWochenAufgababen() {
+        return wochenAufgababen;
+    }
+
+    public void setWochenAufgababen(int wochenAufgababen) {
+        this.wochenAufgababen = wochenAufgababen;
     }
 
     public TimeZone getTimeZone() {
@@ -199,6 +208,9 @@ public class KalenderHelfer {
     }
     public void onChange(){
         wochenArbeitszeit=temp;
+    }
+    public void onChangeAufgabenlaenge(){
+        wochenAufgababen=temp;
     }
 
     public int getTerminID() {
@@ -773,26 +785,36 @@ public class KalenderHelfer {
 
     }
     public void neueAufgabe(){
+
         String aufgabena =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("aufgabenname");
-        String date;
+        Date date;
+        Calendar c= Calendar.getInstance();
         if(defaultDate!= null){
-            Calendar c= Calendar.getInstance();
             c.setTime(defaultDate);
             c.set(Calendar.HOUR_OF_DAY, 1);
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.SECOND, 0);
 
-            date= defaultDate.toString();
+            date= c.getTime();
         } else {
-            Calendar c= Calendar.getInstance();
             c.setTime(new Date());
             c.set(Calendar.HOUR_OF_DAY, 1);
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.SECOND, 0);
-
-            date= c.getTime().toString();
+            date= c.getTime();
         }
-        SQLHelper.newAufgabe(aufgabena, date);
+        if(woechentlich==false){
+            SQLHelper.newAufgabe(aufgabena, date.toString());
+        } else {
+            int i=0;
+            while(i<wochenAufgababen){
+                SQLHelper.newAufgabe(aufgabena, date.toString());
+                c.add(Calendar.DAY_OF_WEEK, 7);
+                date= c.getTime();
+                i++;
+            }
+        }
+
     }
     public void deleteMitarbeiter(int mitarbeiterID){
         SQLHelper.deleteMitarbeiter(mitarbeiterID);
