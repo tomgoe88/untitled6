@@ -1,5 +1,6 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +62,15 @@ public class KundenController {
             kunde=null;//getMitarbeiter().get(0);
         }
         return kunde;
+    }
+    public void updateKunde(){
+
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("teleK");
+        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInputK");;
+        String strassee =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("strasse");
+        String plzz =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailplzInput");
+        String ortt =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ort");
+        SQLHelper.updateKunde(kunde.getKundeID(),strassee,plzz,ortt,tele,email);
+
     }
 }

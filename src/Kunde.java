@@ -1,5 +1,6 @@
 import org.primefaces.event.SelectEvent;
 
+import javax.faces.context.FacesContext;
 import java.util.*;
 
 /**
@@ -11,6 +12,9 @@ public class Kunde {
     private String nachname;
     private String telefonnummer;
     private String email;
+    private String strasse;
+    private String plz;
+    private String ort;
     private Date staticStart=null;
     private Date staticEnd=null;
 
@@ -55,6 +59,30 @@ public class Kunde {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getStrasse() {
+        return strasse;
+    }
+
+    public void setStrasse(String strasse) {
+        this.strasse = strasse;
+    }
+
+    public String getPlz() {
+        return plz;
+    }
+
+    public void setPlz(String plz) {
+        this.plz = plz;
+    }
+
+    public String getOrt() {
+        return ort;
+    }
+
+    public void setOrt(String ort) {
+        this.ort = ort;
     }
 
     public List<Termine> getTermineList() {
@@ -137,4 +165,8 @@ public class Kunde {
         this.staticEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
+    @Override
+    public String toString(){
+return this.getEmail()+" "+this.getOrt();    }
+
 }

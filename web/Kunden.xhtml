@@ -38,7 +38,7 @@
                 <f:selectItems value="#{kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
                                itemValue="#{mi.kundeID}"/>
                 <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                <p:ajax event="valueChange" update="cal ma obe"/>
+                <p:ajax event="valueChange" update="cal ma obe kundenWidget"/>
             </p:selectOneMenu>
         </b:column>
     </b:row>
@@ -49,11 +49,21 @@
     <h:form id="cal">
     <b:row>
         <b:column>
+            <p:panelGrid columns="2">
             <h:outputLabel value="Telefonnummer: "></h:outputLabel>
             <h:outputText value="#{kundenController.kunde.telefonnummer}"/>
-            <b/>
             <h:outputLabel value="E-Mail: "></h:outputLabel>
             <h:outputText value="#{kundenController.kunde.email}"/>
+                <h:outputLabel value="Straße : "></h:outputLabel>
+                <h:outputText value="#{kundenController.kunde.strasse}"/>
+                <h:outputLabel value="Plz: "></h:outputLabel>
+                <h:outputText value="#{kundenController.kunde.plz}"/>
+                <h:outputLabel value="Ort: "></h:outputLabel>
+                <h:outputText value="#{kundenController.kunde.ort}"/>
+                <b/>
+                <p:commandButton value="ändern" oncomplete="PF('kundenaender').show();"/>
+            </p:panelGrid>
+
         </b:column>
     </b:row>
     </h:form>
@@ -118,5 +128,31 @@
     </b:tab>
 </b:tabView>
 </b:container>
+
+<p:dialog widgetVar="kundenaender" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
+    <h:form id="kundenWidget">
+        <p:panelGrid id="kundeDetails">
+            <h:outputText id="tele" value="Telefonnummer: "/>
+            <b:inputText id="teleid" name="teleK" for="tele" value="#{kundenController.kunde.telefonnummer}">
+                <f:validateRegex pattern="[0-9]+" />
+                <f:ajax event="keyup" render="messages" />
+            </b:inputText>
+            <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
+            <h:outputText id="email" value="E-Mail: "/>
+            <b:inputText id="emailIN" name="emailInputK" for="email" value="#{kundenController.kunde.email}">
+            </b:inputText>
+            <h:outputText id="stra" value="Straße: "/>
+            <b:inputText id="strasse" name="strasse"  value="#{kundenController.kunde.strasse}">
+            </b:inputText>
+            <h:outputText id="plz" value="PLZ: "/>
+            <b:inputText id="plzz" name="emailplzInput"  value="#{kundenController.kunde.plz}">
+            </b:inputText>
+            <h:outputText id="ort" value="Ort: "/>
+            <b:inputText id="ortin" name="ort" value="#{kundenController.kunde.ort}">
+            </b:inputText>
+            <p:commandButton value="Speichern" action="#{kundenController.updateKunde}" update="ma cal" oncomplete="PF('kundenaender').hide();"/>
+        </p:panelGrid>
+    </h:form>
+</p:dialog>
 </body>
 </html>

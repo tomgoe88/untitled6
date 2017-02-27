@@ -139,6 +139,9 @@ public class SQLHelper{
                     "nachname VARCHAR(45), " +
                     "telefonnummer VARCHAR (45), " +
                     "email VARCHAR (45), " +
+                    "Strasse VARCHAR (200), " +
+                    "Plz VARCHAR (6), " +
+                    "Ort VARCHAR (200), " +
                     "PRIMARY KEY (KundenID)" +
                     ")";
             con.createStatement().executeUpdate(tableKunden);
@@ -1320,6 +1323,9 @@ public class SQLHelper{
                     temp.setKundeID(result.getInt("KundenID"));
                     temp.setTelefonnummer(result.getString("telefonnummer"));
                     temp.setEmail(result.getString("email"));
+                    temp.setStrasse(result.getString("Strasse"));
+                    temp.setPlz(result.getString("Plz"));
+                    temp.setOrt(result.getString("Ort"));
                     fb.add(temp);
 
                 }
@@ -1455,6 +1461,23 @@ public class SQLHelper{
         }
 
         return fb;
+    }
+    public static void updateKunde( int kundeID, String strasse, String plz, String ort, String tele, String mail){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update kunde SET Strasse='"+strasse+"',Plz='"+plz+"',Ort='"+ort+"',telefonnummer='"+tele+"',email='"+mail+"' WHERE KundenID = '"+kundeID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Update Kunde// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
     }
 
 }

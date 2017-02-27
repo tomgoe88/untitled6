@@ -615,18 +615,25 @@ public class KalenderHelfer {
         String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
-
+        Kunde temoKunde=null;
         if(SQLHelper.kunden().size()!=0){
             for(Kunde k: SQLHelper.kunden()){
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
+                    temoKunde=null;
                     kundenID=k.getKundeID();
                     break;
                 }
                 else{
                     kundenID=SQLHelper.getMaxKundenID()+1;
-                    SQLHelper.neuerKunde(vorname,nachname,tele,email);
-                    break;
+                    temoKunde= new Kunde();
+                    temoKunde.setVorname(vorname);
+                    temoKunde.setNachname(nachname);
+                    temoKunde.setTelefonnummer(tele);
+                    temoKunde.setEmail(email);
                 }
+            }
+            if(temoKunde!=null){
+                SQLHelper.neuerKunde(temoKunde.getVorname(),temoKunde.getNachname(),temoKunde.getTelefonnummer(),temoKunde.getEmail());
             }
         }else {
             SQLHelper.neuerKunde(vorname,nachname,tele, email);

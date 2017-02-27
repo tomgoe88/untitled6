@@ -205,22 +205,28 @@
                 <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
             </b:selectOneMenu>
             <b/>
+            <p:selectOneMenu id="ausMit" value="#{kundenController.q}" styleClass="col-lg-12" >
+                <f:selectItems value="#{kundenController.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
+                               itemValue="#{ku.kundeID}"/>
+                <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                <p:ajax event="valueChange" update="terminWidget"/>
+            </p:selectOneMenu>
             <h:outputText id="vorname" value="Vorname: "/>
-            <b:inputText name="vorname" for="vorname" typeahead="true"
+            <b:inputText name="vorname" for="vorname" typeahead="true" value="#{kundenController.kunde.vorname}"
                          typeahead-values="#{kalenderHelfer.kundenNames}"/>
             <b/>
             <h:outputText id="nachname" value="Nachname: "/>
-            <b:inputText name="nachname" for="nachname" typeahead="true"
+            <b:inputText name="nachname" for="nachname" typeahead="true" value="#{kundenController.kunde.nachname}"
                          typeahead-values="#{kalenderHelfer.kundeNachname}"/>
             <b/>
             <h:outputText id="tele" value="Telefonnummer: "/>
-            <b:inputText id="teleid" name="tele" for="tele">
+            <b:inputText id="teleid" name="tele" for="tele" value="#{kundenController.kunde.telefonnummer}">
                 <f:validateRegex pattern="[0-9]+" />
                 <f:ajax event="keyup" render="messages" />
             </b:inputText>
             <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
             <h:outputText id="email" value="E-Mail: "/>
-            <b:inputText id="emailIN" name="emailInput" for="email">
+            <b:inputText id="emailIN" name="emailInput" for="email" value="#{kundenController.kunde.email}">
             </b:inputText>
             <b/>
             <h:outputText id="beschreibung" value="Beschreibung: "/>

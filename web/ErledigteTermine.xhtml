@@ -58,39 +58,39 @@
 
             <h:form id="ma">
                 <b:row>
-                    <p:dataTable value="#{terminController.termineList}" var="az">
-                        <p:column headerText="Terminart">
+                    <b:dataTable value="#{terminController.termineList}" var="az" span="12">
+                        <b:dataTableColumn label="Terminart">
                             <h:outputText value="#{az.terminart}"></h:outputText>
-                        </p:column>
-                        <p:column headerText="Tag">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Tag">
                             <h:outputText value="#{az.terminstart}">
                                 <f:convertDateTime pattern="dd.MM.yyyy"/>
                             </h:outputText>
-                        </p:column>
-                        <p:column headerText="Arbeitsbeginn">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Arbeitsbeginn">
                             <h:outputText value="#{az.terminstart}">
                                 <f:convertDateTime pattern="HH:mm"/>
                             </h:outputText>
-                        </p:column>
-                        <p:column headerText="Arbeitsende">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Arbeitsende">
                             <h:outputText value="#{az.terminende}">
                               <f:convertDateTime pattern="HH:mm"/>
                             </h:outputText>
-                        </p:column>
-                        <p:column headerText="Kundenname">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Kundenname">
                             <h:outputText value="#{az.kundeName}"/>
-                        </p:column>
-                        <p:column headerText="Mitarbeiter">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Mitarbeiter">
                             <h:outputText value="#{az.mitarbeiterName}"/>
-                        </p:column>
-                        <p:column headerText="Erledigt">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Erledigt">
                             <h:outputText value="#{az.ergebnis}"/>
 
-                        </p:column>
-                        <p:column headerText="Hinweis">
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Hinweis">
                             <h:outputText value="#{az.hinweis}"></h:outputText>
-                        </p:column>
-                    </p:dataTable>
+                        </b:dataTableColumn>
+                    </b:dataTable>
                 </b:row>
             </h:form>
 
