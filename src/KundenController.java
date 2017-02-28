@@ -66,7 +66,7 @@ public class KundenController {
     public void updateKunde(){
 
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("teleK");
-        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInputK");;
+        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInputK");
         String strassee =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("strasse");
         String plzz =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailplzInput");
         String ortt =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ort");

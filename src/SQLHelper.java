@@ -258,6 +258,22 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableMemo="" +
+                    "CREATE TABLE IF NOT EXISTS memo( " +
+                    "MemoID int NOT NULL AUTO_INCREMENT, " +
+                    "Beschreibung TEXT, " +
+                    "EintragDatum VARCHAR (200), " +
+                    "MemoVon INT , " +
+                    "PRIMARY KEY (MemoID), " +
+                    "FOREIGN KEY (MemoVon) REFERENCES mitarbeiter(MitarbeiterID)" +
+                    ")";
+            con.createStatement().executeUpdate(tableMemo);
+        } catch (SQLException e){
+            System.out.println("Aufgabem SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableAufgabenErledigt="" +
                     "CREATE TABLE IF NOT EXISTS aufgabenErledigt( " +
                     "AufgabenErledigtID int NOT NULL AUTO_INCREMENT, " +
@@ -273,19 +289,7 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
-        try {
-            String tableMemo="" +
-                    "CREATE TABLE IF NOT EXISTS memo( " +
-                    "MemoID int NOT NULL AUTO_INCREMENT, " +
-                    "Beschreibung TEXT, " +
-                    "PRIMARY KEY (MemoID) " +
-                    ")";
-            con.createStatement().executeUpdate(tableMemo);
-        } catch (SQLException e){
-            System.out.println("Memo SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
-        }
+
     }
 
     public static List<Mitarbeiter> getMitarbeiterListe(){
@@ -794,6 +798,24 @@ public class SQLHelper{
         }
 
     }
+    public static void newMemo(String beschreibung, String erledigungsDatum, int mitarbeiterID){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO memo(Beschreibung, EintragDatum, MemoVon) VALUES('"+beschreibung+"','"+erledigungsDatum+"','"+mitarbeiterID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Neue Memo//SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+    }
     public static void newAufgabeErledigt(int aufgabenID, int mitarbeiterID){
         con = getInstance();
         if(con != null) {
@@ -812,24 +834,7 @@ public class SQLHelper{
         }
 
     }
-    public static void newMemo(String beschreibung){
-        con = getInstance();
-        if(con != null) {
-            // Abfrage-Statement erzeugen.
-            Statement query;
-            try {
-                query = con.createStatement();
-                String sql=
-                        "INSERT INTO memo(Beschreibung) VALUES('"+beschreibung+"')";
-                query.executeUpdate(sql);
-            }catch(SQLException e){
-                System.out.println("SQLException: " + e.getMessage());
-                System.out.println("SQLState: " + e.getSQLState());
-                System.out.println("VendorError: " + e.getErrorCode());
-            }
-        }
 
-    }
     public static List<Aufgabe> getAufgaben(String aufgabenDatum){
         con= getInstance();
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
@@ -884,19 +889,34 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT * FROM memo";
+                        "SELECT * FROM memo " +
+                                "INNER JOIN mitarbeiter ON mitarbeiter.MitarbeiterID = memo.MemoVon";
+
                 ResultSet result = query.executeQuery(sql);
                 String title;
 
                 while (result.next()) {
                     Memo memo= new Memo();
+                    String memoDate=result.getString("EintragDatum");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date dateMemo=null;
+
+                    try {
+                        dateMemo= dateFormat.parse(memoDate);
+
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
                     memo.setMemoID(result.getInt("MemoID"));
                     memo.setBeschreibung(result.getString("Beschreibung"));
+                    memo.setEintragDatum(dateMemo);
+                    memo.setMitarbeiterM(result.getString("vorname")+" "+result.getString("nachname"));
                     memos.add(memo);
 
                 }
             } catch (SQLException e) {
-                System.out.println("SET Sperrzeit //SQLException: " + e.getMessage());
+                System.out.println("SET Memo //SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

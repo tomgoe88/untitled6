@@ -156,38 +156,67 @@
                 </b:column>
 
             </b:row>
-            <b:row>
-                <b:column span="12">
-                    <b:panel look="success" collapsible="true" title="Aufgaben und Memos">
-                        <b:container fluid="true">
-                            <h:form id="aufgabenformer">
+            <b:tabView>
+                <b:tab title="Aufgabe">
+                    <h:form id="aufgabenformer">
 
 
-                                <b:row>
-                                    <b:column span="6">
-                                        <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
-                                                     styleClass="table-responsive">
-                                            <p:column>
-                                                <h:outputText value="#{aufga.beschreibung}"/>
-                                            </p:column>
-                                            <p:column>
-                                                <p:commandButton value="Erledigen"
-                                                                 action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
-                                                                 oncomplete="PF('AufgabeErledigt').show();"
-                                                                 styleClass="btn"/>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </b:column>
-                                    <b:column span="6">
+                        <b:row>
+                            <b:column span="6">
+                                <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
+                                             styleClass="table-responsive">
+                                    <p:column>
+                                        <h:outputText value="#{aufga.beschreibung}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Erledigen"
+                                                         action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
+                                                         oncomplete="PF('AufgabeErledigt').show();"
+                                                         styleClass="btn"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:column>
+                            <b:column span="6">
 
-                                    </b:column>
+                            </b:column>
 
-                                </b:row>
-                            </h:form>
-                        </b:container>
-                    </b:panel>
-                </b:column>
-            </b:row>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Memos">
+                    <h:form id="memoFormer">
+
+
+                        <b:row>
+
+                            <b:column span="6">
+                                <p:commandButton value="neue Memo" oncomplete="PF('memoEintrag').show();"/>
+                                <p:dataTable value="#{memoController.memoList}" var="memos"
+                                             styleClass="table-responsive">
+                                    <p:column>
+                                        <h:outputText value="#{memos.beschreibung}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{memos.mitarbeiterM}"/>
+
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{memos.eintragDatum}">
+                                            <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
+                                        </h:outputText>
+
+                                    </p:column>
+                                </p:dataTable>
+                            </b:column>
+                            <b:column span="6">
+
+                            </b:column>
+
+                        </b:row>
+                    </h:form>
+                </b:tab>
+            </b:tabView>
+
         </b:container>
 
 
@@ -360,6 +389,18 @@
                          oncomplete="PF('AufgabeErledigt').hide();" styleClass="btn"/>
     </h:form>
 </p:dialog>
+        <p:dialog id="memoID" widgetVar="memoEintrag" header="Neue Memo" showEffect="clip" hideEffect="clip" responsive="true">
+            <h:form id="memoForm">
+                <b:selectOneMenu value="#{memoController.q}">
+                    <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
+                                   itemValue="#{memoEin.mitarbeiterID}"/>
+                </b:selectOneMenu>
+                <h:outputText value="Memo: "></h:outputText>
+                <b:inputText name="memobeschreibung" ></b:inputText>
+                <p:commandButton value="eintragen" action="#{memoController.neueMemo}" update="memoFormer"
+                                 oncomplete="PF('memoEintrag').hide();" styleClass="btn"/>
+            </h:form>
+        </p:dialog>
 
 
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
