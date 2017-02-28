@@ -123,6 +123,52 @@
         </b:row>
     </h:form>
     </b:tab>
+        <b:tab title="Urlaubszeiten">
+            <b:row>
+                <h:form>
+                    <b:column>
+                        <h:outputLabel value="von: "/>
+                        <p:calendar showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateUrlaub}"
+                                    update="urma"/>
+                        </p:calendar>
+                        <h:outputLabel value="bis: "/>
+                        <p:calendar showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateUrlaub}"
+                                    update="urma"/>
+                        </p:calendar>
+
+                    </b:column>
+                </h:form>
+            </b:row>
+            <b:row>
+                <h:form id="urma">
+                <p:dataTable value="#{pageChanger.angemeldet.urlaubList}" var="mitarbeiterurlaub">
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
+                    </p:column>
+                </p:dataTable>
+                </h:form>
+            </b:row>
+        </b:tab>
     </b:tabView>
 </b:container>
 

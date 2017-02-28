@@ -104,6 +104,30 @@
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
+                <b:row>
+
+                        <b:column>
+                            <h:outputLabel value="von: "/>
+                            <p:calendar showTodayButton="true" showOn="button"
+                                        locale="de"
+
+                                        pattern="dd.MM.yyyy"
+                                        styleClass="embed-responsive-item">
+                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDateUrlaubStatic}"
+                                        update="cal"/>
+                            </p:calendar>
+                            <h:outputLabel value="bis: "/>
+                            <p:calendar showTodayButton="true" showOn="button"
+                                        locale="de"
+
+                                        pattern="dd.MM.yyyy"
+                                        styleClass="embed-responsive-item">
+                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDateUrlaubStatic}"
+                                        update="cal"/>
+                            </p:calendar>
+
+                        </b:column>
+                </b:row>
             <b:row>
                 <p:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub">
                     <p:column>

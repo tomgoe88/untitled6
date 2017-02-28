@@ -35,10 +35,14 @@ public class Mitarbeiter extends FullCalendarEventList {
     private boolean admin;
     private Date staticStart=null;
     private Date staticEnd=null;
+    private Date urlabuStart=null;
+    private Date urlaubEnd=null;
     private List<Urlaub> urlaubList;
     private List<Arbeitszeit> arbeitszeitList;
     private static Date filteredDatestart;
     private static Date filterDateEnd;
+    private static Date filterdUrlaubStart;
+    private static Date filteredUrlaubEnd;
     private String arbeitsdauer;
     private static String tempArbeitsdauer;
     private String arbeitdauer;
@@ -64,7 +68,37 @@ public class Mitarbeiter extends FullCalendarEventList {
         return admin;
     }
 
+    public Date getUrlabuStart() {
+        return urlabuStart;
+    }
 
+    public void setUrlabuStart(Date urlabuStart) {
+        this.urlabuStart = urlabuStart;
+    }
+
+    public Date getUrlaubEnd() {
+        return urlaubEnd;
+    }
+
+    public void setUrlaubEnd(Date urlaubEnd) {
+        this.urlaubEnd = urlaubEnd;
+    }
+
+    public static Date getFilterdUrlaubStart() {
+        return filterdUrlaubStart;
+    }
+
+    public static void setFilterdUrlaubStart(Date filterdUrlaubStart) {
+        Mitarbeiter.filterdUrlaubStart = filterdUrlaubStart;
+    }
+
+    public static Date getFilteredUrlaubEnd() {
+        return filteredUrlaubEnd;
+    }
+
+    public static void setFilteredUrlaubEnd(Date filteredUrlaubEnd) {
+        Mitarbeiter.filteredUrlaubEnd = filteredUrlaubEnd;
+    }
 
     public static String getTempArbeitsdauer() {
         return tempArbeitsdauer;
@@ -122,6 +156,45 @@ public class Mitarbeiter extends FullCalendarEventList {
     public List<Urlaub> getUrlaubList() {
         urlaubList= new ArrayList<Urlaub>();
         urlaubList.addAll(SQLHelper.getUrlaubsList(MitarbeiterID));
+        List<Urlaub> tempList= new ArrayList<Urlaub>();
+        if(urlabuStart==null){
+            if(filterdUrlaubStart!=null){
+                if (filteredUrlaubEnd == null) {
+                    filteredUrlaubEnd=new Date();
+                }
+                for(Urlaub a:urlaubList){
+                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
+                        tempList.add(a);
+                    }
+                }
+                urlaubList=new ArrayList<Urlaub>();
+                urlaubList.addAll(tempList);
+                tempList=null;
+            }
+        } else {
+            if (urlaubEnd == null) {
+                urlaubEnd=new Date();
+            }
+            for(Urlaub a:urlaubList){
+                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                    tempList.add(a);
+                }
+            }
+            urlaubList=new ArrayList<Urlaub>();
+            urlaubList.addAll(tempList);
+            tempList=null;
+        }
+
+
+        Collections.sort(urlaubList, new Comparator<Urlaub>() {
+            public int compare(Urlaub o1, Urlaub o2) {
+                return o2.getUrlaubBeginn().compareTo(o1.getUrlaubBeginn());
+            }
+        });
+
+
+
+
         return urlaubList;
     }
     public void filterDateStartDate(SelectEvent event) {
@@ -139,9 +212,9 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     }
     public void filterDateEndDate(SelectEvent event) {
-        filterDateEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        filteredUrlaubEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
         GregorianCalendar gc= new GregorianCalendar();
-        gc.setTime(filterDateEnd);
+        gc.setTime(filteredUrlaubEnd);
   /*      int day= gc.get(Calendar.DAY_OF_WEEK);
         if(day== Calendar.SUNDAY){
             gc.add(Calendar.DAY_OF_MONTH, 0);
@@ -149,7 +222,35 @@ public class Mitarbeiter extends FullCalendarEventList {
         gc.add(Calendar.HOUR_OF_DAY,23);
         // }
         //
-        this.filterDateEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+        this.filteredUrlaubEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+    public void filterDateStartDateUrlaubStatic(SelectEvent event) {
+        filterdUrlaubStart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(filterdUrlaubStart);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,1);
+        // }
+        //
+        this.filterdUrlaubStart= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+    public void filterDateEndDateUrlaubStatic(SelectEvent event) {
+        filteredUrlaubEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(filteredUrlaubEnd);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,23);
+        // }
+        //
+        this.filteredUrlaubEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
     public void filterDateStartDateMA(SelectEvent event) {
@@ -178,6 +279,35 @@ public class Mitarbeiter extends FullCalendarEventList {
         // }
         //
         this.staticEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+
+    public void filterDateStartDateUrlaub(SelectEvent event) {
+        urlabuStart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(urlabuStart);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,1);
+        // }
+        //
+        this.urlabuStart= gc.getTime();// auch hier schauen, welches Datum raus komme
+
+    }
+    public void filterDateEndDateUrlaub(SelectEvent event) {
+        urlaubEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        GregorianCalendar gc= new GregorianCalendar();
+        gc.setTime(urlaubEnd);
+  /*      int day= gc.get(Calendar.DAY_OF_WEEK);
+        if(day== Calendar.SUNDAY){
+            gc.add(Calendar.DAY_OF_MONTH, 0);
+        } else{*/
+        gc.add(Calendar.HOUR_OF_DAY,23);
+        // }
+        //
+        this.urlaubEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
 
