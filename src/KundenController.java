@@ -2,6 +2,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
 @ManagedBean
 @SessionScoped
 public class KundenController {
-    private int q=0;
+    private int q=-1;
     private Kunde kunde;
     private List<Kunde> kundeList;
 
@@ -36,6 +38,11 @@ public class KundenController {
     public List<Kunde> getKundeList() {
 
         kundeList.addAll(SQLHelper.getKundeList());
+        Collections.sort(kundeList, new Comparator<Kunde>() {
+            public int compare(Kunde o1, Kunde o2) {
+                return o2.getNachname().compareTo(o1.getNachname());
+            }
+        });
         return kundeList;
     }
 
@@ -46,6 +53,7 @@ public class KundenController {
 
 
     public Kunde getKunde() {
+
         if(q != 0){
             for(Kunde m: getKundeList()){
                 //  if(m.getName().equalsIgnoreCase(q)){
@@ -54,16 +62,22 @@ public class KundenController {
                     break;
                 }
                 else {
-                    kunde=null;
-
+                    kunde= new Kunde();
+                    kunde.setVorname("neuer Eintrag");
+                    kunde.setNachname("neuer Eintrag");
+                    kunde.setTelefonnummer("neuer Eintrag");
+                    kunde.setEmail("neuer Eintrag");
                 }
             }
-        } else {
+        }
+        else {
             kunde=null;//getMitarbeiter().get(0);
         }
+        System.out.print(q+"");
         return kunde;
     }
     public void updateKunde(){
+
 
         String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("teleK");
         String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInputK");

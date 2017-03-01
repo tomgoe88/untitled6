@@ -5,6 +5,7 @@
  */
 
 
+import net.bootsfaces.component.fullCalendar.FullCalendar;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -27,6 +28,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     private List<Termine> termine;
     private String tem;
     private String farbe;
+    private List<Krankheit> krankheitslist;
     private FullCalendarEventList calendarList;
     private int MitarbeiterID;
     private String arbeitszeiten;
@@ -50,6 +52,7 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String fruehSchicht;
     private String mittelSchicht;
     private String wochendendschicht;
+    private String krankheitstage;
     public Mitarbeiter(){
 
     }
@@ -196,6 +199,50 @@ public class Mitarbeiter extends FullCalendarEventList {
 
 
         return urlaubList;
+    }
+    public List<Krankheit> getKrankheitslist() {
+        krankheitslist= new ArrayList<Krankheit>();
+        krankheitslist.addAll(SQLHelper.getKranklist(MitarbeiterID));
+        List<Krankheit> tempList= new ArrayList<Krankheit>();
+        if(urlabuStart==null){
+            if(filterdUrlaubStart!=null){
+                if (filteredUrlaubEnd == null) {
+                    filteredUrlaubEnd=new Date();
+                }
+                for(Krankheit a:krankheitslist){
+                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
+                        tempList.add(a);
+                    }
+                }
+                krankheitslist=new ArrayList<Krankheit>();
+                krankheitslist.addAll(tempList);
+                tempList=null;
+            }
+        } else {
+            if (urlaubEnd == null) {
+                urlaubEnd=new Date();
+            }
+            for(Krankheit a:krankheitslist){
+                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                    tempList.add(a);
+                }
+            }
+            krankheitslist=new ArrayList<Krankheit>();
+            krankheitslist.addAll(tempList);
+            tempList=null;
+        }
+
+
+        Collections.sort(krankheitslist, new Comparator<Krankheit>() {
+            public int compare(Krankheit o1, Krankheit o2) {
+                return o2.getUrlaubBeginn().compareTo(o1.getUrlaubBeginn());
+            }
+        });
+
+
+
+
+        return krankheitslist;
     }
     public void filterDateStartDate(SelectEvent event) {
         filteredDatestart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
@@ -433,6 +480,18 @@ public class Mitarbeiter extends FullCalendarEventList {
 
         return urlaubszeiten;
     }
+    public String getKrankheitstage() {
+        FullCalendarEventList fk= new FullCalendarEventList();
+        fk.getList().addAll(SQLHelper.getKrankheitszeiten(MitarbeiterID));
+        if(fk.getList()!= null){
+            krankheitstage=fk.toJson();
+        } else{
+            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            krankheitstage=fk.toJson();
+        }
+
+        return krankheitstage;
+    }
 
     public void setUrlaubszeiten(String urlaubszeiten) {
         this.urlaubszeiten = urlaubszeiten;
@@ -464,16 +523,19 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     public String getTem() {
         FullCalendarEventList fk= new FullCalendarEventList();
+
         fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getUrlaubszeiten(MitarbeiterID));
-        if(fk.getList()!=null){
-            tem= fk.toJson();
-        }else{
-            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+        fk.getList().addAll(SQLHelper.getKrankheitszeiten(MitarbeiterID));
+        if(getList().size()==0){
+            fk.getList().add(new FullCalendarEventBean());
+            tem=fk.toJson();
+        } else {
             tem=fk.toJson();
         }
+        System.out.print(tem);
         return tem;
     }
 

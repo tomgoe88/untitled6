@@ -22,6 +22,7 @@ public class PageChanger {
     private String pageMitarbeiterkonto;
     private String pageKunde;
     private String pageErledigteTermine;
+    private String pageKrankheitszeit;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -42,7 +43,7 @@ public class PageChanger {
 
     public String getPageArbeitszeiten(){
 
-                page="Arbeitszeiten";
+        page="Arbeitszeiten";
 
         return "/"+page+".xhtml";
     }
@@ -51,6 +52,15 @@ public class PageChanger {
         page= "mitarbeiter";
         return "/"+page+".xhtml";
 
+    }
+
+    public String getPageKrankheitszeit() {
+        page= "Krankheitszeiten";
+        return "/"+page+".xhtml";
+    }
+
+    public void setPageKrankheitszeit(String pageKrankheitszeit) {
+        this.pageKrankheitszeit = pageKrankheitszeit;
     }
 
     public String getPageMitarbeiterkonto() {

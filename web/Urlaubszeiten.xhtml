@@ -154,17 +154,18 @@
 
     <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
         <h:form id="urlaubszeitfenster">
-            <p:panelGrid id="eventDetails">
-                <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
+            <p:panelGrid columns="2" id="eventDetails">
+                <h:outputLabel value="Termin für: "/>
+                <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
                 <h:outputText id="Start" value="Urlaubsstart: "/>
-                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy" locale="de"
+                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy" locale="de" showOn="button"
                             value="#{kalenderHelfer.start}">
                     <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
                 </p:calendar>
-                <b/>
                 <h:outputText id="End" value="Urlaubsende: "/>
                 <p:calendar
                         widgetVar="endDate"
+                        showOn="button"
                         name="end"
                         for="End"
                         pattern="MM/dd/yyyy"

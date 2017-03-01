@@ -223,6 +223,22 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableKrankheitstage="" +
+                    "CREATE TABLE IF NOT EXISTS krankheitstage( " +
+                    "KrankID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterID int, " +
+                    "Krankbeginn VARCHAR (200), " +
+                    "Krankende VARCHAR (200), " +
+                    "PRIMARY KEY (KrankID), " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
+                    ")";
+            con.createStatement().executeUpdate(tableKrankheitstage);
+        } catch (SQLException e){
+            System.out.println("Create Krank//SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableSperrzeiten="" +
                     "CREATE TABLE IF NOT EXISTS sperrzeiten( " +
                     "SperrID int NOT NULL AUTO_INCREMENT, " +
@@ -991,6 +1007,56 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<FullCalendarEventBean> getKrankheitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM krankheitstage " +
+                                "INNER JOIN mitarbeiter ON krankheitstage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE krankheitstage.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Krankbeginn");
+                    String schichtende=result.getString("Krankende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Krank");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get  Krankheitstage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static void newUrlaubszeit(int mitarbeiterID, String urlaubsbeginn, String urlaubsende){
         con = getInstance();
         if(con != null) {
@@ -1004,6 +1070,24 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void newKrankheit(int mitarbeiterID, String krankbeginn, String krankende){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO krankheitstage(MitarbeiterID, Krankbeginn, Krankende) VALUES(" +
+                                "'"+mitarbeiterID+"','"+krankbeginn+"','"+krankende+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Set neuen Krankheit//SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
@@ -1182,6 +1266,55 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<Krankheit> getKranklist(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<Krankheit> fb= new ArrayList<Krankheit>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM krankheitstage " +
+                                "INNER JOIN mitarbeiter ON krankheitstage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE krankheitstage.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    Krankheit temp = new Krankheit();
+
+                    String schichtbeginn=result.getString("Krankbeginn");
+                    String schichtende=result.getString("Krankende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setUrlaubsID(result.getInt("KrankID"));
+                    temp.setUrlaubBeginn(start);
+                    temp.setUrlaubEnde(end);
+                    ;
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Liste Krankheitstage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static void deleteUrlaub(int urlaubsID){
         con = getInstance();
         if(con != null) {
@@ -1194,6 +1327,23 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void deleteKrank(int krankID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM krankheitstage WHERE KrankID='"+krankID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Krank lösche//SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

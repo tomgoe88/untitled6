@@ -251,6 +251,7 @@ public class KalenderHelfer {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         if(defaultDate!=null) {
             dd=dateFormat.format(defaultDate);
+
         } else {
             dd=dateFormat.format(new Date());
         }
@@ -382,12 +383,14 @@ public class KalenderHelfer {
         gc.add(Calendar.DAY_OF_MONTH,1);
         this.defaultDate=gc.getTime();
 
+
     }
     public void preDay(){
         GregorianCalendar gc= new GregorianCalendar();
         gc.setTime(defaultDate);
         gc.add(Calendar.DAY_OF_MONTH,-1);
         this.defaultDate=gc.getTime();
+
     }
     public void nextWeek(){
         GregorianCalendar gc= new GregorianCalendar();
@@ -395,12 +398,14 @@ public class KalenderHelfer {
         gc.add(Calendar.WEEK_OF_MONTH,1);
         this.defaultDate=gc.getTime();
 
+
     }
     public void preWeek(){
         GregorianCalendar gc= new GregorianCalendar();
         gc.setTime(defaultDate);
         gc.add(Calendar.WEEK_OF_MONTH,-1);
         this.defaultDate=gc.getTime();
+
     }
 
 
@@ -694,6 +699,18 @@ public class KalenderHelfer {
         SQLHelper.newUrlaubszeit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
 
     }
+    public void newKrankheit(){
+        GregorianCalendar startDate= new GregorianCalendar();
+        GregorianCalendar endDate= new GregorianCalendar();
+        startDate.setTime(start);
+        endDate.setTime(end);
+        startDate.set(Calendar.HOUR_OF_DAY, 1);
+        endDate.set(Calendar.HOUR_OF_DAY,23);
+        Date starting= startDate.getTime();
+        Date ending=endDate.getTime();
+        SQLHelper.newKrankheit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+
+    }
 
     public String getTest() {
         if(calendarBean!=null){
@@ -842,6 +859,9 @@ public class KalenderHelfer {
     }
     public void deleteUrlaub(int urlaubsID){
         SQLHelper.deleteUrlaub(urlaubsID);
+    }
+    public void deleteKrankheit(int krankID){
+        SQLHelper.deleteKrank(krankID);
     }
     public List<Aufgabe> getAufgaben(){
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
