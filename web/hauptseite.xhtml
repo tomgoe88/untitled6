@@ -23,6 +23,8 @@
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/menu-element.js"></script>
     <script type="text/javascript" src="primefaces-omega.js"></script>
+    <link rel="stylesheet" href="css/prime.css"/>
+
 </h:head>
 <h:body onload="testMobile()">
 
@@ -30,7 +32,7 @@
     <ui:composition>
 
         <h:form  id="bar">
-            <b:navBar  brand="Palestro" rendered="#{pageChanger.angemeldet!=null}">
+            <b:navBar  brand="Palestro" rendered="#{pageChanger.angemeldet!=null}" styleClass="barbar">
                 <b:navbarLinks >
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
                     <b:navLink value="Erledigte Termine" href="#{pageChanger.pageErledigteTermine}" />

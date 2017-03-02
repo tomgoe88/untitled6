@@ -259,9 +259,9 @@ public class Mitarbeiter extends FullCalendarEventList {
 
     }
     public void filterDateEndDate(SelectEvent event) {
-        filteredUrlaubEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
+        filterDateEnd = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
         GregorianCalendar gc= new GregorianCalendar();
-        gc.setTime(filteredUrlaubEnd);
+        gc.setTime(filterDateEnd);
   /*      int day= gc.get(Calendar.DAY_OF_WEEK);
         if(day== Calendar.SUNDAY){
             gc.add(Calendar.DAY_OF_MONTH, 0);
@@ -269,7 +269,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         gc.add(Calendar.HOUR_OF_DAY,23);
         // }
         //
-        this.filteredUrlaubEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+        this.filterDateEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
     public void filterDateStartDateUrlaubStatic(SelectEvent event) {
