@@ -529,7 +529,8 @@ public class Mitarbeiter extends FullCalendarEventList {
         fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getUrlaubszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getKrankheitszeiten(MitarbeiterID));
-        if(getList().size()==0){
+        fk.getList().addAll(SQLHelper.getKurszeitenMitarbeiter(MitarbeiterID));
+        if(fk.getList().size()==0){
             fk.getList().add(new FullCalendarEventBean());
             tem=fk.toJson();
         } else {

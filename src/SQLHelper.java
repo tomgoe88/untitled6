@@ -188,6 +188,53 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+        try {
+            String tableKursbezeichnungen="" +
+                    "CREATE TABLE IF NOT EXISTS kursbezeichnungen( " +
+                    "BezeichnungsID int NOT NULL AUTO_INCREMENT, " +
+                    "Bezeichnung VARCHAR(200), " +
+                    "PRIMARY KEY (BezeichnungsID)" +
+                    ")";
+            con.createStatement().executeUpdate(tableKursbezeichnungen);
+        } catch (SQLException e){
+            System.out.println("Kursbezeichnung //SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
+            String tableKurs="" +
+                    "CREATE TABLE IF NOT EXISTS kurse( " +
+                    "KursID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterID int, " +
+                    "Kursbeginn VARCHAR (200), " +
+                    "Kursende VARCHAR (200), " +
+                    "Kursbezeichnung VARCHAR (200), " +
+                    "PRIMARY KEY (KursID), " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID)" +
+                    ")";
+            con.createStatement().executeUpdate(tableKurs);
+        } catch (SQLException e){
+            System.out.println("Kursbezeichnung //SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
+            String tableKursteilnehmer="" +
+                    "CREATE TABLE IF NOT EXISTS kursteilnehmer( " +
+                    "TeilnehmerID int NOT NULL AUTO_INCREMENT, " +
+                    "KursID int, " +
+                    "KundenID int, " +
+                    "PRIMARY KEY (TeilnehmerID), " +
+                    "FOREIGN KEY (KursID) REFERENCES kurse(KursID), " +
+                    "FOREIGN KEY (KundenID) REFERENCES kunde(KundenID)" +
+                    ")";
+            con.createStatement().executeUpdate(tableKursteilnehmer);
+        } catch (SQLException e){
+            System.out.println("Kursteilnehmer //SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+
 
         try {
             String tableArbeitszeiten="" +
@@ -362,7 +409,7 @@ public class SQLHelper{
         }
 
     }
-    public static List<Kunde> kunden(){
+    public static List<Kunde> teilnehmerListe(int kursID){
 
         con = getInstance();
         List<Kunde> kunden= new ArrayList<Kunde>();
@@ -372,7 +419,10 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql =
-                        "SELECT * FROM Kunde";
+                        "SELECT * FROM kursteilnehmer " +
+                                "INNER JOIN kunde ON kursteilnehmer.KundenID=kunde.KundenID " +
+                                "INNER JOIN kurse ON kursteilnehmer.KursID=kurse.KursID " +
+                                "WHERE kurse.KursID='"+kursID+"'";
                 ResultSet ergebnis = query.executeQuery(sql);
                 String title;
 
@@ -393,6 +443,33 @@ public class SQLHelper{
         }
         return kunden;
     }
+    public static List<String> getKursbezeichnungen(){
+
+        con = getInstance();
+        List<String> kursb= new ArrayList<String>();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql =
+                        "SELECT * FROM kursbezeichnungen";
+                ResultSet ergebnis = query.executeQuery(sql);
+                String title;
+
+                while (ergebnis.next()) {
+                    String temp = ergebnis.getString("Bezeichnung");
+                    kursb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Kursbezeichnung SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return kursb;
+    }
     public static void neuerTermin (int MitarbeiterID, int KundenID, String Beschreibung, String Terminart, String start, String end , int eintrager){
         con = getInstance();
         if(con != null) {
@@ -406,6 +483,26 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+
+    }
+    public static void neuerTeilnehmer (int kursID, int kundeiD){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO kursteilnehmer(KursID, KundenID) VALUES("+
+                                "'"+kursID+"','"+kundeiD+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("NeuerTeilnehmer//SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
@@ -1007,6 +1104,107 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<FullCalendarEventBean> getKurszeitenMitarbeiter(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM kurse " +
+                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE kurse.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Kursbeginn");
+                    String schichtende=result.getString("Kursende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor("red");
+                    temp.setTitle(result.getInt("KursID")+" "+result.getString("Kursbezeichnung"));
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Kurse //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getKurse(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM kurse " +
+                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID ";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Kursbeginn");
+                    String schichtende=result.getString("Kursende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle(result.getString("Kursbezeichnung")+" ; "+result.getString("vorname")+" ; "+result.getInt("KursID"));
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Kurse //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+
     public static List<FullCalendarEventBean> getKrankheitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
@@ -1070,6 +1268,42 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void newKurs(String kursbezeichnung, String kursstart, String kursende, int mitarbeiterID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO kurse(Kursbezeichnung, Kursbeginn, Kursende, MitarbeiterID) VALUES(" +
+                                "'"+kursbezeichnung+"','"+kursstart+"','"+kursende+"','"+mitarbeiterID+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println(" neuer Kurs//SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void newKursbezeichnung(String kursbezeichnung){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO kursbezeichnungen(Bezeichnung) VALUES(" +
+                                "'"+kursbezeichnung+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("neuer Kursbezeichnung//SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
@@ -1266,6 +1500,57 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<Kurse> getKursList(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<Kurse> fb= new ArrayList<Kurse>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM kurse " +
+                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    Kurse temp = new Kurse();
+
+                    String schichtbeginn=result.getString("Kursbeginn");
+                    String schichtende=result.getString("Kursende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setKursID(result.getInt("KursID"));
+                    temp.setKursstart(start);
+                    temp.setKursende(end);
+                    temp.setMitarbeiter(result.getString("vorname")+" "+result.getString("nachname"));
+                    temp.setKursbezeichnung(result.getString("Kursbezeichnung"));
+                    ;
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static List<Krankheit> getKranklist(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         List<Krankheit> fb= new ArrayList<Krankheit>();
@@ -1327,6 +1612,23 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void deleteKursbezeichnung(String kursbezeichnung){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM kursbezeichnungen WHERE Bezeichnung='"+kursbezeichnung+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Delete Kurs//SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

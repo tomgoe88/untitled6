@@ -621,8 +621,8 @@ public class KalenderHelfer {
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         Kunde temoKunde=null;
-        if(SQLHelper.kunden().size()!=0){
-            for(Kunde k: SQLHelper.kunden()){
+        if(SQLHelper.getKundeList().size()!=0){
+            for(Kunde k: SQLHelper.getKundeList()){
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
                     temoKunde=null;
                     kundenID=k.getKundeID();
@@ -642,7 +642,7 @@ public class KalenderHelfer {
             }
         }else {
             SQLHelper.neuerKunde(vorname,nachname,tele, email);
-            for(Kunde k: SQLHelper.kunden()) {
+            for(Kunde k: SQLHelper.getKundeList()) {
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())) {
                     kundenID = k.getKundeID();
                     break;
@@ -845,14 +845,14 @@ public class KalenderHelfer {
     }
     public List<String> getKundenNames(){
         List<String> kundenanee= new ArrayList<String>();
-        for(Kunde k: SQLHelper.kunden()){
+        for(Kunde k: SQLHelper.getKundeList()){
             kundenanee.add(k.getVorname());
         }
         return kundenanee;
     }
     public List<String> getKundeNachname(){
         List<String> kundenanee= new ArrayList<String>();
-        for(Kunde k: SQLHelper.kunden()){
+        for(Kunde k: SQLHelper.getKundeList()){
             kundenanee.add(k.getNachname());
         }
         return kundenanee;

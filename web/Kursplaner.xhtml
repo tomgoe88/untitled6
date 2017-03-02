@@ -1,10 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
     <title>Facelet Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,11 +21,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
-    <link href="css/flexnav.css" media="screen, projection" rel="stylesheet" type="text/css"/>
-    <link href="css/page.css" media="screen, projection" rel="stylesheet" type="text/css"/>
-    <link href="css/font-awesome.css" media="screen, projection" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="//use.typekit.net/qyb8ood.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
 </h:head>
 <h:body>
 
@@ -28,7 +30,243 @@
     </ui:insert>
 
 
-<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+
+    <b:container fluid="true">
+        <b:row>
+            <h:form id="navform">
+
+                <b:column span="4">
+
+
+                    <p:calendar showTodayButton="true" showOn="button"
+                                locale="de"
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
+                                update="cal"/>
+                    </p:calendar>
+
+
+
+                </b:column>
+
+                <b:column span="1"/>
+                <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
+                    <p:ajax update="cal"/>
+                </p:selectBooleanButton>
+
+                <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
+
+
+                <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
+                <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
+
+
+                <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
+                <b/>
+
+
+            </h:form>
+        </b:row>
+        <h:form id="cal">
+            <b:row>
+                <b:column span="5">
+                    <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
+                        <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
+                    </h:outputText>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column span="12">
+
+
+                </b:column>
+            </b:row>
+            <b:row>
+
+                <b:column colLg="11">
+
+                    <b:fullCalendar
+                            height="#{pageResizer.size}"
+                            lang="de"
+                            calendarHeader="false"
+                            defaultView="#{kalenderHelfer.changeAgenda}"
+                            events="#{kursController.kurplanKurse}"
+
+                            dayClick="
+                                                        function(date, jsEvent, view) {
+                                                        selectDate(date);
+                                                        PF('urlaubszeitWigdet').show();
+                                                        }"
+                            eventClick="
+                                                        function(calEvent, jsEvent, view) {
+                                                        test(calEvent);
+                                                        }"
+                            defaultDate="#{kalenderHelfer.theDefaultDate}">
+                    </b:fullCalendar>
+                </b:column>
+                <b:column colLg="1">
+                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
+                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                </b:column>
+            </b:row>
+            <b:tabView>
+                <b:tab title="Kursbezeichnungen">
+            <b:row>
+                <b:column>
+                    <p:commandButton value="neue Kursbezeichnung" oncomplete="PF('kursbezeichnungan').show();"/>
+                </b:column>
+                <p:dataTable value="#{kursController.kursbezeichnungen}" var="kursbez">
+                    <p:column headerText="Kursbezeichnung">
+                        <h:outputText value="#{kursbez}"></h:outputText>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="X" action="#{kursController.deleteKurs(kursbez)}" update="cal urlaubszeitfenster"/>
+                    </p:column>
+                </p:dataTable>
+            </b:row>
+                </b:tab>
+                <b:tab title="Kurstermine">
+                    <b:row>
+                        <b:column>
+                            <p:commandButton value="neue Kursbezeichnung" oncomplete="PF('kursbezeichnungan').show();"/>
+                        </b:column>
+                        <p:dataTable value="#{kursController.kurseList}" var="kursinList">
+                            <p:column headerText="Kursbezeichnung">
+                                <h:outputText value="#{kursinList.kursbezeichnung}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Tag">
+                                <h:outputText value="#{kursinList.kursstart}">
+                                    <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Kursbeginn">
+                                <h:outputText value="#{kursinList.kursstart}">
+                                    <f:convertDateTime pattern="HH:mm"/>
+                                </h:outputText>
+
+                            </p:column>
+                            <p:column headerText="Kursende">
+                            <h:outputText value="#{kursinList.kursende}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                            </p:column>
+                            <p:column headerText="Teilnehmer">
+                                <p:selectOneMenu id="teil" >
+                                    <f:selectItems value="#{kursinList.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
+                                                   itemValue="#{mi.kundeID}"/>
+                                    <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:dataTable>
+                    </b:row>
+                </b:tab>
+
+            </b:tabView>
+        </h:form>
+    </b:container>
+
+
+    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="urlaubszeitfenster">
+            <p:panelGrid columns="2" id="eventDetails">
+                <h:outputLabel value="Mitarbeiter: "></h:outputLabel>
+                <p:selectOneMenu id="mitauswahl" value="#{kursController.q}" styleClass="col-lg-12" >
+                    <f:selectItems value="#{kursController.mitarbeiterList}" var="mi" itemLabel="#{mi.name}"
+                                   itemValue="#{mi.mitarbeiterID}"/>
+                    <p:ajax event="valueChange" update="cal"/>
+                </p:selectOneMenu>
+                <h:outputText value="Kursbezeichnung: "/>
+                <p:selectOneMenu id="kurswahl" value="#{kursController.kursbezeichnung}" styleClass="col-lg-12" >
+                    <f:selectItems value="#{kursController.kursbezeichnungen}" var="kursb" itemLabel="#{kursb}"
+                                   itemValue="#{kursb}"/>
+                    <p:ajax event="valueChange" update="cal"/>
+                </p:selectOneMenu>
+                <h:outputText id="Start" value="Kursbeginn: "/>
+                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" showOn="button"
+                            value="#{kursController.kursstart}">
+                    <p:ajax event="dateSelect" listener="#{kursController.kursstartDate}"/>
+                </p:calendar>
+                <h:outputText id="End" value="Kursende: "/>
+                <p:calendar
+                        widgetVar="endDate"
+                        showOn="button"
+                        name="end"
+                        for="End"
+                        pattern="MM/dd/yyyy HH:mm"
+                        locale="de"
+                        value="#{kursController.kursende}">
+                    <p:ajax event="dateSelect" listener="#{kursController.kursEndeDate}"/>
+                </p:calendar>
+                <b/>
+                <p:commandButton action="#{kursController.newKurs}" value="go for it" update="cal"
+                                 oncomplete="PF('urlaubszeitWigdet').hide();" styleClass="btn"/>
+            </p:panelGrid>
+            <pe:remoteCommand id="urlaubszeitCommand" name="dateSelect" process="@this" update="urlaubszeitfenster"
+                              actionListener="#{kursController.myKursDate}">
+                <pe:methodSignature parameters="java.lang.String"/>
+                <pe:methodParam name="dateEvent">
+                </pe:methodParam>
+            </pe:remoteCommand>
+            <script type="text/javascript" src="selectdate.js"></script>
+        </h:form>
+    </p:dialog>
+    <p:dialog widgetVar="kursbezeichnungan" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="kursbezeichnungForm">
+            <b:inputText name="kursBZ" />
+            <p:commandButton value="anlegen" action="#{kursController.newKursbezeichnung}" update="cal urlaubszeitfenster"  oncomplete="PF('kursbezeichnungan').hide();"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="ding">
+            <b:container>
+                <b:panelGrid columns="2">
+                    <h:outputText value="KursID: "></h:outputText>
+                    <h:outputText value="#{kursController.kursID}"></h:outputText>
+                    <h:outputText value="Kursbezeichnung: "></h:outputText>
+                    <h:outputText value="#{kursController.eingetragenerKurs}"></h:outputText>
+                    <h:outputText value="Kursleiter: "></h:outputText>
+                    <h:outputText value="#{kursController.eingetrageneMA}"></h:outputText>
+                </b:panelGrid>
+
+                <pe:remoteCommand id="myCommand" name="sendEvent" process="@this" update="ding"
+                                  actionListener="#{kursController.myEvent}">
+                    <pe:methodSignature parameters="java.lang.String"/>
+                    <pe:methodParam name="event">
+                    </pe:methodParam>
+                </pe:remoteCommand>
+                <script type="text/javascript" src="form.js"></script>
+
+                <b:commandButton value="OK" update="cal"
+                                 oncomplete="PF('testVar').hide(); PF('teilnehmerVar').show();"/>
+            </b:container>
+        </h:form>
+    </p:dialog>
+    <p:dialog id="teilnehmerID" widgetVar="teilnehmerVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="teilnehmerForm">
+            <b:container>
+                <b:panelGrid columns="2">
+                    <h:outputText value="Neuer Teilnehmer: "></h:outputText>
+                    <p:selectOneMenu id="teilnehmer" value="#{kursController.kundenID}"  >
+                        <f:selectItems value="#{kursController.kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
+                                       itemValue="#{mi.kundeID}"/>
+                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                    </p:selectOneMenu>
+
+                </b:panelGrid>
+
+                <b:commandButton value="Eintragen" action="#{kursController.neuerTeilnehmer}" update="cal"
+                                 oncomplete="PF('teilnehmerVar').hide();"/>
+            </b:container>
+        </h:form>
+    </p:dialog>
+
+
+    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
 
 </h:body>
 </html>
