@@ -1,9 +1,7 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Jutom on 28.02.2017.
@@ -24,6 +22,11 @@ public class MemoController {
     public List<Memo> getMemoList() {
         memoList= new ArrayList<Memo>();
         memoList.addAll(SQLHelper.getMemo());
+        Collections.sort(memoList, new Comparator<Memo>() {
+            public int compare(Memo o1, Memo o2) {
+                return o2.getEintragDatum().compareTo(o1.getEintragDatum());
+            }
+        });
         return memoList;
     }
 

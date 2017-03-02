@@ -89,9 +89,12 @@
                     </p:selectOneMenu>
                 </b:column>
             </b:row>
+            <b:row>
 
+              <b:column colLg="11">
             <b:label text="#{mit.name}"/>
             <b:fullCalendar
+                    height="#{pageResizer.size}"
                     lang="de"
                     calendarHeader="false"
                     defaultView="#{kalenderHelfer.changeAgenda}"
@@ -104,6 +107,12 @@
                                                         }"
                     defaultDate="#{kalenderHelfer.theDefaultDate}">
             </b:fullCalendar>
+              </b:column>
+                <b:column colLg="1">
+                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
+                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                </b:column>
+            </b:row>
             <b:row>
 
                 <b:column>

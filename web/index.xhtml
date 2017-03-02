@@ -29,6 +29,7 @@
             <ui:include src="/hauptseite.xhtml"/>
         </ui:insert>
 
+
         <b:container fluid="true">
             <b:row>
                 <h:form id="navform">
@@ -95,10 +96,11 @@
                                 </b:column>
 
                             </b:row>
-
-                                    <b:fullCalendar lang="de"
+                            <b:row>
+                            <b:column colLg="11">
+                                    <b:fullCalendar  lang="de"
                                                     calendarHeader="false"
-                                                    height="960"
+                                                    height="#{pageResizer.size}"
                                                     defaultView="#{kalenderHelfer.changeAgenda}"
                                                     events="#{kalenderHelfer.mitarbeit.tem}"
                                                     eventClick="
@@ -117,7 +119,12 @@
                                     >
 
                                     </b:fullCalendar>
-
+                            </b:column>
+                                <b:column colLg="1">
+                                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
+                                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                                </b:column>
+                            </b:row>
                             <b:row rendered="false">
                                 <b:column>
                                     <b:row>
@@ -163,22 +170,19 @@
 
 
                         <b:row>
-                            <b:column span="6">
+                            <b:column span="12">
                                 <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
                                              styleClass="table-responsive">
-                                    <p:column>
+                                    <p:column colspan="8">
                                         <h:outputText value="#{aufga.beschreibung}"/>
                                     </p:column>
-                                    <p:column>
+                                    <p:column colspan="4">
                                         <p:commandButton value="Erledigen"
                                                          action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
                                                          oncomplete="PF('AufgabeErledigt').show();"
                                                          styleClass="btn"/>
                                     </p:column>
                                 </p:dataTable>
-                            </b:column>
-                            <b:column span="6">
-
                             </b:column>
 
                         </b:row>
@@ -190,27 +194,24 @@
 
                         <b:row>
 
-                            <b:column span="6">
+                            <b:column span="12">
                                 <p:commandButton value="neue Memo" oncomplete="PF('memoEintrag').show();"/>
                                 <p:dataTable value="#{memoController.memoList}" var="memos"
                                              styleClass="table-responsive">
-                                    <p:column>
+                                    <p:column colspan="7" >
                                         <h:outputText value="#{memos.beschreibung}"/>
                                     </p:column>
-                                    <p:column>
+                                    <p:column colspan="3">
                                         <h:outputText value="#{memos.mitarbeiterM}"/>
 
                                     </p:column>
-                                    <p:column>
+                                    <p:column colspan="2">
                                         <h:outputText value="#{memos.eintragDatum}">
                                             <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
                                         </h:outputText>
 
                                     </p:column>
                                 </p:dataTable>
-                            </b:column>
-                            <b:column span="6">
-
                             </b:column>
 
                         </b:row>

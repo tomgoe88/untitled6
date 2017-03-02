@@ -91,13 +91,15 @@
         </b:row>
     </h:form>
 
-
+<b:row>
 
             <h:form id="cal">
 
 
+<b:column colLg="11">
                 <b:label text="#{mit.name}"/>
                 <b:fullCalendar
+                        height="#{pageResizer.size}"
                         lang="de"
                         calendarHeader="false"
                         defaultView="#{kalenderHelfer.changeAgenda}"
@@ -111,8 +113,14 @@
                         defaultDate="#{kalenderHelfer.theDefaultDate}">
                 </b:fullCalendar>
 
-            </h:form>
 
+</b:column>
+                <b:column colLg="1">
+                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
+                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                </b:column>
+            </h:form>
+</b:row>
 
 <b:tabView>
         <b:tab title="Aufgaben">
@@ -136,9 +144,7 @@
 
                                         </p:dataTable>
                                     </b:column>
-                                    <b:column span="6">
 
-                                    </b:column>
 
                                 </b:row>
                             </h:form>
