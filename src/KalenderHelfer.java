@@ -375,6 +375,7 @@ public class KalenderHelfer {
        // }
         //
         this.defaultDate= gc.getTime();// auch hier schauen, welches Datum raus komme
+        ArbeitszeitController.setDefaultDate(defaultDate);
 
     }
     public void nextDay(){
@@ -382,6 +383,7 @@ public class KalenderHelfer {
         gc.setTime(defaultDate);
         gc.add(Calendar.DAY_OF_MONTH,1);
         this.defaultDate=gc.getTime();
+        ArbeitszeitController.setDefaultDate(defaultDate);
 
 
     }
@@ -390,6 +392,7 @@ public class KalenderHelfer {
         gc.setTime(defaultDate);
         gc.add(Calendar.DAY_OF_MONTH,-1);
         this.defaultDate=gc.getTime();
+        ArbeitszeitController.setDefaultDate(defaultDate);
 
     }
     public void nextWeek(){
@@ -397,6 +400,7 @@ public class KalenderHelfer {
         gc.setTime(defaultDate);
         gc.add(Calendar.WEEK_OF_MONTH,1);
         this.defaultDate=gc.getTime();
+        ArbeitszeitController.setDefaultDate(defaultDate);
 
 
     }
@@ -405,6 +409,7 @@ public class KalenderHelfer {
         gc.setTime(defaultDate);
         gc.add(Calendar.WEEK_OF_MONTH,-1);
         this.defaultDate=gc.getTime();
+        ArbeitszeitController.setDefaultDate(defaultDate);
 
     }
 
@@ -769,6 +774,7 @@ public class KalenderHelfer {
 
     public void handleDefaultDate(SelectEvent event) {
         defaultDate = (Date) event.getObject();
+        ArbeitszeitController.setDefaultDate(defaultDate);
     }
 
     public String getTempColor() {

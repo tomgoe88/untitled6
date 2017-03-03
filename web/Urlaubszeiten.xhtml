@@ -53,19 +53,22 @@
                     </b:column>
 
                     <b:column span="1"/>
-                    <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
-                        <p:ajax update="cal"/>
-                    </p:selectBooleanButton>
+                    <b:column>
+                        <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
+                            <p:ajax update="cal"/>
+                        </p:selectBooleanButton>
 
-                    <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
-
-
-                    <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
-                    <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
+                        <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
 
 
-                    <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
-                    <b/>
+                        <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
+                        <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
+
+
+                        <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
+                        <b/>
+                    </b:column>
+
 
 
                 </h:form>
