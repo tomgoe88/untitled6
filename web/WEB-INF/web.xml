@@ -12,6 +12,9 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
     <context-param>
         <param-name>BootsFaces_THEME</param-name>
         <param-value>cerulean</param-value>

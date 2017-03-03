@@ -35,7 +35,7 @@ import java.util.Locale;
 public class SQLHelper{
     private static Connection con = null;
     String driver = "com.mysql.jdbc.Driver";
-    String url = "jdbc:mysql://localhost/demodb";
+    String url = "jdbc:mysql://localhost/TerminplanerP";
     String user = "root";
     String passwd = "times-88";
 
@@ -44,7 +44,7 @@ public class SQLHelper{
     private String dbName = "Terminplaner";   // Datenbankname
    //private static String dbUser = "root";     // Datenbankuser
     //private static String dbPass = "times-88";      // Datenbankpasswort
-    private static String sql = "CREATE DATABASE IF NOT EXISTS DEMODB";
+    private static String sql = "CREATE DATABASE IF NOT EXISTS TerminplanerP";
     private static SQLHelper aktuell = new SQLHelper();
 
     private SQLHelper(){
@@ -95,6 +95,12 @@ public class SQLHelper{
     public static List<Termine> termine(Date chooseDate){
         List<Termine> termine= new ArrayList<Termine>();
         return termine ;
+    }
+    public static void initAnmeldung(){
+        if(getMaxMitarbeiterID()==0){
+            newMitarbeiter("Admin","Admin","red");
+            newPassword(1,"admin", "true");
+        }
     }
 
 
@@ -352,6 +358,8 @@ public class SQLHelper{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+        SQLHelper.initAnmeldung();
+
 
     }
 
@@ -1407,6 +1415,7 @@ public class SQLHelper{
             }
         }
     }
+
     public static int getMaxMitarbeiterID(){
         //TODO: mit Operator Max die Maxnummer der tabelle heruasfinden
         con = getInstance();

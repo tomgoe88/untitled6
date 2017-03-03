@@ -2,6 +2,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,9 @@ import java.util.List;
  */
 @ViewScoped
 @ManagedBean
-public class PageChanger {
+public class PageChanger implements Serializable {
+    private static final long serialVersionUID = 1094801825228386363L;
+
     private String page;
     private String ifMobile;
     private String pageIndex;
@@ -28,6 +32,7 @@ public class PageChanger {
     private Mitarbeiter angemeldet;
     private  static Mitarbeiter tempMitarbeiter;
     private List<Mitarbeiter> mitarbeiter;
+    private String angemeeldetUser;
 
 
     public String getIfMobile() {
@@ -71,6 +76,16 @@ public class PageChanger {
     public String getPageKunde() {
         page="Kunden";
         return  "/"+page+".xhtml";
+    }
+
+    public String getAngemeeldetUser() {
+        HttpSession session = SessionUtils.getSession();
+        angemeeldetUser=session.getAttribute("username").toString();
+        return angemeeldetUser;
+    }
+
+    public void setAngemeeldetUser(String angemeeldetUser) {
+        this.angemeeldetUser = angemeeldetUser;
     }
 
     public String getPageErledigteTermine() {
@@ -144,6 +159,8 @@ public class PageChanger {
                     break;
                 } else {
                     if(m.getPassword().equals(password)){
+                        HttpSession session = SessionUtils.getSession();
+                        session.setAttribute("username", m.getName());
                         tempMitarbeiter= m;
                         login="hauptseite";
                         break;
