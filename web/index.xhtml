@@ -33,10 +33,7 @@
         <b:container fluid="true">
             <b:row>
                 <h:form id="navform">
-
                 <b:column span="4">
-
-
                     <p:calendar showTodayButton="true" showOn="button"
                                 locale="de"
 
@@ -45,9 +42,6 @@
                         <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
                                 update="cal terminWidget aufgabenformer"/>
                     </p:calendar>
-
-
-
                 </b:column>
 
                 <b:column span="1"/>
@@ -66,10 +60,6 @@
                         <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal aufgabenformer schicht"></p:commandButton>
                         <b/>
                     </b:column>
-
-
-
-
                 </h:form>
                 <b:column>
                     <h:form id="schicht">
@@ -84,13 +74,8 @@
                     </h:form>
                 </b:column>
             </b:row>
-
-
             <b:row>
                 <b:column span="12">
-
-
-
                         <h:form id="cal">
                             <b:row>
                                 <b:column span="5">
@@ -99,10 +84,8 @@
                                     </h:outputText>
                                 </b:column>
                             </b:row>
-
                             <b:row>
                                 <b:column span="12">
-
                                     <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
                                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                                        itemValue="#{mi.mitarbeiterID}"/>
@@ -110,7 +93,6 @@
                                         <p:ajax event="valueChange" update="cal"/>
                                     </p:selectOneMenu>
                                 </b:column>
-
                             </b:row>
                             <b:row>
                             <b:column colLg="11">
@@ -131,8 +113,7 @@
                                                     }"
                                                     defaultDate="#{kalenderHelfer.theDefaultDate}"
                                                     businessHours="{start:'6:00', end:'23:30', dow: [1, 2]}"
-                                                    scrollTime="06:00:00"
-                                    >
+                                                    scrollTime="06:00:00">
 
                                     </b:fullCalendar>
                             </b:column>

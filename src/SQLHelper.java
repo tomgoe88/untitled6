@@ -39,11 +39,11 @@ public class SQLHelper{
     String user = "root";
     String passwd = "times-88";
 
-    private static String dbHost = "localhost"; // Hostname
-    private static String dbPort = "3306";      // Port -- Standard: 3306
+ //   private static String dbHost = "localhost"; // Hostname
+  //  private static String dbPort = "3306";      // Port -- Standard: 3306
     private String dbName = "Terminplaner";   // Datenbankname
-    private static String dbUser = "root";     // Datenbankuser
-    private static String dbPass = "times-88";      // Datenbankpasswort
+   //private static String dbUser = "root";     // Datenbankuser
+    //private static String dbPass = "times-88";      // Datenbankpasswort
     private static String sql = "CREATE DATABASE IF NOT EXISTS DEMODB";
     private static SQLHelper aktuell = new SQLHelper();
 
