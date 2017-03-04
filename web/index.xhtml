@@ -240,6 +240,7 @@
 
                 <p:ajax event="valueChange" update="terminWidget"/>
             </p:selectOneMenu>
+            <p:panelGrid rendered="#{kundenController.q!=-1}">
             <h:outputText id="vorname" value="Vorname: "/>
             <b:inputText name="vorname" for="vorname" typeahead="true" value="#{kundenController.kunde.vorname}"
                          typeahead-values="#{kalenderHelfer.kundenNames}"/>
@@ -258,6 +259,27 @@
             <b:inputText id="emailIN" name="emailInput" for="email" value="#{kundenController.kunde.email}">
             </b:inputText>
             <b/>
+            </p:panelGrid>
+            <p:panelGrid rendered="#{kundenController.q==-1}">
+                <h:outputText id="vornamet" value="Vorname: "/>
+                <b:inputText name="vorname" for="vornamet" typeahead="true"
+                             typeahead-values="#{kalenderHelfer.kundenNames}"/>
+                <b/>
+                <h:outputText id="nachnamet" value="Nachname: "/>
+                <b:inputText name="nachname" for="nachnamet" typeahead="true"
+                             typeahead-values="#{kalenderHelfer.kundeNachname}"/>
+                <b/>
+                <h:outputText id="telet" value="Telefonnummer: "/>
+                <b:inputText id="teleidz" name="tele" for="telet">
+                    <f:validateRegex pattern="[0-9]+" />
+                    <f:ajax event="keyup" render="messages" />
+                </b:inputText>
+                <p:messages id="messagets" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
+                <h:outputText id="emailt" value="E-Mail: "/>
+                <b:inputText id="emailINu" name="emailInput" for="emailt">
+                </b:inputText>
+                <b/>
+            </p:panelGrid>
             <h:outputText id="beschreibung" value="Beschreibung: "/>
             <b:inputText name="beschreibung" for="beschreibung"/>
             <b/>

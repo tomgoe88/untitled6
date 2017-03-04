@@ -17,7 +17,7 @@ public class KundenController {
     private List<Kunde> kundeList;
 
     public KundenController(){
-        this.kundeList= new ArrayList<>();;
+
     }
 
 
@@ -36,7 +36,7 @@ public class KundenController {
     }
 
     public List<Kunde> getKundeList() {
-
+        this.kundeList= new ArrayList<>();
         kundeList.addAll(SQLHelper.getKundeList());
         Collections.sort(kundeList, new Comparator<Kunde>() {
             public int compare(Kunde o1, Kunde o2) {
@@ -69,6 +69,13 @@ public class KundenController {
                     kunde.setEmail("neuer Eintrag");
                 }
             }
+        }
+        else if(q==-1){
+            kunde= new Kunde();
+            kunde.setVorname("neuer Eintrag");
+            kunde.setNachname("neuer Eintrag");
+            kunde.setTelefonnummer("neuer Eintrag");
+            kunde.setEmail("neuer Eintrag");
         }
         else {
             kunde=null;//getMitarbeiter().get(0);

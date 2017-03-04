@@ -162,7 +162,7 @@ public class PageChanger implements Serializable {
                         HttpSession session = SessionUtils.getSession();
                         session.setAttribute("username", m.getName());
                         tempMitarbeiter= m;
-                        login="hauptseite";
+                        login="welcom";
                         break;
                     }
                     else {
