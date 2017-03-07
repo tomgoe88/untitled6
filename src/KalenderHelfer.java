@@ -421,9 +421,6 @@ public class KalenderHelfer {
     }
 
     public Mitarbeiter getMitarbeit() {
-        if(q==0){
-            q=PageChanger.getTempMitarbeiter().getMitarbeiterID();
-        }
         if(q != 0){
             for(Mitarbeiter m: getMitarbeiter()){
               //  if(m.getName().equalsIgnoreCase(q)){

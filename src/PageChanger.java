@@ -133,7 +133,12 @@ public class PageChanger implements Serializable {
     }
 
     public Mitarbeiter getAngemeldet() {
-        angemeldet=tempMitarbeiter;
+        for(Mitarbeiter m:getMitarbeiter()){
+            if(m.getName().equals(getAngemeeldetUser())){
+                angemeldet=m;
+            }
+        }
+
         return angemeldet;
     }
 
@@ -171,7 +176,7 @@ public class PageChanger implements Serializable {
                     if(m.getPassword().equals(password)){
                         HttpSession session = SessionUtils.getSession();
                         session.setAttribute("username", m.getName());
-                        tempMitarbeiter= m;
+
                         login="welcom";
                         break;
                     }
@@ -225,6 +230,8 @@ public class PageChanger implements Serializable {
             if(m.getName().equals(vorname)){
                 SQLHelper.updatePassword(m.getMitarbeiterID(),password);
                 tempBool=false;
+                HttpSession session = SessionUtils.getSession();
+                session.setAttribute("username", m.getName());
                 login="hauptseite";
                 break;
             }
