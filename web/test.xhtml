@@ -12,30 +12,50 @@
       xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
-    <title>Facelet Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="theme.css"/>
-    <script type="text/javascript" src="de.js"></script>
-    <script type="text/javascript" src="mobiletest.js"></script>
-    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
-    <link rel="stylesheet" href="css/prime.css"/>
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
+    <script type="text/javascript" src='fullcalendar/lib/jquery.min.js'></script>
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
+
+
+    <script type="text/javascript">
+        $('#calendar').fullCalendar({
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+        });
+        $(document).ready(function() {
+
+// page is now ready, initialize the calendar...
+
+            $('#calendar').fullCalendar({
+// put your options and callbacks here
+                defaultView: 'agendaDay',
+                events: #{resourceController.events},
+
+                resources: #{resourceController.resources}
+            })
+
+        });
+
+    </script>
+
+
 
 </h:head>
-<body  onload="testMobile()">
-<f:view renderKitId="PRIMEFACES_MOBILE">
-    <h:form id="cal">
-    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
-        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                       itemValue="#{mi.mitarbeiterID}"/>
-        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-        <p:ajax event="valueChange" update="cal"/>
-    </p:selectOneMenu>
-        <p:schedule  value="#{kalenderHelfer.mitarbeit.terminee}"></p:schedule>
 
-    </h:form>
-</f:view>
+
+<body>
+
+
+
+
+
+    <div id='calendar'></div>
+
+
+
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </body>
-
 </html>

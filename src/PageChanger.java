@@ -27,6 +27,7 @@ public class PageChanger implements Serializable {
     private String pageKunde;
     private String pageErledigteTermine;
     private String pageKrankheitszeit;
+    private String pageTest;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -76,6 +77,15 @@ public class PageChanger implements Serializable {
     public String getPageKunde() {
         page="Kunden";
         return  "/"+page+".xhtml";
+    }
+
+    public String getPageTest() {
+        page="test";
+        return  "/"+page+".xhtml";
+    }
+
+    public void setPageTest(String pageTest) {
+        this.pageTest = pageTest;
     }
 
     public String getAngemeeldetUser() {

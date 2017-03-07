@@ -531,7 +531,7 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
+                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, termin.MitarbeiterMacherID AS id, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
                                 "FROM termin " +
                                 "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
                                 "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
@@ -555,6 +555,7 @@ public class SQLHelper{
                         System.out.println(e.getMessage());
                     }
                     temp.setStart(start);
+                    temp.setResourceId(result.getInt("id")+"");
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
                     String terminart= result.getString("Terminart");
@@ -671,7 +672,7 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
@@ -1094,7 +1095,8 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
@@ -1144,7 +1146,7 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor("red");
@@ -1197,6 +1199,7 @@ public class SQLHelper{
 
                     temp.setStart(start);
                     temp.setEnd(end);
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
                     temp.setColor(result.getString("kalenderfarbe"));
                     temp.setTitle(result.getString("Kursbezeichnung")+" ; "+result.getString("vorname")+" ; "+result.getInt("KursID"));
 
@@ -1245,7 +1248,7 @@ public class SQLHelper{
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
-
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
@@ -2060,6 +2063,308 @@ public class SQLHelper{
                 System.out.println("VendorError: " + e.getErrorCode());
             }
         }
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+    public static List<FullCalendarEventBean> getAllEventsRes() {//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<FullCalendarEventBean> fb = new ArrayList<FullCalendarEventBean>();
+
+        if (con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, termin.MitarbeiterMacherID AS id, M1.kalenderfarbe, termin.terminart, kunde.vorname, kunde.nachname, kunde.telefonnummer, termin.Beschreibung, M2.vorname AS eintrager " +
+                                "FROM termin " +
+                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
+                                "INNER JOIN kunde ON termin.KundenID = kunde.KundenID";
+
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+                    String terminstart = result.getString("Terminstart");
+                    String terminende = result.getString("Terminende");
+                    DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start = null;
+                    Date end = null;
+                    try {
+                        start = dateFormat.parse(terminstart);
+                        end = dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setStart(start);
+                    temp.setResourceId(result.getInt("id") + "");
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    String terminart = result.getString("Terminart");
+                    String vorname = result.getString("vorname");
+                    String nachname = result.getString("nachname");
+                    String tele = result.getString("telefonnummer");
+                    String beschreibung = result.getString("Beschreibung");
+                    String eintrager = result.getString("eintrager");
+                    int terminID = result.getInt("TerminID");
+                    title = terminart + " ; " + vorname + " ; " + nachname + " ; " + tele + " ; " + beschreibung + " ; " + eintrager + " ; " + terminID;
+                    temp.setTitle(title);
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getAllArbeitszeitenRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM arbeitszeiten " +
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Schichtbeginn");
+                    String schichtende=result.getString("Schichtende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Arbeiteszeit");
+                    temp.setRendering("background");
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getUrlaubszeitenRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM urlaubszeit " +
+                                "INNER JOIN mitarbeiter ON urlaubszeit.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Urlaubszeitbeginn");
+                    String schichtende=result.getString("Urlaubszeitende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Urlaub");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getKurszeitenMitarbeiterRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM kurse " +
+                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Kursbeginn");
+                    String schichtende=result.getString("Kursende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor("red");
+                    temp.setTitle(result.getInt("KursID")+" "+result.getString("Kursbezeichnung"));
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Kurse //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getKrankheitszeitenRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM krankheitstage " +
+                                "INNER JOIN mitarbeiter ON krankheitstage.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Krankbeginn");
+                    String schichtende=result.getString("Krankende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Krank");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get  Krankheitstage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullcalendarRessouceBean> getAllResources(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullcalendarRessouceBean> fb= new ArrayList<FullcalendarRessouceBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM mitarbeiter";
+
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullcalendarRessouceBean temp = new FullcalendarRessouceBean();
+
+
+                    temp.setId(result.getInt("MitarbeiterID")+"");
+
+
+                    temp.setTitle(result.getString("vorname"));
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get  Resources //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
     }
 
 }

@@ -29,6 +29,7 @@ public class FullCalendarEventBean implements Serializable {
     private String color;
     private String url;
     private String rendering;
+    private String resourceId;
 
 
     public FullCalendarEventBean(){
@@ -78,6 +79,13 @@ public class FullCalendarEventBean implements Serializable {
         }
         if (durationEditable != null) {
             buf.append("durationEditable:").append(durationEditable).append(",");
+
+
+        }
+        if (resourceId != null) {
+            buf.append("resourceId:").append(resourceId).append(",");
+
+
         }
         if (color != null) {
             buf.append("color:'#").append(color).append("',");
@@ -112,6 +120,14 @@ public class FullCalendarEventBean implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
     public String getTitle() {
