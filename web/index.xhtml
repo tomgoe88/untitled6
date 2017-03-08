@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
+
+
 </h:head>
 
 <h:body>
@@ -87,14 +89,16 @@
                             <b:row>
                                 <b:column span="12">
                                     <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
+                                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
                                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                                        itemValue="#{mi.mitarbeiterID}"/>
-                                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+
                                         <p:ajax event="valueChange" update="cal"/>
                                     </p:selectOneMenu>
                                 </b:column>
+
                             </b:row>
-                            <b:row>
+                            <b:row rendered="#{kalenderHelfer.q!=0}">
                             <b:column colLg="11">
                                     <b:fullCalendar  lang="de"
                                                     calendarHeader="false"
@@ -120,37 +124,6 @@
                                 <b:column colLg="1">
                                     <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
                                     <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
-                                </b:column>
-                            </b:row>
-                            <b:row rendered="false">
-                                <b:column>
-                                    <b:row>
-                                        <ui:repeat value="#{kalenderHelfer.mitarbeiter}"
-                                                   var="mit">
-
-                                                <b:label text="#{mit.name}"/>
-                                                <b:fullCalendar
-
-                                                        calendarHeader="false"
-                                                        weekMode="false"
-                                                        lang="de"
-                                                        defaultView="#{kalenderHelfer.changeAgenda}"
-                                                        events="#{mit.tem}"
-                                                        defaultDate="#{kalenderHelfer.theDefaultDate}"
-                                                        dayClick="
-                                                        function(date, jsEvent, view) {
-                                                        selectDate(date);
-                                                        PF('eventDialog').show();
-                                                        }"
-                                                        eventClick="
-                                                        function(calEvent, jsEvent, view) {
-                                                        test(calEvent);
-                                                        }"
-                                                >
-                                                </b:fullCalendar>
-
-                                        </ui:repeat>
-                                    </b:row>
                                 </b:column>
                             </b:row>
 

@@ -351,6 +351,10 @@ public class KalenderHelfer {
         return chooseDate;
     }
 
+    public void qChange(){
+        q=0;
+    }
+
     public void setChooseDate(Date chooseDate) {
         this.chooseDate = chooseDate;
     }
@@ -421,6 +425,7 @@ public class KalenderHelfer {
     }
 
     public Mitarbeiter getMitarbeit() {
+        System.out.println(q+"    hier ist q");
         if(q != 0){
             for(Mitarbeiter m: getMitarbeiter()){
               //  if(m.getName().equalsIgnoreCase(q)){
