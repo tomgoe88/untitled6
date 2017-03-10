@@ -27,6 +27,7 @@ public class PageChanger implements Serializable {
     private String pageKunde;
     private String pageErledigteTermine;
     private String pageKrankheitszeit;
+    private String pageUnizeiten;
     private String pageTest;
     private static boolean tempBool= false;
     private boolean passwordBool;
@@ -63,6 +64,15 @@ public class PageChanger implements Serializable {
     public String getPageKrankheitszeit() {
         page= "Krankheitszeiten";
         return "/"+page+".xhtml";
+    }
+
+    public String getPageUnizeiten() {
+        page= "Unizeiten";
+        return "/"+page+".xhtml";
+    }
+
+    public void setPageUnizeiten(String pageUnizeiten) {
+        this.pageUnizeiten = pageUnizeiten;
     }
 
     public void setPageKrankheitszeit(String pageKrankheitszeit) {

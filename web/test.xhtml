@@ -20,32 +20,37 @@
     <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
 
 
-    <script type="text/javascript">
-        $('#calendar').fullCalendar({
-            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
-        });
-        $(document).ready(function() {
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
 
-// page is now ready, initialize the calendar...
 
-            $('#calendar').fullCalendar({
-// put your options and callbacks here
-                defaultView: 'agendaDay',
-                events: #{resourceController.events},
-
-                resources: #{resourceController.resources}
-            })
-
-        });
-
-    </script>
-
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
 
 
 </h:head>
 
 
 <body>
+<h:outputScript >
+    $('#calendar').fullCalendar({
+    schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+    });
+    $(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+    // put your options and callbacks here
+    defaultView: 'agendaDay',
+    events: #{resourceController.events},
+
+    resources: #{resourceController.resources}
+    })
+
+    });
+</h:outputScript>
 
 
 

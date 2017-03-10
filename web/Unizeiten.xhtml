@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+
+</h:head>
+<h:body>
+
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
+
+
+
+
+    <b:container fluid="true">
+        <b:row>
+            <h:form id="navform">
+
+                <b:column span="4">
+
+
+                    <p:calendar showTodayButton="true" showOn="button"
+                                locale="de"
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
+                                update="cal"/>
+                    </p:calendar>
+
+
+
+                </b:column>
+
+                <b:column span="1"/>
+                <b:column>
+                    <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
+                        <p:ajax update="cal"/>
+                    </p:selectBooleanButton>
+
+                    <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
+
+
+                    <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
+                    <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
+
+
+                    <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
+                    <b/>
+                </b:column>
+
+
+
+            </h:form>
+        </b:row>
+        <h:form id="cal">
+            <b:row>
+                <b:column span="5">
+                    <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
+                        <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
+                    </h:outputText>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column span="12">
+
+                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
+                                       itemValue="#{mi.mitarbeiterID}"/>
+                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                        <p:ajax event="valueChange" update="cal"/>
+                    </p:selectOneMenu>
+                </b:column>
+            </b:row>
+            <b:row>
+
+                <b:column colLg="11">
+                    <b:label text="#{mit.name}"/>
+                    <b:fullCalendar
+                            height="#{pageResizer.size}"
+                            lang="de"
+                            calendarHeader="false"
+                            defaultView="#{kalenderHelfer.changeAgenda}"
+                            events="#{kalenderHelfer.mitarbeit.unitage}"
+
+                            dayClick="
+                                                        function(date, jsEvent, view) {
+                                                        selectDate(date);
+                                                        PF('urlaubszeitWigdet').show();
+                                                        }"
+                            defaultDate="#{kalenderHelfer.theDefaultDate}">
+                    </b:fullCalendar>
+                </b:column>
+                <b:column colLg="1">
+                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
+                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                </b:column>
+            </b:row>
+            <b:row>
+
+                <b:column>
+                    <h:outputLabel value="von: "/>
+                    <p:calendar showTodayButton="true" showOn="button"
+                                locale="de"
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDateUrlaubStatic}"
+                                update="cal"/>
+                    </p:calendar>
+                    <h:outputLabel value="bis: "/>
+                    <p:calendar showTodayButton="true" showOn="button"
+                                locale="de"
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDateUrlaubStatic}"
+                                update="cal"/>
+                    </p:calendar>
+
+                </b:column>
+            </b:row>
+            <b:row>
+                <p:dataTable value="#{kalenderHelfer.mitarbeit.uniList}" var="mitarbeiterurlaub">
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="Löschen" action="#{kalenderHelfer.deleteUni(mitarbeiterurlaub.urlaubsID)}" update="cal"/>
+                    </p:column>
+                </p:dataTable>
+            </b:row>
+        </h:form>
+    </b:container>
+
+
+    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="urlaubszeitfenster">
+            <p:panelGrid columns="2" id="eventDetails">
+                <h:outputLabel value="Termin für: "/>
+                <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+                <h:outputText id="Start" value="Krankheitsbeginn: "/>
+                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy" locale="de" showOn="button"
+                            value="#{kalenderHelfer.start}">
+                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
+                </p:calendar>
+
+                <h:outputText id="End" value="Krankheitsende: "/>
+                <p:calendar
+                        widgetVar="endDate"
+                        showOn="button"
+                        name="end"
+                        for="End"
+                        pattern="MM/dd/yyyy"
+                        locale="de"
+                        value="#{kalenderHelfer.end}">
+                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
+                </p:calendar>
+                <b/>
+                <p:commandButton action="#{kalenderHelfer.newUni}" value="go for it" update="cal"
+                                 oncomplete="PF('urlaubszeitWigdet').hide();" styleClass="btn"/>
+            </p:panelGrid>
+            <pe:remoteCommand id="urlaubszeitCommand" name="dateSelect" process="@this" update="urlaubszeitfenster"
+                              actionListener="#{kalenderHelfer.myUrlaubDate}">
+                <pe:methodSignature parameters="java.lang.String"/>
+                <pe:methodParam name="dateEvent">
+                </pe:methodParam>
+            </pe:remoteCommand>
+            <script type="text/javascript" src="selectdate.js"></script>
+        </h:form>
+    </p:dialog>
+
+
+    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+
+</h:body>
+</html>

@@ -15,6 +15,7 @@ public class ResourceController {
         FullCalendarEventList fl= new FullCalendarEventList();
         fl.getList().addAll(SQLHelper.getAllArbeitszeitenRes());
         fl.getList().addAll(SQLHelper.getAllEventsRes());
+        fl.getList().addAll(SQLHelper.getUniRes());
         fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
         fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
         fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());

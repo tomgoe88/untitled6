@@ -34,7 +34,6 @@
         <h:form  id="bar">
             <b:navBar  brand="Palestro" brandHref="/welcom.xhtml" rendered="#{pageChanger.angemeeldetUser!=null}" styleClass="barbar">
                 <b:navbarLinks >
-                    <b:navLink value="Test" href="#{pageChanger.pageTest}" />
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
                     <b:navLink value="Erledigte Termine" href="#{pageChanger.pageErledigteTermine}" />
                     <b:navLink value="Konto" href="#{pageChanger.pageMitarbeiterkonto}" />
@@ -44,6 +43,7 @@
                     <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Krankheitszeiten" href="#{pageChanger.pageKrankheitszeit}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:navLink value="Unizeiten" href="#{pageChanger.pageUnizeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                 </b:navbarLinks>
             </b:navBar>
 

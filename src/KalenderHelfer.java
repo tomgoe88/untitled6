@@ -718,6 +718,18 @@ public class KalenderHelfer {
         SQLHelper.newKrankheit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
 
     }
+    public void newUni(){
+        GregorianCalendar startDate= new GregorianCalendar();
+        GregorianCalendar endDate= new GregorianCalendar();
+        startDate.setTime(start);
+        endDate.setTime(end);
+        startDate.set(Calendar.HOUR_OF_DAY, 1);
+        endDate.set(Calendar.HOUR_OF_DAY,23);
+        Date starting= startDate.getTime();
+        Date ending=endDate.getTime();
+        SQLHelper.newUni(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+
+    }
 
     public String getTest() {
         if(calendarBean!=null){
@@ -870,6 +882,9 @@ public class KalenderHelfer {
     }
     public void deleteKrankheit(int krankID){
         SQLHelper.deleteKrank(krankID);
+    }
+    public void deleteUni(int uniId){
+        SQLHelper.deleteUni(uniId);
     }
     public List<Aufgabe> getAufgaben(){
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();

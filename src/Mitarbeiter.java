@@ -53,6 +53,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String mittelSchicht;
     private String wochendendschicht;
     private String krankheitstage;
+    private String unitage;
+    private List<Uni> uniList;
     public Mitarbeiter(){
 
     }
@@ -243,6 +245,50 @@ public class Mitarbeiter extends FullCalendarEventList {
 
 
         return krankheitslist;
+    }
+    public List<Uni> getUniList() {
+        uniList= new ArrayList<Uni>();
+        uniList.addAll(SQLHelper.getUnilist(MitarbeiterID));
+        List<Uni> tempList= new ArrayList<Uni>();
+        if(urlabuStart==null){
+            if(filterdUrlaubStart!=null){
+                if (filteredUrlaubEnd == null) {
+                    filteredUrlaubEnd=new Date();
+                }
+                for(Uni a:uniList){
+                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
+                        tempList.add(a);
+                    }
+                }
+                uniList=new ArrayList<Uni>();
+                uniList.addAll(tempList);
+                tempList=null;
+            }
+        } else {
+            if (urlaubEnd == null) {
+                urlaubEnd=new Date();
+            }
+            for(Uni a:uniList){
+                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                    tempList.add(a);
+                }
+            }
+            uniList=new ArrayList<Uni>();
+            uniList.addAll(tempList);
+            tempList=null;
+        }
+
+
+        Collections.sort(uniList, new Comparator<Uni>() {
+            public int compare(Uni o1, Uni o2) {
+                return o2.getUrlaubBeginn().compareTo(o1.getUrlaubBeginn());
+            }
+        });
+
+
+
+
+        return uniList;
     }
     public void filterDateStartDate(SelectEvent event) {
         filteredDatestart = (Date) event.getObject(); //die AUswahl stimmt nciht, Datum ist nicht correct, hier sollte geprüft werden, welches Datum hier raus kommt
@@ -492,6 +538,18 @@ public class Mitarbeiter extends FullCalendarEventList {
 
         return krankheitstage;
     }
+    public String getUnitage() {
+        FullCalendarEventList fk= new FullCalendarEventList();
+        fk.getList().addAll(SQLHelper.getUniZeiten(MitarbeiterID));
+        if(fk.getList()!= null){
+            unitage=fk.toJson();
+        } else{
+            fk.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            unitage=fk.toJson();
+        }
+
+        return unitage;
+    }
 
     public void setUrlaubszeiten(String urlaubszeiten) {
         this.urlaubszeiten = urlaubszeiten;
@@ -529,6 +587,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getUrlaubszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getKrankheitszeiten(MitarbeiterID));
+        fk.getList().addAll(SQLHelper.getUniZeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getKurse());
         if(fk.getList().size()==0){
             fk.getList().add(new FullCalendarEventBean());

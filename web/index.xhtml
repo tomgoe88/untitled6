@@ -8,6 +8,8 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions"
 
       xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
@@ -21,6 +23,10 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
+
+
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+
 
 
 </h:head>
@@ -124,6 +130,30 @@
                                 <b:column colLg="1">
                                     <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
                                     <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
+                                </b:column>
+                            </b:row>
+                            <h:outputScript>
+                                $('#calendar').fullCalendar({
+                                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+                                });
+                                $(document).ready(function() {
+
+                                // page is now ready, initialize the calendar...
+
+                                $('#calendar').fullCalendar({
+                                // put your options and callbacks here
+                                defaultView: 'agendaDay',
+                                events: #{resourceController.events},
+
+                                resources: #{resourceController.resources}
+                                })
+
+                                });
+                            </h:outputScript>
+
+                            <b:row rendered="#{kalenderHelfer.q==0}">
+                                <b:column>
+                                    <div id="calendar"></div>
                                 </b:column>
                             </b:row>
 
@@ -400,5 +430,12 @@
 
 
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
+
+
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
 </h:body>
 </html>

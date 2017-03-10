@@ -292,6 +292,22 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableUniTage="" +
+                    "CREATE TABLE IF NOT EXISTS unitage( " +
+                    "UniID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterID int, " +
+                    "Unibeginn VARCHAR (200), " +
+                    "Uniende VARCHAR (200), " +
+                    "PRIMARY KEY (UniID), " +
+                    "FOREIGN KEY (MitarbeiterID) REFERENCES mitarbeiter(MitarbeiterID) ON DELETE CASCADE ON UPDATE CASCADE " +
+                    ")";
+            con.createStatement().executeUpdate(tableUniTage);
+        } catch (SQLException e){
+            System.out.println("Create Uni//SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableSperrzeiten="" +
                     "CREATE TABLE IF NOT EXISTS sperrzeiten( " +
                     "SperrID int NOT NULL AUTO_INCREMENT, " +
@@ -1266,6 +1282,56 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<FullCalendarEventBean> getUniZeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM unitage " +
+                                "INNER JOIN mitarbeiter ON unitage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE unitage.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Unibeginn");
+                    String schichtende=result.getString("Uniende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Uni");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get  Unitage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static void newUrlaubszeit(int mitarbeiterID, String urlaubsbeginn, String urlaubsende){
         con = getInstance();
         if(con != null) {
@@ -1338,6 +1404,25 @@ public class SQLHelper{
             }
         }
     }
+    public static void newUni(int mitarbeiterID, String unibeginn, String uniende){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO unitage(MitarbeiterID, Unibeginn, Uniende) VALUES(" +
+                                "'"+mitarbeiterID+"','"+unibeginn+"','"+uniende+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Set neuen Unitage//SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+
     public static String getPassword(int mitarbeiterID){
         con = getInstance();
         String password= null;
@@ -1612,6 +1697,55 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<Uni> getUnilist(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<Uni> fb= new ArrayList<Uni>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM unitage " +
+                                "INNER JOIN mitarbeiter ON unitage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE unitage.MitarbeiterID = '"+mitarbeiter+"'";
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    Uni temp = new Uni();
+
+                    String schichtbeginn=result.getString("Unibeginn");
+                    String schichtende=result.getString("Uniende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setUrlaubsID(result.getInt("UniID"));
+                    temp.setUrlaubBeginn(start);
+                    temp.setUrlaubEnde(end);
+                    ;
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get Liste Unitage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static void deleteUrlaub(int urlaubsID){
         con = getInstance();
         if(con != null) {
@@ -1663,6 +1797,24 @@ public class SQLHelper{
             }
         }
     }
+    public static void deleteUni(int uniID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM unitage WHERE UniID='"+uniID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Uni lösche//SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+
     public static List<Arbeitszeit> getArbeitszeiten(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         List<Arbeitszeit> fb= new ArrayList<Arbeitszeit>();
@@ -2321,6 +2473,56 @@ public class SQLHelper{
                 }
             } catch (SQLException e) {
                 System.out.println("Get  Krankheitstage //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getUniRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM unitage " +
+                                "INNER JOIN mitarbeiter ON unitage.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Unibeginn");
+                    String schichtende=result.getString("Uniende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Uni");
+
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Get  UnitageRes //SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
