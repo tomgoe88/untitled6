@@ -41,6 +41,7 @@
                 <p:ajax event="valueChange" update="cal ma obe kundenWidget"/>
             </p:selectOneMenu>
         </b:column>
+        <p:commandButton value="Neuer Kunde" oncomplete="PF('kundenanlegen').show();"/>
     </b:row>
    </h:form>
 
@@ -154,5 +155,36 @@
         </p:panelGrid>
     </h:form>
 </p:dialog>
+    <p:dialog widgetVar="kundenanlegen" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
+        <h:form id="neuerKundeForm">
+            <p:panelGrid id="neuerKundeGrid">
+                <h:outputText id="vorname" value="Vorname: "/>
+                <b:inputText name="vorname" for="vorname" />
+
+                <h:outputText id="nachname" value="Nachname: "/>
+                <b:inputText name="nachname" for="nachname"
+                           />
+                <h:outputText id="teleNeu" value="Telefonnummer: "/>
+                <b:inputText id="teleidNeu" name="teleKNeu" for="teleNeu">
+                    <f:validateRegex pattern="[0-9]+" />
+                    <f:ajax event="keyup" render="messagesneu" />
+                </b:inputText>
+                <p:messages id="messagesneu" for="teleidNeu" showDetail="true" autoUpdate="true" closable="true" />
+                <h:outputText id="emailNeu" value="E-Mail: "/>
+                <b:inputText id="emailINNeu" name="emailInputKNeu" for="emailNeu" >
+                </b:inputText>
+                <h:outputText id="straNeu" value="Straße: "/>
+                <b:inputText id="strasseNeu" name="strasseNeu"  >
+                </b:inputText>
+                <h:outputText id="plzNeu" value="PLZ: "/>
+                <b:inputText id="plzzNeu" name="emailplzInputNeu" >
+                </b:inputText>
+                <h:outputText id="ortNeu" value="Ort: "/>
+                <b:inputText id="ortinNeu" name="ortNeu" >
+                </b:inputText>
+                <p:commandButton value="Speichern" action="#{kundenController.newKunde}" update="ma cal obe" oncomplete="PF('kundenanlegen').hide();"/>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
 </h:body>
 </html>

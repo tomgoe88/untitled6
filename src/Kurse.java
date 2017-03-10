@@ -15,6 +15,7 @@ public class Kurse {
     private String mitarbeiter;
     private Date kursstart;
     private Date kursende;
+    private String teilnehmeranzahl;
     private List<Kunde> kundeList;
 
 
@@ -66,5 +67,18 @@ public class Kurse {
 
     public void setKundeList(List<Kunde> kundeList) {
         this.kundeList = kundeList;
+    }
+
+    public String getTeilnehmeranzahl() {
+        int anzahl=0;
+        for(Kunde k:getKundeList()){
+            anzahl++;
+        }
+        teilnehmeranzahl=anzahl+"";
+        return teilnehmeranzahl;
+    }
+
+    public void setTeilnehmeranzahl(String teilnehmeranzahl) {
+        this.teilnehmeranzahl = teilnehmeranzahl;
     }
 }

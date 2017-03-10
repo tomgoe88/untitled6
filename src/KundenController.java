@@ -94,4 +94,16 @@ public class KundenController {
         SQLHelper.updateKunde(kunde.getKundeID(),strassee,plzz,ortt,tele,email);
 
     }
+    public void newKunde(){
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+        String nachname=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
+
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("teleKNeu");
+        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInputKNeu");
+        String strassee =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("strasseNeu");
+        String plzz =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailplzInputNeu");
+        String ortt =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ortNeu");
+        SQLHelper.neuerKunde(vorname,nachname,strassee,plzz,ortt,tele,email);
+
+    }
 }

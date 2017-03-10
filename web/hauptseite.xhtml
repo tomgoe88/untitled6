@@ -26,52 +26,36 @@
     <link rel="stylesheet" href="css/prime.css"/>
 
 </h:head>
-<h:body onload="testMobile()">
+<h:body >
 
 
     <ui:composition>
 
         <h:form  id="bar">
-            <b:navBar  brand="Palestro" brandHref="/welcom.xhtml" rendered="#{pageChanger.angemeeldetUser!=null}" styleClass="barbar">
-                <b:navbarLinks >
+            <b:navBar  brand="Palestro" brandHref="/welcom.xhtml" rendered="#{pageChanger.angemeeldetUser!=null}" styleClass="barbar" inverse="true">
+                <b:navbarLinks pull="left" >
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
                     <b:navLink value="Erledigte Termine" href="#{pageChanger.pageErledigteTermine}" />
                     <b:navLink value="Konto" href="#{pageChanger.pageMitarbeiterkonto}" />
                     <b:navLink value="Kunde" href="#{pageChanger.pageKunde}" />
+                    <b:navLink></b:navLink>
+                        <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
+
+
+
+                </b:navbarLinks>
+                <b:navbarLinks pull="right">
                     <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Krankheitszeiten" href="#{pageChanger.pageKrankheitszeit}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Unizeiten" href="#{pageChanger.pageUnizeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                 </b:navbarLinks>
             </b:navBar>
-
-            <p:menu  rendered="false">
-                <p:menuitem value="Terminplaner"     url="#{pageChanger.pageIndex}"  />
-
-                <p:submenu id="sub" label="Administration"  >
-                    <p:menuitem value="Arbeitszeiten" url="#{pageChanger.pageArbeitszeiten}"  />
-                    <p:menuitem value="Mitarbeiter" url="#{pageChanger.pageMitarbeiter}" />
-                    <p:menuitem value="Kursplaner" url="#{pageChanger.pageKursplaner}"  />
-                    <p:menuitem value="Urlaubszeiten" url="#{pageChanger.pageUrlaubszeiten}" />
-                </p:submenu>
-            </p:menu>
-
         </h:form>
     </ui:composition>
-    <h:form id="includeBody">
-        <pe:remoteCommand autoRun="true" id="mobile" name="checkPhone" process="@this" update="bar"
-                          actionListener="#{pageChanger.checkMobile}">
-            <pe:methodSignature parameters="java.lang.String"/>
-            <pe:methodParam name="dateEvent">
-            </pe:methodParam>
-        </pe:remoteCommand>
-        <p:dialog widgetVar="admin" id="admin" >
 
-        </p:dialog>
-    </h:form>
-    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
 
 </h:body>
 

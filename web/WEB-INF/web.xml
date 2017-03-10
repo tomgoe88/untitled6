@@ -17,28 +17,18 @@
     </session-config>
     <context-param>
         <param-name>BootsFaces_THEME</param-name>
-        <param-value>cerulean</param-value>
+        <param-value>patternfly</param-value>
     </context-param>
     <context-param>
         <param-name>BootsFaces_USE_VIEWPORT</param-name>
         <param-value>width=device-width, initial-scale=1.0, user-scalable=no</param-value>
     </context-param>
-    <context-param>
-        <param-name>org.butterfaces.noEntriesText</param-name>
-        <param-value>No matching entries...</param-value>
-    </context-param>
-    <context-param>
-        <param-name>org.butterfaces.ajaxDisableRenderRegionsOnRequest</param-name>
-        <param-value>false</param-value>
-    </context-param>
+
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
     </context-param>
-    <context-param>
-        <param-name>net.bootsfaces.get_jquery_from_cdn</param-name>
-        <param-value>true</param-value>
-    </context-param>
+
     <context-param>
         <param-name>org.butterfaces.spinnerText</param-name>
         <param-value>Fetching data...</param-value>

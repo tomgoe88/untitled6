@@ -2216,6 +2216,24 @@ public class SQLHelper{
             }
         }
     }
+    public static void neuerKunde (String vorname, String nachname,String telefonnummer, String email, String strasse, String plz, String ort ){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO kunde(vorname, nachname, telefonnummer, email, Strasse, Plz, Ort) VALUES(" +
+                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"','"+email+"','"+email+"','"+email+"','"+email+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////
