@@ -103,7 +103,7 @@ public class KundenController {
         String strassee =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("strasseNeu");
         String plzz =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailplzInputNeu");
         String ortt =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ortNeu");
-        SQLHelper.neuerKunde(vorname,nachname,strassee,plzz,ortt,tele,email);
+        SQLHelper.neuerKunde(vorname,nachname,tele, email,strassee,plzz,ortt);
 
     }
 }

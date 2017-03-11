@@ -2225,7 +2225,7 @@ public class SQLHelper{
                 query = con.createStatement();
                 String sql=
                         "INSERT INTO kunde(vorname, nachname, telefonnummer, email, Strasse, Plz, Ort) VALUES(" +
-                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"','"+email+"','"+email+"','"+email+"','"+email+"')";
+                                "'"+vorname+"','"+nachname+"','"+telefonnummer+"','"+email+"','"+strasse+"','"+plz+"','"+ort+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
