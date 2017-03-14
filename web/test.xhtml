@@ -32,7 +32,17 @@
 </h:head>
 
 
-<body>
+<h:body>
+<ui:composition>
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
+</ui:composition>
+
+
+
 <h:outputScript >
     $('#calendar').fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
@@ -62,5 +72,5 @@
 
 
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
-</body>
+</h:body>
 </html>

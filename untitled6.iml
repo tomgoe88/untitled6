@@ -21,10 +21,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/fullcalendar-scheduler" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/web/fullcalendar-scheduler" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/web/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Mojarra-2.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 7.0.56" level="application_server_libraries" />
+    <orderEntry type="library" name="FullLib" level="application" />
   </component>
 </module>
