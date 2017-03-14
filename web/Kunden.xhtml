@@ -45,11 +45,11 @@
     </b:row>
    </h:form>
 
-<b:tabView>
-    <b:tab title="Adressdaten">
+<b:tabView >
+    <b:tab title="Adressdaten" >
     <h:form id="cal">
     <b:row>
-        <b:column>
+        <b:column span="12">
             <p:panelGrid columns="2">
             <h:outputLabel value="Telefonnummer: "></h:outputLabel>
             <h:outputText value="#{kundenController.kunde.telefonnummer}"/>
@@ -70,7 +70,7 @@
     </h:form>
     </b:tab>
 
-    <b:tab title="Termine">
+    <b:tab title="Termine" >
     <b:row>
         <h:form>
             <b:column>
@@ -95,37 +95,41 @@
 
             </b:column>
         </h:form>
-        <h:form id="ma">
-            <b:column>
-                <p:dataTable value="#{kundenController.kunde.termineList}" var="termi" >
-                    <p:column headerText="Terminart">
-                        <h:outputText value="#{termi.terminart}"></h:outputText>
-                    </p:column>
-                    <p:column headerText="Tag">
-                        <h:outputText value="#{termi.terminstart}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Terminbeginn">
-                        <h:outputText value="#{termi.terminstart}">
-                            <f:convertDateTime pattern="HH:mm"/>
-                        </h:outputText>
-
-                    </p:column>
-                    <p:column headerText="Terminende">
-                        <h:outputText value="#{termi.terminende}">
-                            <f:convertDateTime pattern="HH:mm"/>
-                        </h:outputText>
-
-                    </p:column>
-                    <p:column headerText="Dauer">
-                        <h:outputText value="#{termi.termindauer}"></h:outputText>
-                    </p:column>
-                </p:dataTable>
-
-            </b:column>
-        </h:form>
     </b:row>
+        <h:form id="ma">
+    <b:row>
+
+
+                <b:dataTable value="#{kundenController.kunde.termineList}" var="termi" span="12">
+                    <b:dataTableColumn label="Terminart">
+                        <h:outputText value="#{termi.terminart}"></h:outputText>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Tag">
+                        <h:outputText value="#{termi.terminstart}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
+                        </h:outputText>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Terminbeginn">
+                        <h:outputText value="#{termi.terminstart}">
+                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                        </h:outputText>
+
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Terminende">
+                        <h:outputText value="#{termi.terminende}">
+                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                        </h:outputText>
+
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Dauer">
+                        <h:outputText value="#{termi.termindauer}"></h:outputText>
+                    </b:dataTableColumn>
+                </b:dataTable>
+
+
+
+    </b:row>
+        </h:form>
     </b:tab>
 </b:tabView>
 </b:container>

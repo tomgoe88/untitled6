@@ -1,8 +1,10 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Created by Jutom on 20.02.2017.
@@ -27,6 +29,13 @@ public class Arbeitszeit {
     }
 
     public Date getArbeitsstart() {
+        try {
+            SimpleDateFormat sdf= new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
+            arbeitsstart= sdf.parse(arbeitsstart.toString());
+        } catch (Exception e){
+            System.out.print(e.toString());
+        }
+
         return arbeitsstart;
     }
 
@@ -43,6 +52,12 @@ public class Arbeitszeit {
     }
 
     public Date getArbeitsende() {
+        try {
+            SimpleDateFormat sdf= new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
+            arbeitsende= sdf.parse(arbeitsende.toString());
+        } catch (Exception e){
+            System.out.print(e.toString());
+        }
         return arbeitsende;
     }
 
@@ -104,6 +119,10 @@ public class Arbeitszeit {
     }
     public void updateArbeitszeit(){
         SQLHelper.updatearbeitszeit(arbeitszeitID,arbeitsstart.toString(),arbeitsende.toString());
+    }
+    @Override
+    public String toString(){
+        return ""+arbeitsstart+" "+arbeitsende;
     }
 
 }

@@ -166,19 +166,19 @@
 
                     <p:column headerText="Tag">
                         <h:outputText value="#{az.arbeitsstart}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Arbeitsbeginn">
                         <h:outputText value="#{az.arbeitsstart}">
-                            <f:convertDateTime pattern="HH:mm"/>
+                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                         </h:outputText>
                         <p:commandButton value="weniger" action="#{az.deleteStundeStart}" update="ma"/>
                         <p:commandButton value="mehr" action="#{az.addStundeStart}" update="ma"/>
                     </p:column>
                     <p:column headerText="Arbeitsende">
                         <h:outputText value="#{az.arbeitsende}">
-                            <f:convertDateTime pattern="HH:mm"/>
+                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                         </h:outputText>
                         <p:commandButton value="weniger" action="#{az.deleteStundeEnde}" update="ma"/>
                         <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>

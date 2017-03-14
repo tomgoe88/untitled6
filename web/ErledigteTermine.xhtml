@@ -64,17 +64,17 @@
                         </b:dataTableColumn>
                         <b:dataTableColumn label="Tag">
                             <h:outputText value="#{az.terminstart}">
-                                <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
                             </h:outputText>
                         </b:dataTableColumn>
                         <b:dataTableColumn label="Arbeitsbeginn">
                             <h:outputText value="#{az.terminstart}">
-                                <f:convertDateTime pattern="HH:mm"/>
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                             </h:outputText>
                         </b:dataTableColumn>
                         <b:dataTableColumn label="Arbeitsende">
                             <h:outputText value="#{az.terminende}">
-                              <f:convertDateTime pattern="HH:mm"/>
+                              <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                             </h:outputText>
                         </b:dataTableColumn>
                         <b:dataTableColumn label="Kundenname">
