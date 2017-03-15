@@ -23,6 +23,11 @@
     <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
     <link rel="stylesheet" href="css/prime.css"/>
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
 
 
 
@@ -91,14 +96,18 @@
                             </b:row>
                             <b:row>
                                 <b:column span="12">
-                                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
-                                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
+                                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12"  >
+                                        <f:selectItem  value="#{null}" itemLabel="keine Auswahl" itemValue="0" noSelectionOption="true"/>
                                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                                        itemValue="#{mi.mitarbeiterID}"/>
 
-                                        <p:ajax event="valueChange" update="cal"/>
+                                        <p:ajax event="valueChange"  update="cal"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton value="update" update="cal"/>
+                                    <b:commandButton span="12" value="Alle Mitarbeiter" action="#{kalenderHelfer.qChange}" onclick="  $('#calendar').fullCalendar('refresh');
+
+
+
+                                "/>
                                 </b:column>
 
                             </b:row>
@@ -130,12 +139,12 @@
                                     <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
                                 </b:column>
                             </b:row>
-                            <h:outputScript name="fullcalendar-scheduler/scheduler.js" >
 
-                            </h:outputScript>
+
+
+
 
                             <h:outputScript >
-
                                 $('#calendar').fullCalendar({
                                 schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
                                 });
@@ -435,13 +444,7 @@
                                  oncomplete="PF('memoEintrag').hide();" styleClass="btn"/>
             </h:form>
         </p:dialog>
-<h:form id="tes">
-     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
-     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
-     <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
-     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
-     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
-</h:form>
+
 
 </h:body>
 </html>
