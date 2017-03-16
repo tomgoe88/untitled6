@@ -9,68 +9,93 @@
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 
+
       xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
-    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
-    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
-    <script type="text/javascript" src='fullcalendar/lib/jquery.min.js'></script>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
+    <link rel="stylesheet" href="css/prime.css"/>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
-
-
-    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
-    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
-    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
-
-
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
+
 
 
 </h:head>
 
+<!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
+<!-- weiter sollte auf Deutsch gesetzt werden-->
 
 <h:body>
-<ui:composition>
-    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
-    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
-    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
-    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
-    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
-</ui:composition>
+    <b:container fluid="true">
+        <b:row>
+            <h:form>
+                <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                                                changeDay();" />
+                <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                                                changeDay();" />
+                <h:outputScript>
+                    function changeDay() {
+                        var moment= $('#calendar').fullCalendar('getDate');
+                        alert(''+moment.format());
+                    }
+                </h:outputScript>
+
+                <h:outputScript >
+                    $('#calendar').fullCalendar({
+                    schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+                    });
+                    $(document).ready(function() {
+
+                    // page is now ready, initialize the calendar...
+
+                    $('#calendar').fullCalendar({
+                    header: {
+                    left: 'resourceDay',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                    },
+
+
+                    // put your options and callbacks here
+                    defaultView: 'agendaDay',
+                    events: #{resourceController.events},
+
+                    resources: #{resourceController.resources}
+                    })
+
+                    });
+                </h:outputScript>
 
 
 
-<h:outputScript >
-    $('#calendar').fullCalendar({
-    schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
-    });
-    $(document).ready(function() {
 
-    // page is now ready, initialize the calendar...
 
-    $('#calendar').fullCalendar({
-    // put your options and callbacks here
-    defaultView: 'agendaDay',
-    events: #{resourceController.events},
+                <div id='calendar'></div>
+            </h:form>
 
-    resources: #{resourceController.resources}
-    })
+        </b:row>
 
-    });
-</h:outputScript>
+    </b:container>
 
 
 
 
 
-    <div id='calendar'></div>
 
 
 
 
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
 </h:body>
 </html>

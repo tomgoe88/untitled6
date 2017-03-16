@@ -60,7 +60,7 @@
                             <p:ajax update="cal aufgabenformer schicht"/>
                         </p:selectBooleanButton>
 
-                        <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal aufgabenformer schicht"></p:commandButton>
+                        <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" onclick="$('#calendar').moment(#{kalendarHelfer.theDefaultDate});" update="cal aufgabenformer schicht"></p:commandButton>
 
 
                         <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal aufgabenformer schicht"></p:commandButton>
@@ -153,6 +153,7 @@
                                 // page is now ready, initialize the calendar...
 
                                 $('#calendar').fullCalendar({
+
                                 header: {
                                 left: 'prev,next today',
                                 center: 'title',
