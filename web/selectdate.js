@@ -4,5 +4,9 @@
 function selectDate(event){
 
     dateSelect(event.format());
+
+}
+function getResourceid(resourceID) {
+    selectResource(resourceID.toString());
 }
 //diese Funktion klappt nicht

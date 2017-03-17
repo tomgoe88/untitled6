@@ -758,6 +758,34 @@ public class KalenderHelfer {
         c2.add(Calendar.HOUR_OF_DAY,1);
         start= calendar.getTime();
         end=c2.getTime();
+        System.out.println(start.toString()+"   So ist das Start-Datum");
+    }
+    public void resourcegetDate(){
+        String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+      Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
+        c2.add(Calendar.HOUR_OF_DAY,1);
+        start= calendar.getTime();
+        end=c2.getTime();
+
+        System.out.println(start+"   So ist das Start-Datum");
+    }
+    public void resourceGetMaId(){
+        String resID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        q= Integer.parseInt(resID);
+
+        System.out.println(resID+"   So ist die ResId");
+    }
+
+    public void resourceDefaultDate(){
+
+            String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+            Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+
+        defaultDate= calendar.getTime();
+
     }
     public void myWorkDate(String date){
         work1= javax.xml.bind.DatatypeConverter.parseDateTime(date);

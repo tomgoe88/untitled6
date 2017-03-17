@@ -13,6 +13,7 @@
       <root url="jar://I:/Java_Bibiliotheken/gson-2.2.2.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/common-lang3.jar!/" />
       <root url="jar://I:/Java_Bibiliotheken/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar!/" />
+      <root url="jar://I:/Java_Bibiliotheken/BootsFaces-OSP-1.0.2-dist.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

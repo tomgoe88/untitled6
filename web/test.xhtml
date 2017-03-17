@@ -18,16 +18,15 @@
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
-    <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-flex.min.css"/>
-    <link rel="stylesheet" href="css/prime.css"/>
+    <script type="text/javascript" src="selectdate.js"></script>
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
+    <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+
 
 
 
@@ -39,52 +38,103 @@
 <h:body>
     <b:container fluid="true">
         <b:row>
-            <h:form>
-                <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+
+
+
+                <h:form>
+                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
-                <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
                                                 changeDay();" />
-                <h:outputScript>
-                    function changeDay() {
+                    <h:outputScript>
+                        function changeDay() {
                         var moment= $('#calendar').fullCalendar('getDate');
-                        alert(''+moment.format());
-                    }
-                </h:outputScript>
 
-                <h:outputScript >
-                    $('#calendar').fullCalendar({
-                    schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
-                    });
-                    $(document).ready(function() {
+                        }
+                    </h:outputScript>
 
-                    // page is now ready, initialize the calendar...
+                    <h:outputScript >
+                        $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+                        });
+                        $(document).ready(function() {
 
-                    $('#calendar').fullCalendar({
-                    header: {
-                    left: 'resourceDay',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                    },
+                        // page is now ready, initialize the calendar...
 
+                        $('#calendar').fullCalendar({
+                        header: {
+                        left: 'resourceDay',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                        },
+                        dayClick: function(date, jsEvent, view, resourceObj) {
+                        selectDate(date);
+                        getResourceid(resourceObj.id);
+                        $('.modalPseudoClass').modal();return false;
 
-                    // put your options and callbacks here
-                    defaultView: 'agendaDay',
-                    events: #{resourceController.events},
-
-                    resources: #{resourceController.resources}
-                    })
-
-                    });
-                </h:outputScript>
+                        },
 
 
+                        // put your options and callbacks here
+                        defaultView: 'agendaDay',
+                        events: #{resourceController.events},
+
+                        resources: #{resourceController.resources}
+                        })
+
+                        });
+                    </h:outputScript>
 
 
 
-                <div id='calendar'></div>
+
+
+                    <div id='calendar'></div>
+
+
+                    <b:remoteCommand name="dateSelect" id="remoteCommand2"
+                                     actionListener="#{kalenderHelfer.resourcegetDate}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectResource" id="idCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
+                                     update="mordalForm" parameters="initialValue" />
+                </h:form>
+
+    <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm">
+                <b:panelGrid columns="2">
+                    <h:outputLabel value="Name des Mitarbeiters"/>
+
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+
+                    <b:panel>
+                        <h:outputLabel value="Startdatum: "/>
+                        <b:dateTimePicker value="#{kalenderHelfer.start}">
+
+                        </b:dateTimePicker>
+                        <h:outputLabel value="Enddatum: "/>
+                        <b:dateTimePicker value="#{kalenderHelfer.end}">
+
+                        </b:dateTimePicker>
+                    </b:panel>
+                </b:panelGrid>
+
+
             </h:form>
+        </div>
+        <f:facet name="footer">
+            <b:button value="close" dismiss="modal" onclick="return false;"/>
+            <b:button value="Ok" look="primary" dismiss="modal" onclick="return false;"/>
+        </f:facet>
+    </b:modal>
+
+
 
         </b:row>
+
+
+
 
     </b:container>
 
