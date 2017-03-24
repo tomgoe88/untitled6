@@ -129,9 +129,15 @@
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
                     <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
-
-
-                    <b:panel>
+                    <h:outputLabel value="Terminart: "></h:outputLabel>
+                    <b:selectOneMenu value="#{kalenderHelfer.terminart}">
+                        <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
+                        <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
+                        <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
+                        <f:selectItem value="Neuer Trainingsplan" itemLabel="Neuer Trainingsplan"
+                                      itemValue="Neuer Trainingsplan"/>
+                        <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
+                    </b:selectOneMenu>
                         <h:outputLabel value="Startdatum: "/>
                         <b:dateTimePicker value="#{kalenderHelfer.start}">
 
@@ -140,7 +146,8 @@
                         <b:dateTimePicker value="#{kalenderHelfer.end}">
 
                         </b:dateTimePicker>
-                    </b:panel>
+
+
 
                 </b:panelGrid>
 
