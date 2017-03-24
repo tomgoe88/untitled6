@@ -82,12 +82,13 @@ public class KalenderHelfer {
     private Calendar work2;
     private boolean adminbool;
     private boolean terminErledigtTest= false;
+    private KundenController kC;
 
     /**
      * Creates a new instance of KalenderHelfer
      */
     public KalenderHelfer() {
-
+        this.kC = new KundenController();
     }
 
     public String getSchichtart() {
@@ -100,6 +101,22 @@ public class KalenderHelfer {
 
     public boolean isAdminbool() {
         return adminbool;
+    }
+
+    public KundenController getkC() {
+        return kC;
+    }
+
+    public void setkC(KundenController kC) {
+        this.kC = kC;
+    }
+
+    public int getKundenID() {
+        return kundenID;
+    }
+
+    public void setKundenID(int kundenID) {
+        this.kundenID = kundenID;
     }
 
     public void setAdminbool(boolean adminbool) {
@@ -621,21 +638,22 @@ public class KalenderHelfer {
     public void newTermin(){
         calendarBean=null;
 
-        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+
+/*        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
-        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
-        String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");*/
+      /*  String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;*/
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
-        String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
+     //   String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         Kunde temoKunde=null;
-        if(SQLHelper.getKundeList().size()!=0){
+/*        if(SQLHelper.getKundeList().size()!=0){
             for(Kunde k: SQLHelper.getKundeList()){
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())){
                     temoKunde=null;
                     kundenID=k.getKundeID();
                     break;
                 }
-                else{
+*//*                else{
                     kundenID=SQLHelper.getMaxKundenID()+1;
                     temoKunde= new Kunde();
                     temoKunde.setVorname(vorname);
@@ -645,17 +663,17 @@ public class KalenderHelfer {
                 }
             }
             if(temoKunde!=null){
-                SQLHelper.neuerKunde(temoKunde.getVorname(),temoKunde.getNachname(),temoKunde.getTelefonnummer(),temoKunde.getEmail());
+                SQLHelper.neuerKunde(temoKunde.getVorname(),temoKunde.getNachname(),temoKunde.getTelefonnummer(),temoKunde.getEmail());*//*
             }
-        }else {
+*//*        }else {
             SQLHelper.neuerKunde(vorname,nachname,tele, email);
             for(Kunde k: SQLHelper.getKundeList()) {
                 if (vorname.equalsIgnoreCase(k.getVorname()) && nachname.equalsIgnoreCase(k.getNachname())) {
                     kundenID = k.getKundeID();
                     break;
                 }
-            }
-        }
+            }*//*
+        }*/
 
         SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
         int terminidmax= SQLHelper.getMaxTerminID();
@@ -668,9 +686,9 @@ public class KalenderHelfer {
             }
 
         }
-        vorname=null;
+/*        vorname=null;
         nachname=null;
-        tele=null;
+        tele=null;*/
         beschreibung=null;
 
     }

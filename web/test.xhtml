@@ -117,10 +117,10 @@
 
         </b:row>
 
-
-
-
     </b:container>
+
+
+
 
     <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
         <div>
@@ -146,18 +146,35 @@
                         <b:dateTimePicker value="#{kalenderHelfer.end}">
 
                         </b:dateTimePicker>
+                    <h:outputLabel value="Kunde: "></h:outputLabel>
+                    <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
+
+                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
+                        <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
+                                       itemValue="#{ku.kundeID}"/>
+
+                    </b:selectOneMenu>
+                    <h:outputLabel id="beschreibung" value="Beschreibung: "/>
+                    <b:inputText name="beschreibung" for="beschreibung"/>
+
 
 
 
                 </b:panelGrid>
 
-
             </h:form>
         </div>
+
         <f:facet name="footer">
-            <b:button value="close" dismiss="modal" onclick="return false;"/>
-            <b:button value="Ok" look="primary" dismiss="modal" onclick="return false;"/>
+<h:form>
+    <b:button value="close" dismiss="modal" onclick="return false;"/>
+    <b:commandButton value="Ok" action="#{kalenderHelfer.newTermin}" look="primary" />
+</h:form>
+
+
+
         </f:facet>
+
     </b:modal>
 
 
