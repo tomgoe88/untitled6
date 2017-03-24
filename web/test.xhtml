@@ -36,11 +36,17 @@
 <!-- weiter sollte auf Deutsch gesetzt werden-->
 
 <h:body>
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
     <b:container fluid="true">
         <b:row>
 
 
+            <b:column span="1">
 
+            </b:column>
+            <b:column span="10">
                 <h:form>
                     <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
@@ -99,6 +105,22 @@
                                      actionListener="#{kalenderHelfer.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
                 </h:form>
+            </b:column>
+            <b:column span="1">
+
+            </b:column>
+
+
+
+
+
+
+        </b:row>
+
+
+
+
+    </b:container>
 
     <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
         <div>
@@ -107,6 +129,7 @@
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
                     <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+
 
                     <b:panel>
                         <h:outputLabel value="Startdatum: "/>
@@ -118,6 +141,7 @@
 
                         </b:dateTimePicker>
                     </b:panel>
+
                 </b:panelGrid>
 
 
@@ -128,16 +152,6 @@
             <b:button value="Ok" look="primary" dismiss="modal" onclick="return false;"/>
         </f:facet>
     </b:modal>
-
-
-
-        </b:row>
-
-
-
-
-    </b:container>
-
 
 
 
