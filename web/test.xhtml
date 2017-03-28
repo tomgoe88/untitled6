@@ -177,7 +177,7 @@
                                        itemValue="#{mitarb.mitarbeiterID}"/>
                     </b:selectOneMenu>
                     <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin()" look="primary" />
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin()" oncomplete="$('.modalPseudoClass').modal('hide'); $('#calendar').fullCalendar('refresh');" look="primary" />
 
 
 
