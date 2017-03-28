@@ -9,4 +9,7 @@ function selectDate(event){
 function getResourceid(resourceID) {
     selectResource(resourceID.toString());
 }
+function setTerminShow(boolwert){
+    selectShowTermin(boolwert);
+}
 //diese Funktion klappt nicht

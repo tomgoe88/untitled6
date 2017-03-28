@@ -31,6 +31,7 @@ import sun.security.jca.GetInstance;
 @ManagedBean
 @ViewScoped
 public class KalenderHelfer {
+    private boolean showTermineintrag;
     private boolean wocheTag;
     private int temp=0;
     private int currentWeek;
@@ -186,6 +187,14 @@ public class KalenderHelfer {
             change="agendaDay";
         }
         return change;
+    }
+
+    public boolean isShowTermineintrag() {
+        return showTermineintrag;
+    }
+
+    public void setShowTermineintrag(boolean showTermineintrag) {
+        this.showTermineintrag = showTermineintrag;
     }
 
     public String getErgebnis() {
@@ -795,6 +804,16 @@ public class KalenderHelfer {
         q= Integer.parseInt(resID);
 
         System.out.println(resID+"   So ist die ResId");
+    }
+    public void terminShowCommand(){
+        String resID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        if(resID.equals("true")){
+            showTermineintrag=true;
+        } else {
+            showTermineintrag=false;
+        }
+
+        System.out.println(resID+"   Show Termin ist so und der Boolean wert ist: "+ showTermineintrag);
     }
 
     public void resourceDefaultDate(){

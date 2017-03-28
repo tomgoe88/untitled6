@@ -39,14 +39,17 @@
     <ui:insert name="header">
         <ui:include src="/hauptseite.xhtml"/>
     </ui:insert>
-    <b:container fluid="true">
+    <b:container id="bigContainer" fluid="true">
+        <b:row id="terminRow" >
+
+
+
+        </b:row>
         <b:row>
 
 
-            <b:column span="1">
 
-            </b:column>
-            <b:column span="10">
+            <b:column span="9">
                 <h:form>
                     <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
@@ -54,7 +57,7 @@
                                                 changeDay();" />
                     <h:outputScript>
                         function changeDay() {
-                        var moment= $('#calendar').fullCalendar('getDate');
+                            var moment= $('#calendar').fullCalendar('getDate');
 
                         }
                     </h:outputScript>
@@ -76,7 +79,10 @@
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
                         getResourceid(resourceObj.id);
+                      //  setTerminShow("true");
                         $('.modalPseudoClass').modal();return false;
+
+
 
                         },
 
@@ -104,14 +110,22 @@
                     <b:remoteCommand name="selectResource" id="idCommand"
                                      actionListener="#{kalenderHelfer.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectShowTermin" id="showTerminCommand"
+                                     actionListener="#{kalenderHelfer.terminShowCommand}"
+                                     update="terminRow" parameters="initialValue" />
                 </h:form>
             </b:column>
-            <b:column span="1">
+            <b:column span="3">
 
             </b:column>
 
 
 
+
+
+
+        </b:row>
+        <b:row>
 
 
 
@@ -125,7 +139,8 @@
     <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm">
-                <b:panelGrid columns="2">
+
+                <b:panelGrid columns="2" >
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
                     <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
@@ -138,14 +153,14 @@
                                       itemValue="Neuer Trainingsplan"/>
                         <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
                     </b:selectOneMenu>
-                        <h:outputLabel value="Startdatum: "/>
-                        <b:dateTimePicker value="#{kalenderHelfer.start}">
+                    <h:outputLabel value="Startdatum: "/>
+                    <b:dateTimePicker value="#{kalenderHelfer.start}">
 
-                        </b:dateTimePicker>
-                        <h:outputLabel value="Enddatum: "/>
-                        <b:dateTimePicker value="#{kalenderHelfer.end}">
+                    </b:dateTimePicker>
+                    <h:outputLabel value="Enddatum: "/>
+                    <b:dateTimePicker value="#{kalenderHelfer.end}">
 
-                        </b:dateTimePicker>
+                    </b:dateTimePicker>
                     <h:outputLabel value="Kunde: "></h:outputLabel>
                     <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
 
@@ -156,6 +171,13 @@
                     </b:selectOneMenu>
                     <h:outputLabel id="beschreibung" value="Beschreibung: "/>
                     <b:inputText name="beschreibung" for="beschreibung"/>
+                    <h:outputLabel value="Einträger: "/>
+                    <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
+                                       itemValue="#{mitarb.mitarbeiterID}"/>
+                    </b:selectOneMenu>
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin()" look="primary" />
 
 
 
@@ -164,16 +186,6 @@
 
             </h:form>
         </div>
-
-        <f:facet name="footer">
-<h:form>
-    <b:button value="close" dismiss="modal" onclick="return false;"/>
-    <b:commandButton value="Ok" action="#{kalenderHelfer.newTermin}" look="primary" />
-</h:form>
-
-
-
-        </f:facet>
 
     </b:modal>
 
