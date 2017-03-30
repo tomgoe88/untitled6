@@ -35,7 +35,10 @@
 <!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
 <!-- weiter sollte auf Deutsch gesetzt werden-->
 
-<h:body>
+<h:body onload="$(document).ready(function() {
+                        $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                        })
+                        ">
     <ui:insert name="header">
         <ui:include src="/hauptseite.xhtml"/>
     </ui:insert>
@@ -177,7 +180,21 @@
                                        itemValue="#{mitarb.mitarbeiterID}"/>
                     </b:selectOneMenu>
                     <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin()" oncomplete="$('.modalPseudoClass').modal('hide'); $('#calendar').fullCalendar('refresh');" look="primary" />
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate()" />
+                    <h:outputScript>
+
+                        function useCurrentDate() {
+                        $('.modalPseudoClass').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })
+
+
+
+
+                    </h:outputScript>
 
 
 

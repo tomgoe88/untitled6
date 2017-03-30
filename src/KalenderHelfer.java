@@ -84,6 +84,7 @@ public class KalenderHelfer {
     private boolean adminbool;
     private boolean terminErledigtTest= false;
     private KundenController kC;
+    private String javaScriptDate;
 
     /**
      * Creates a new instance of KalenderHelfer
@@ -685,6 +686,7 @@ public class KalenderHelfer {
         }*/
 
         SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
+        System.out.println("Der Termin wurde angelegt angeblich");
         int terminidmax= SQLHelper.getMaxTerminID();
 
 
@@ -799,6 +801,27 @@ public class KalenderHelfer {
 
         System.out.println(start+"   So ist das Start-Datum");
     }
+
+    public String getJavaScriptDate() {
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        if(start!=null){
+            javaScriptDate = "'"+simpleDateFormat.format(start)+"'";
+        }else{
+            javaScriptDate = "'"+simpleDateFormat.format(new Date())+"'";
+        }
+
+
+          //  javaScriptDate= buf.toString();
+        System.out.println("JavaScriptDate=   "+ javaScriptDate);
+        return javaScriptDate;
+    }
+
+    public void setJavaScriptDate(String javaScriptDate) {
+        this.javaScriptDate = javaScriptDate;
+    }
+
     public void resourceGetMaId(){
         String resID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
         q= Integer.parseInt(resID);
