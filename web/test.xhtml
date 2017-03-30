@@ -19,6 +19,7 @@
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
     <script type="text/javascript" src="selectdate.js"></script>
+    <script type="text/javascript" src="form.js"></script>
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
@@ -81,10 +82,8 @@
                         },
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
-                        getResourceid(resourceObj.id);
-                      //  setTerminShow("true");
-                        $('.modalPseudoClass').modal();return false;
-
+                        getResourceid(resourceObj.id); // setTerminShow("true");
+                        $('#amodal').modal();return false;
 
 
                         },
@@ -94,7 +93,13 @@
                         defaultView: 'agendaDay',
                         events: #{resourceController.events},
 
-                        resources: #{resourceController.resources}
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        test(calEvent);
+                        $('#eventContent').modal();return false;
+
+                        }
+
                         })
 
                         });
@@ -116,6 +121,9 @@
                     <b:remoteCommand name="selectShowTermin" id="showTerminCommand"
                                      actionListener="#{kalenderHelfer.terminShowCommand}"
                                      update="terminRow" parameters="initialValue" />
+                    <b:remoteCommand name="sendEvent" id="showEventContent"
+                                     actionListener="#{kalenderHelfer.resourceGetEvent}"
+                                     update="eventContent" parameters="initialValue" />
                 </h:form>
             </b:column>
             <b:column span="3">
@@ -184,12 +192,12 @@
                     <h:outputScript>
 
                         function useCurrentDate() {
-                        $('.modalPseudoClass').modal('hide');
+                        $('#amodal').modal('hide');
                         $(document).ready(function() {
                         $('#calendar').fullCalendar('refetchEventSources', sources);
 
 
-                        })
+                        })}
 
 
 
@@ -201,6 +209,14 @@
 
                 </b:panelGrid>
 
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="eventContent" title="Modal Example" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="eventContentForm">
+                <h:outputText value="Test"/>
             </h:form>
         </div>
 
