@@ -19,7 +19,7 @@
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
     <script type="text/javascript" src="selectdate.js"></script>
-    <script type="text/javascript" src="form.js"></script>
+
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
@@ -61,7 +61,7 @@
                                                 changeDay();" />
                     <h:outputScript>
                         function changeDay() {
-                            var moment= $('#calendar').fullCalendar('getDate');
+                        var moment= $('#calendar').fullCalendar('getDate');
 
                         }
                     </h:outputScript>
@@ -95,8 +95,12 @@
 
                         resources: #{resourceController.resources},
                         eventClick: function(calEvent, jsEvent, view) {
-                        test(calEvent);
-                        $('#eventContent').modal();return false;
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
 
                         }
 
@@ -104,6 +108,7 @@
 
                         });
                     </h:outputScript>
+                    <h:outputScript name="JS/eventSelector.js"></h:outputScript>
 
 
 
@@ -121,9 +126,10 @@
                     <b:remoteCommand name="selectShowTermin" id="showTerminCommand"
                                      actionListener="#{kalenderHelfer.terminShowCommand}"
                                      update="terminRow" parameters="initialValue" />
-                    <b:remoteCommand name="sendEvent" id="showEventContent"
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
                                      actionListener="#{kalenderHelfer.resourceGetEvent}"
-                                     update="eventContent" parameters="initialValue" />
+                                     update="mordalForm2" parameters="initialValue" />
+
                 </h:form>
             </b:column>
             <b:column span="3">
@@ -146,6 +152,85 @@
 
 
 
+
+
+    <b:modal id="eventContentI" title="Modal Example" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
+
+                <b:container>
+                <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                    <b:column span="2">
+                        <h:outputLabel for="tec" value="Terminart: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="tec" id="tec" value="#{kalenderHelfer.eingetragenTerminart}"/>
+                    </b:column>
+                </b:row>
+                <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                    <b:column span="2">
+                        <h:outputLabel for="tecvor" value="Vorname: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.eingetragenVorname}"/>
+                    </b:column>
+                </b:row>
+                <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                    <b:column span="2">
+                        <h:outputLabel for="tecnach" value="Nachname: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.eingetragenNachname}"/>
+                    </b:column>
+                </b:row>
+                <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                    <b:column span="2">
+                        <h:outputLabel for="tectel" value="Telefonnummer: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="telefon" id="tectel" value="#{kalenderHelfer.eingetrageneTelefonnummer}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="2">
+                        <h:outputLabel for="tecbe" value="Beschreibung: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.eignetrageneBeschreibung}"/>
+                    </b:column>
+                </b:row>
+                <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                    <b:column span="2">
+                        <h:outputLabel for="tecein" value="Eingetragen von: "/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText name="eintragerer" id="tecein" value="#{kalenderHelfer.eingetragenEintraeger}"/>
+                    </b:column>
+                </b:row>
+                    <b:commandButton value="Löschen" onclick="ajax:kalenderHelfer.deleteAppointment();javascript:changeAppointment()" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                                     />
+                    <b:commandButton value="Erledigen"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                                     />
+                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');"
+                                    />
+                    <h:outputScript>
+                        function changeAppointment() {
+                        $('#eventContentI').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+                </b:container>
+            </h:form>
+        </div>
+
+    </b:modal>
 
     <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
         <div>
@@ -213,15 +298,6 @@
         </div>
 
     </b:modal>
-    <b:modal id="eventContent" title="Modal Example" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="eventContentForm">
-                <h:outputText value="Test"/>
-            </h:form>
-        </div>
-
-    </b:modal>
-
 
 
 

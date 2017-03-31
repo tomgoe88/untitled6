@@ -12,4 +12,5 @@ function getResourceid(resourceID) {
 function setTerminShow(boolwert){
     selectShowTermin(boolwert);
 }
+
 //diese Funktion klappt nicht
