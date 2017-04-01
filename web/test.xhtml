@@ -62,6 +62,7 @@
                     <h:outputScript>
                         function changeDay() {
                         var moment= $('#calendar').fullCalendar('getDate');
+                            defaultSelect(moment.format());
 
                         }
                     </h:outputScript>
@@ -117,7 +118,10 @@
                     <div id='calendar'></div>
 
 
-                    <b:remoteCommand name="dateSelect" id="remoteCommand2"
+                    <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
+                                     update="aufgabenformer" parameters="initialValue" />
+                    <b:remoteCommand name="dateSelect" id="getDayDate"
                                      actionListener="#{kalenderHelfer.resourcegetDate}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="selectResource" id="idCommand"
@@ -133,7 +137,60 @@
                 </h:form>
             </b:column>
             <b:column span="3">
+                <b:tabView>
+                    <b:tab title="Aufgabe">
+                        <h:form id="aufgabenformer">
 
+
+                            <b:row>
+                                <b:column span="12">
+                                    <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
+                                                >
+                                        <b:dataTableColumn label="Beschreibung" >
+                                            <h:outputText value="#{aufga.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erledigen" >
+                                            <!--p:commandButton value="Erledigen"
+                                                             action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
+                                                             oncomplete="PF('AufgabeErledigt').show();"
+                                                             styleClass="btn"/-->
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+                                </b:column>
+
+                            </b:row>
+                        </h:form>
+                    </b:tab>
+                    <b:tab title="Memos">
+                        <h:form id="memoFormer">
+
+
+                            <b:row>
+
+                                <b:column span="12">
+                                    <!--p:commandButton value="neue Memo" oncomplete="PF('memoEintrag').show();"/-->
+                                    <b:dataTable value="#{memoController.memoList}" var="memos"
+                                                 >
+                                        <b:dataTableColumn label="Beschreibung">
+                                            <h:outputText value="#{memos.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Mitarbeiter">
+                                            <h:outputText value="#{memos.mitarbeiterM}"/>
+
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erstelldatum">
+                                            <h:outputText value="#{memos.eintragDatum}">
+                                                <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
+                                            </h:outputText>
+
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+                                </b:column>
+
+                            </b:row>
+                        </h:form>
+                    </b:tab>
+                </b:tabView>
             </b:column>
 
 
@@ -209,9 +266,9 @@
                 </b:row>
                     <b:commandButton value="Löschen" onclick="ajax:kalenderHelfer.deleteAppointment();javascript:changeAppointment()" rendered="#{kalenderHelfer.terminErledigtTest==false}"
                                      />
-                    <b:commandButton value="Erledigen"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                    <b:commandButton value="Erledigen" onclick="$('#eventContentI').modal('hide');$('#terminErlefigtID').modal('show');return false;"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
                                      />
-                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');"
+                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
                                     />
                     <h:outputScript>
                         function changeAppointment() {
@@ -230,6 +287,35 @@
             </h:form>
         </div>
 
+    </b:modal>
+    <b:modal id="terminErlefigtID" title="Modal Example" styleClass="modalPseudoClass">
+        <h:form id="aufgabenForm">
+            <b:panelGrid columns="1">
+                <h:outputText value="Ergebnis"></h:outputText>
+                <b:selectOneMenu value="#{kalenderHelfer.ergebnis}">
+                    <f:selectItem value="Erfolgreich" itemLabel="Erfolgreich" itemValue="Erfolgreich"/>
+                    <f:selectItem value="Abgesagt" itemLabel="Abgesagt" itemValue="Abgesagt"/>
+                    <f:selectItem value="Verschoben" itemLabel="Verschoben" itemValue="Verschoben"/>
+                </b:selectOneMenu>
+                <h:outputText value="Hinweis: " for="hinweis"></h:outputText>
+                <b:inputText id="hinweis" name="hinweistext"/>
+                <b:commandButton value="anlegen" onclick="ajax:kalenderHelfer.terminErledigt();javascript:doneAppointment()"
+                                 />
+            </b:panelGrid>
+            <h:outputScript>
+                function doneAppointment() {
+                $('#terminErlefigtID').modal('hide');
+                $(document).ready(function() {
+                $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                })}
+
+
+
+
+            </h:outputScript>
+        </h:form>
     </b:modal>
 
     <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">

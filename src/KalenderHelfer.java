@@ -801,6 +801,16 @@ public class KalenderHelfer {
 
         System.out.println(start+"   So ist das Start-Datum");
     }
+    public void resourceGetCurrentDate(){
+        String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+
+
+        defaultDate= calendar.getTime();
+
+
+        System.out.println(defaultDate+"   So ist das Default-Datum");
+    }
     public void resourceGetEvent(){
         String texten = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
             terminErledigtTest=false;
