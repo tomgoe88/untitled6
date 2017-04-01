@@ -150,12 +150,11 @@
                                             <h:outputText value="#{aufga.beschreibung}"/>
                                         </b:dataTableColumn>
                                         <b:dataTableColumn label="Erledigen" >
-                                            <!--p:commandButton value="Erledigen"
-                                                             action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
-                                                             oncomplete="PF('AufgabeErledigt').show();"
-                                                             styleClass="btn"/-->
+                                            <b:commandButton value="OK" onclick="ajax:kalenderHelfer.aufgabeErledigen(aufga.aufgabeID);javascript:$('#aufgabenErledigtIDMordal').modal('show');return false;"/>
+
                                         </b:dataTableColumn>
                                     </b:dataTable>
+
                                 </b:column>
 
                             </b:row>
@@ -168,7 +167,8 @@
                             <b:row>
 
                                 <b:column span="12">
-                                    <!--p:commandButton value="neue Memo" oncomplete="PF('memoEintrag').show();"/-->
+                                    <b:commandButton value="Neue Memo" onclick="$('#memoIDMordal').modal('show');return false;"/>
+
                                     <b:dataTable value="#{memoController.memoList}" var="memos"
                                                  >
                                         <b:dataTableColumn label="Beschreibung">
@@ -211,7 +211,7 @@
 
 
 
-    <b:modal id="eventContentI" title="Modal Example" styleClass="modalPseudoClass">
+    <b:modal id="eventContentI" title="Termininfo" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm2">
 
@@ -288,7 +288,41 @@
         </div>
 
     </b:modal>
-    <b:modal id="terminErlefigtID" title="Modal Example" styleClass="modalPseudoClass">
+    <b:modal id="aufgabenErledigtIDMordal" title="Aufgabe" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="erledigungsForm">
+
+                <b:panelGrid columns="2" >
+                    <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
+                                       itemValue="#{erlediger.mitarbeiterID}"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="Aufgabe erledigen" onclick="ajax:kalenderHelfer.aufgabeErledigt();javascript:$('#aufgabenErledigtIDMordal').modal('hide');" update="aufgabenformer"/>
+
+
+
+
+                </b:panelGrid>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="memoIDMordal" title="Memo" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="memoForm">
+                <b:selectOneMenu value="#{memoController.q}">
+                    <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
+                                   itemValue="#{memoEin.mitarbeiterID}"/>
+                </b:selectOneMenu>
+                <h:outputText value="Memo: "></h:outputText>
+                <b:inputText name="memobeschreibung" ></b:inputText>
+                <b:commandButton value="eintragen" onclick="ajax:memoController.neueMemo();javascript:$('#memoIDMordal').modal('hide');" update="memoFormer"/>
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="terminErlefigtID" title="Termin erledigen" styleClass="modalPseudoClass">
         <h:form id="aufgabenForm">
             <b:panelGrid columns="1">
                 <h:outputText value="Ergebnis"></h:outputText>
@@ -318,7 +352,7 @@
         </h:form>
     </b:modal>
 
-    <b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
+    <b:modal id="amodal" title="Neuer Termin" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm">
 
@@ -384,6 +418,9 @@
         </div>
 
     </b:modal>
+
+
+
 
 
 
