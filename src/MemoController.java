@@ -15,7 +15,7 @@ public class MemoController {
     private List<Mitarbeiter> mitarbeiterList;
 
     public MemoController(){
-        mitarbeiterList= new ArrayList<Mitarbeiter>();
+
     }
 
 
@@ -48,7 +48,7 @@ public class MemoController {
     }
 
     public List<Mitarbeiter> getMitarbeiterList() {
-
+        mitarbeiterList= new ArrayList<Mitarbeiter>();
         mitarbeiterList.addAll(SQLHelper.getMitarbeiterListe());
         return mitarbeiterList;
     }

@@ -19,6 +19,7 @@
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
     <script type="text/javascript" src="selectdate.js"></script>
+
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
@@ -29,410 +30,286 @@
 
 
 
+
 </h:head>
 
-<h:body>
+<!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
+<!-- weiter sollte auf Deutsch gesetzt werden-->
 
-        <ui:insert name="header">
-            <ui:include src="/hauptseite.xhtml"/>
-        </ui:insert>
-
-
-        <b:container fluid="true">
-            <b:row>
-                <h:form id="navform">
-                <b:column span="4">
-                    <p:calendar showTodayButton="true" showOn="button"
-                                locale="de"
-
-                                pattern="dd.MM.yyyy"
-                                styleClass="embed-responsive-item">
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
-                                update="cal terminWidget aufgabenformer"/>
-                    </p:calendar>
-                </b:column>
-
-                <b:column span="1"/>
-                    <b:column>
-                        <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Tag" offLabel="Woche" style="width:110px"  >
-                            <p:ajax update="cal aufgabenformer schicht"/>
-                        </p:selectBooleanButton>
-
-                        <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" onclick="$('#calendar').moment(#{kalendarHelfer.theDefaultDate});" update="cal aufgabenformer schicht"></p:commandButton>
+<h:body onload="$(document).ready(function() {
+                        $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                        })
+                        ">
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
+    <b:container id="bigContainer" fluid="true">
+        <b:row id="terminRow" >
 
 
-                        <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal aufgabenformer schicht"></p:commandButton>
-                        <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal aufgabenformer schicht"></p:commandButton>
+
+        </b:row>
+        <b:row>
 
 
-                        <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal aufgabenformer schicht"></p:commandButton>
-                        <b/>
-                    </b:column>
+
+            <b:column span="9">
+                <h:form>
+                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                                                changeDay();" />
+                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                                                changeDay();" />
+                    <h:outputScript>
+                        function changeDay() {
+                        var moment= $('#calendar').fullCalendar('getDate');
+                        defaultSelect(moment.format());
+
+                        }
+                    </h:outputScript>
+
+
+                    <h:outputScript >
+
+                        $(document).ready(function() {
+
+                        // page is now ready, initialize the calendar...
+
+                        $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                        header: {
+                        left: 'resourceDay',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                        },
+                        dayClick: function(date, jsEvent, view, resourceObj) {
+                        selectDate(date);
+                        getResourceid(resourceObj.id); // setTerminShow("true");
+                        $('#amodal').modal();return false;
+
+
+                        },
+
+
+                        // put your options and callbacks here
+                        defaultView: 'agendaDay',
+                        events: #{resourceController.events},
+
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
+
+                        }
+
+                        })
+
+                        });
+                    </h:outputScript>
+                    <h:outputScript name="JS/eventSelector.js"></h:outputScript>
+
+
+
+
+
+                    <div id='calendar'></div>
+
+
+                    <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
+                                     update="aufgabenformer" parameters="initialValue" />
+                    <b:remoteCommand name="dateSelect" id="getDayDate"
+                                     actionListener="#{kalenderHelfer.resourcegetDate}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectResource" id="idCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectShowTermin" id="showTerminCommand"
+                                     actionListener="#{kalenderHelfer.terminShowCommand}"
+                                     update="terminRow" parameters="initialValue" />
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
+                                     actionListener="#{kalenderHelfer.resourceGetEvent}"
+                                     update="mordalForm2" parameters="initialValue" />
+
                 </h:form>
-                <b:column>
-                    <h:form id="schicht">
-                        <p:panelGrid columns="2">
-                            <h:outputLabel value="Frühschicht: "></h:outputLabel>
-                            <h:outputText value="#{arbeitszeitController.fruehSchicht}"/>
-                            <h:outputLabel value="Mittelschicht: "></h:outputLabel>
-                            <h:outputText value="#{arbeitszeitController.mittelSchicht}"/>
-                            <h:outputLabel value="Spätschicht: "></h:outputLabel>
-                            <h:outputText value="#{arbeitszeitController.spaetSchicht}"/>
-                        </p:panelGrid>
-                    </h:form>
-                </b:column>
-            </b:row>
-            <b:row>
-                <b:column span="12">
-                        <h:form id="cal">
-                            <b:row>
-                                <b:column span="5">
-                                    <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
-                                        <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
-                                    </h:outputText>
-                                </b:column>
-                            </b:row>
+            </b:column>
+            <b:column span="3">
+                <b:tabView>
+                    <b:tab title="Aufgabe">
+                        <h:form id="aufgabenformer">
+
+
                             <b:row>
                                 <b:column span="12">
-                                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12"  >
-                                        <f:selectItem  value="#{null}" itemLabel="keine Auswahl" itemValue="0" noSelectionOption="true"/>
-                                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                                                       itemValue="#{mi.mitarbeiterID}"/>
+                                    <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
+                                    >
+                                        <b:dataTableColumn label="Beschreibung" >
+                                            <h:outputText value="#{aufga.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erledigen" >
+                                            <b:commandButton value="OK" onclick="ajax:kalenderHelfer.aufgabeErledigen(aufga.aufgabeID);javascript:$('#aufgabenErledigtIDMordal').modal('show');return false;"/>
 
-                                        <p:ajax event="valueChange"  update="cal"/>
-                                    </p:selectOneMenu>
-                                    <b:commandButton span="12" value="Alle Mitarbeiter" action="#{kalenderHelfer.qChange}" onclick="  $('#calendar').fullCalendar('refresh');
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
 
-
-
-                                "/>
                                 </b:column>
 
                             </b:row>
-                            <b:row rendered="#{kalenderHelfer.q!=0}">
-                            <b:column colLg="11">
-                                    <b:fullCalendar  lang="de"
-                                                    calendarHeader="false"
-                                                    height="#{pageResizer.size}"
-                                                    defaultView="#{kalenderHelfer.changeAgenda}"
-                                                    events="#{kalenderHelfer.mitarbeit.tem}"
-                                                    eventClick="
-                                                    function(calEvent, jsEvent, view) {
-                                                    test(calEvent);
-                                                    PF('testVar').show();
-                                                    }"
-                                                    rendered="#{kalenderHelfer.mitarbeit!=null}"
-                                                    dayClick="
-                                                    function(date, jsEvent, view) {
-                                                    selectDate(date);
-                                                    PF('eventDialog').show();
-                                                    }"
-                                                    defaultDate="#{kalenderHelfer.theDefaultDate}"
-                                                    businessHours="{start:'6:00', end:'23:30', dow: [1, 2]}"
-                                                    scrollTime="06:00:00">
-
-                                    </b:fullCalendar>
-                            </b:column>
-                                <b:column colLg="1">
-                                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
-                                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
-                                </b:column>
-                            </b:row>
-
-
-
-
-
-                            <h:outputScript >
-                                $('#calendar').fullCalendar({
-                                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
-                                });
-                                $(document).ready(function() {
-
-                                // page is now ready, initialize the calendar...
-
-                                $('#calendar').fullCalendar({
-
-                                header: {
-                                left: 'prev,next today',
-                                center: 'title',
-                                right: 'resourceDay,month,agendaWeek,agendaDay'
-                                },
-                                // put your options and callbacks here
-                                defaultView: 'agendaDay',
-                                events: #{resourceController.events},
-
-                                resources: #{resourceController.resources}
-                                })
-
-                                });
-                            </h:outputScript>
-
-                            <b:row rendered="#{kalenderHelfer.q==0}">
-                                <b:column>
-                                    <div id="calendar"></div>
-                                </b:column>
-                            </b:row>
-
                         </h:form>
+                    </b:tab>
+                    <b:tab title="Memos">
+                        <h:form id="memoFormer">
+
+
+                            <b:row>
+
+                                <b:column span="12">
+                                    <b:commandButton value="Neue Memo" onclick="$('#memoIDMordal').modal('show');return false;"/>
+
+                                    <b:dataTable value="#{memoController.memoList}" var="memos"
+                                    >
+                                        <b:dataTableColumn label="Beschreibung">
+                                            <h:outputText value="#{memos.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Mitarbeiter">
+                                            <h:outputText value="#{memos.mitarbeiterM}"/>
+
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erstelldatum">
+                                            <h:outputText value="#{memos.eintragDatum}">
+                                                <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
+                                            </h:outputText>
+
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+                                </b:column>
+
+                            </b:row>
+                        </h:form>
+                    </b:tab>
+                </b:tabView>
+            </b:column>
 
 
 
-                </b:column>
-
-            </b:row>
-            <b:tabView>
-                <b:tab title="Aufgabe">
-                    <h:form id="aufgabenformer">
-
-
-                        <b:row>
-                            <b:column span="12">
-                                <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
-                                             styleClass="table-responsive">
-                                    <p:column colspan="8">
-                                        <h:outputText value="#{aufga.beschreibung}"/>
-                                    </p:column>
-                                    <p:column colspan="4">
-                                        <p:commandButton value="Erledigen"
-                                                         action="#{kalenderHelfer.aufgabeErledigen(aufga.aufgabeID)}"
-                                                         oncomplete="PF('AufgabeErledigt').show();"
-                                                         styleClass="btn"/>
-                                    </p:column>
-                                </p:dataTable>
-                            </b:column>
-
-                        </b:row>
-                    </h:form>
-                </b:tab>
-                <b:tab title="Memos">
-                    <h:form id="memoFormer">
-
-
-                        <b:row>
-
-                            <b:column span="12">
-                                <p:commandButton value="neue Memo" oncomplete="PF('memoEintrag').show();"/>
-                                <p:dataTable value="#{memoController.memoList}" var="memos"
-                                             styleClass="table-responsive">
-                                    <p:column colspan="7" >
-                                        <h:outputText value="#{memos.beschreibung}"/>
-                                    </p:column>
-                                    <p:column colspan="3">
-                                        <h:outputText value="#{memos.mitarbeiterM}"/>
-
-                                    </p:column>
-                                    <p:column colspan="2">
-                                        <h:outputText value="#{memos.eintragDatum}">
-                                            <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
-                                        </h:outputText>
-
-                                    </p:column>
-                                </p:dataTable>
-                            </b:column>
-
-                        </b:row>
-                    </h:form>
-                </b:tab>
-            </b:tabView>
-
-        </b:container>
 
 
 
-<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-    <h:form id="terminWidget">
-        <p:panelGrid id="eventDetails">
-            <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
-            <b:selectOneMenu value="#{kalenderHelfer.terminart}">
-                <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
-                <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
-                <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
-                <f:selectItem value="Neuer Trainingsplan" itemLabel="Neuer Trainingsplan"
-                              itemValue="Neuer Trainingsplan"/>
-                <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
-            </b:selectOneMenu>
-            <b/>
-            <p:selectOneMenu id="ausMit" value="#{kundenController.q}" styleClass="col-lg-12" >
-                <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
-                <f:selectItems value="#{kundenController.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
-                               itemValue="#{ku.kundeID}"/>
+        </b:row>
+        <b:row>
 
-                <p:ajax event="valueChange" update="terminWidget"/>
-            </p:selectOneMenu>
-            <p:panelGrid rendered="#{kundenController.q!=-1}">
-            <h:outputText id="vorname" value="Vorname: "/>
-            <b:inputText name="vorname" for="vorname" typeahead="true" value="#{kundenController.kunde.vorname}"
-                         typeahead-values="#{kalenderHelfer.kundenNames}"/>
-            <b/>
-            <h:outputText id="nachname" value="Nachname: "/>
-            <b:inputText name="nachname" for="nachname" typeahead="true" value="#{kundenController.kunde.nachname}"
-                         typeahead-values="#{kalenderHelfer.kundeNachname}"/>
-            <b/>
-            <h:outputText id="tele" value="Telefonnummer: "/>
-            <b:inputText id="teleid" name="tele" for="tele" value="#{kundenController.kunde.telefonnummer}">
-                <f:validateRegex pattern="[0-9]+" />
-                <f:ajax event="keyup" render="messages" />
-            </b:inputText>
-            <p:messages id="messages" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
-            <h:outputText id="email" value="E-Mail: "/>
-            <b:inputText id="emailIN" name="emailInput" for="email" value="#{kundenController.kunde.email}">
-            </b:inputText>
-            <b/>
-            </p:panelGrid>
-            <p:panelGrid rendered="#{kundenController.q==-1}">
-                <h:outputText id="vornamet" value="Vorname: "/>
-                <b:inputText name="vorname" for="vornamet" typeahead="true"
-                             typeahead-values="#{kalenderHelfer.kundenNames}"/>
-                <b/>
-                <h:outputText id="nachnamet" value="Nachname: "/>
-                <b:inputText name="nachname" for="nachnamet" typeahead="true"
-                             typeahead-values="#{kalenderHelfer.kundeNachname}"/>
-                <b/>
-                <h:outputText id="telet" value="Telefonnummer: "/>
-                <b:inputText id="teleidz" name="tele" for="telet">
-                    <f:validateRegex pattern="[0-9]+" />
-                    <f:ajax event="keyup" render="messages" />
-                </b:inputText>
-                <p:messages id="messagets" for="teleid" showDetail="true" autoUpdate="true" closable="true" />
-                <h:outputText id="emailt" value="E-Mail: "/>
-                <b:inputText id="emailINu" name="emailInput" for="emailt">
-                </b:inputText>
-                <b/>
-            </p:panelGrid>
-            <h:outputText id="beschreibung" value="Beschreibung: "/>
-            <b:inputText name="beschreibung" for="beschreibung"/>
-            <b/>
-            <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
-                <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
-                               itemValue="#{mitarb.mitarbeiterID}"/>
-            </b:selectOneMenu>
-            <b/>
-            <h:outputText id="Start" value="Terminbeginn: "/>
-            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
-                        value="#{kalenderHelfer.start}">
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
-            </p:calendar>
-            <b/>
-            <h:outputText id="End" value="Terminende: "/>
-            <p:calendar
-                    widgetVar="endDate"
-                    name="end"
-                    for="End"
-                    pattern="MM/dd/yyyy HH:mm"
-                    locale="de"
-                    value="#{kalenderHelfer.end}">
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
-            </p:calendar>
-            <b/>
-            <p:commandButton action="#{kalenderHelfer.newTermin}" value="go for it" update="cal"
-                             oncomplete="PF('eventDialog').hide();" styleClass="btn"/>
-        </p:panelGrid>
-        <pe:remoteCommand id="eventCommand" name="dateSelect" process="@this" update="terminWidget"
-                          actionListener="#{kalenderHelfer.myDate}">
-            <pe:methodSignature parameters="java.lang.String"/>
-            <pe:methodParam name="dateEvent">
-            </pe:methodParam>
-        </pe:remoteCommand>
-        <script type="text/javascript" src="selectdate.js"></script>
-    </h:form>
-</p:dialog>
 
-<p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
-    <h:form id="ding">
-        <b:container>
-            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
-                <b:column span="2">
-                    <h:outputLabel for="tec" value="Terminart: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="tec" id="tec" value="#{kalenderHelfer.eingetragenTerminart}"/>
-                </b:column>
-            </b:row>
-            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
-                <b:column span="2">
-                    <h:outputLabel for="tecvor" value="Vorname: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.eingetragenVorname}"/>
-                </b:column>
-            </b:row>
-            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
-                <b:column span="2">
-                    <h:outputLabel for="tecnach" value="Nachname: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.eingetragenNachname}"/>
-                </b:column>
-            </b:row>
-            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
-                <b:column span="2">
-                    <h:outputLabel for="tectel" value="Telefonnummer: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="telefon" id="tectel" value="#{kalenderHelfer.eingetrageneTelefonnummer}"/>
-                </b:column>
-            </b:row>
-            <b:row>
-                <b:column span="2">
-                    <h:outputLabel for="tecbe" value="Beschreibung: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.eignetrageneBeschreibung}"/>
-                </b:column>
-            </b:row>
-            <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
-                <b:column span="2">
-                    <h:outputLabel for="tecein" value="Eingetragen von: "/>
-                </b:column>
-                <b:column span="2">
-                    <h:outputText name="eintragerer" id="tecein" value="#{kalenderHelfer.eingetragenEintraeger}"/>
-                </b:column>
-            </b:row>
-            <pe:remoteCommand id="myCommand" name="sendEvent" process="@this" update="ding"
-                              actionListener="#{kalenderHelfer.myEvent}">
-                <pe:methodSignature parameters="java.lang.String"/>
-                <pe:methodParam name="event">
-                </pe:methodParam>
-            </pe:remoteCommand>
-            <script type="text/javascript" src="form.js"></script>
-            <b:commandButton value="Löschen" action="#{kalenderHelfer.deleteAppointment}" update="cal" rendered="#{kalenderHelfer.terminErledigtTest==false}"
-                             oncomplete="PF('testVar').hide();"/>
-            <b:commandButton value="Erledigen" update="cal" rendered="#{kalenderHelfer.terminErledigtTest==false}"
-                             oncomplete="PF('terminErledigt').show();
-                                        PF('testVar').hide();"/>
-            <b:commandButton value="OK" update="cal"
-                             oncomplete="PF('testVar').hide();"/>
-        </b:container>
-    </h:form>
-</p:dialog>
-    <p:dialog id="terminErlefigtID" widgetVar="terminErledigt" header="Termin erledigen" showEffect="clip" hideEffect="clip">
-            <h:form id="aufgabenForm">
-                <b:panelGrid columns="1">
-                    <h:outputText value="Ergebnis"></h:outputText>
-                    <b:selectOneMenu value="#{kalenderHelfer.ergebnis}">
-                        <f:selectItem value="Erfolgreich" itemLabel="Erfolgreich" itemValue="Erfolgreich"/>
-                        <f:selectItem value="Abgesagt" itemLabel="Abgesagt" itemValue="Abgesagt"/>
-                        <f:selectItem value="Verschoben" itemLabel="Verschoben" itemValue="Verschoben"/>
-                    </b:selectOneMenu>
-                    <h:outputText value="Hinweis: " for="hinweis"></h:outputText>
-                    <b:inputText id="hinweis" name="hinweistext"/>
-                    <b:commandButton value="anlegen" action="#{kalenderHelfer.terminErledigt}"  update="cal"
-                                     oncomplete="PF('terminErledigt').hide();"/>
-                </b:panelGrid>
+
+        </b:row>
+
+    </b:container>
+
+
+
+
+
+    <b:modal id="eventContentI" title="Termininfo" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
+
+                <b:container>
+                    <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                        <b:column span="2">
+                            <h:outputLabel for="tec" value="Terminart: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="tec" id="tec" value="#{kalenderHelfer.eingetragenTerminart}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                        <b:column span="2">
+                            <h:outputLabel for="tecvor" value="Vorname: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="vornamen" id="tecvor" value="#{kalenderHelfer.eingetragenVorname}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                        <b:column span="2">
+                            <h:outputLabel for="tecnach" value="Nachname: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="nachnamen" id="tecnach" value="#{kalenderHelfer.eingetragenNachname}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                        <b:column span="2">
+                            <h:outputLabel for="tectel" value="Telefonnummer: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="telefon" id="tectel" value="#{kalenderHelfer.eingetrageneTelefonnummer}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="2">
+                            <h:outputLabel for="tecbe" value="Beschreibung: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="beschreib" id="tecbe" value="#{kalenderHelfer.eignetrageneBeschreibung}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{kalenderHelfer.terminErledigtTest==false}">
+                        <b:column span="2">
+                            <h:outputLabel for="tecein" value="Eingetragen von: "/>
+                        </b:column>
+                        <b:column span="2">
+                            <h:outputText name="eintragerer" id="tecein" value="#{kalenderHelfer.eingetragenEintraeger}"/>
+                        </b:column>
+                    </b:row>
+                    <b:commandButton value="Löschen" onclick="ajax:kalenderHelfer.deleteAppointment();javascript:changeAppointment()" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                    />
+                    <b:commandButton value="Erledigen" onclick="$('#eventContentI').modal('hide');$('#terminErlefigtID').modal('show');return false;"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                    />
+                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
+                    />
+                    <h:outputScript>
+                        function changeAppointment() {
+                        $('#eventContentI').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+                </b:container>
             </h:form>
-        </p:dialog>
-<p:dialog id="aufgabenErledigtID" widgetVar="AufgabeErledigt" header="Erledigt" showEffect="clip" hideEffect="clip" responsive="true">
-    <h:form id="erledigungsForm">
-        <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
-            <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
-                           itemValue="#{erlediger.mitarbeiterID}"/>
-        </b:selectOneMenu>
-        <p:commandButton action="#{kalenderHelfer.aufgabeErledigt}" update="aufgabenformer"
-                         oncomplete="PF('AufgabeErledigt').hide();" styleClass="btn"/>
-    </h:form>
-</p:dialog>
-        <p:dialog id="memoID" widgetVar="memoEintrag" header="Neue Memo" showEffect="clip" hideEffect="clip" responsive="true">
+        </div>
+
+    </b:modal>
+    <b:modal id="aufgabenErledigtIDMordal" title="Aufgabe" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="erledigungsForm">
+
+                <b:panelGrid columns="2" >
+                    <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
+                                       itemValue="#{erlediger.mitarbeiterID}"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="Aufgabe erledigen" onclick="ajax:kalenderHelfer.aufgabeErledigt();javascript:$('#aufgabenErledigtIDMordal').modal('hide');" update="aufgabenformer"/>
+
+
+
+
+                </b:panelGrid>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="memoIDMordal" title="Memo" styleClass="modalPseudoClass">
+        <div>
             <h:form id="memoForm">
                 <b:selectOneMenu value="#{memoController.q}">
                     <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
@@ -440,10 +317,116 @@
                 </b:selectOneMenu>
                 <h:outputText value="Memo: "></h:outputText>
                 <b:inputText name="memobeschreibung" ></b:inputText>
-                <p:commandButton value="eintragen" action="#{memoController.neueMemo}" update="memoFormer"
-                                 oncomplete="PF('memoEintrag').hide();" styleClass="btn"/>
+                <b:commandButton value="eintragen" onclick="ajax:memoController.neueMemo();javascript:$('#memoIDMordal').modal('hide');" update="memoFormer"/>
             </h:form>
-        </p:dialog>
+        </div>
+
+    </b:modal>
+    <b:modal id="terminErlefigtID" title="Termin erledigen" styleClass="modalPseudoClass">
+        <h:form id="aufgabenForm">
+            <b:panelGrid columns="1">
+                <h:outputText value="Ergebnis"></h:outputText>
+                <b:selectOneMenu value="#{kalenderHelfer.ergebnis}">
+                    <f:selectItem value="Erfolgreich" itemLabel="Erfolgreich" itemValue="Erfolgreich"/>
+                    <f:selectItem value="Abgesagt" itemLabel="Abgesagt" itemValue="Abgesagt"/>
+                    <f:selectItem value="Verschoben" itemLabel="Verschoben" itemValue="Verschoben"/>
+                </b:selectOneMenu>
+                <h:outputText value="Hinweis: " for="hinweis"></h:outputText>
+                <b:inputText id="hinweis" name="hinweistext"/>
+                <b:commandButton value="anlegen" onclick="ajax:kalenderHelfer.terminErledigt();javascript:doneAppointment()"
+                />
+            </b:panelGrid>
+            <h:outputScript>
+                function doneAppointment() {
+                $('#terminErlefigtID').modal('hide');
+                $(document).ready(function() {
+                $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                })}
+
+
+
+
+            </h:outputScript>
+        </h:form>
+    </b:modal>
+
+    <b:modal id="amodal" title="Neuer Termin" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm">
+
+                <b:panelGrid columns="2" >
+                    <h:outputLabel value="Name des Mitarbeiters"/>
+
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+                    <h:outputLabel value="Terminart: "></h:outputLabel>
+                    <b:selectOneMenu value="#{kalenderHelfer.terminart}">
+                        <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
+                        <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
+                        <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
+                        <f:selectItem value="Neuer Trainingsplan" itemLabel="Neuer Trainingsplan"
+                                      itemValue="Neuer Trainingsplan"/>
+                        <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
+                    </b:selectOneMenu>
+                    <h:outputLabel value="Startdatum: "/>
+                    <b:dateTimePicker value="#{kalenderHelfer.start}">
+
+                    </b:dateTimePicker>
+                    <h:outputLabel value="Enddatum: "/>
+                    <b:dateTimePicker value="#{kalenderHelfer.end}">
+
+                    </b:dateTimePicker>
+                    <h:outputLabel value="Kunde: "></h:outputLabel>
+                    <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
+
+                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
+                        <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
+                                       itemValue="#{ku.kundeID}"/>
+
+                    </b:selectOneMenu>
+                    <h:outputLabel id="beschreibung" value="Beschreibung: "/>
+                    <b:inputText name="beschreibung" for="beschreibung"/>
+                    <h:outputLabel value="Einträger: "/>
+                    <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
+                                       itemValue="#{mitarb.mitarbeiterID}"/>
+                    </b:selectOneMenu>
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate()" />
+                    <h:outputScript>
+
+                        function useCurrentDate() {
+                        $('#amodal').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+
+
+
+
+                </b:panelGrid>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+
+
+
+
+
+
+
+
+
 
 
 </h:body>

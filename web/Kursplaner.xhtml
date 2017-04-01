@@ -110,6 +110,7 @@
                             eventClick="
                                                         function(calEvent, jsEvent, view) {
                                                         test(calEvent);
+                                                        PF('testVar').show();
                                                         }"
                             defaultDate="#{kalenderHelfer.theDefaultDate}">
                     </b:fullCalendar>
@@ -250,7 +251,7 @@
                     <pe:methodParam name="event">
                     </pe:methodParam>
                 </pe:remoteCommand>
-                <script type="text/javascript" src="form.js"></script>
+                <h:outputScript name="JS/kursEvent.js"></h:outputScript>
 
                 <b:commandButton value="OK" update="cal"
                                  oncomplete="PF('testVar').hide(); PF('teilnehmerVar').show();"/>

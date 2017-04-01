@@ -1,8 +1,7 @@
 /**
- * Created by Jutom on 17.01.2017.
+ * Created by Jutom on 01.04.2017.
  */
 function test(eevent) {
     sendEvent(eevent.title);
 
 }
-
