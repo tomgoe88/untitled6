@@ -179,6 +179,25 @@ public class SQLHelper{
             System.out.println("VendorError: " + e.getErrorCode());
         }
         try {
+            String tableFreieTermine="" +
+                    "CREATE TABLE IF NOT EXISTS freieTermine( " +
+                    "TerminID int NOT NULL AUTO_INCREMENT, " +
+                    "MitarbeiterMacherID int, " +
+                    "Terminstart VARCHAR (200), " +
+                    "Terminende VARCHAR (200), " +
+                    "Beschreibung TEXT, " +
+                    "MitarbeiterSchreiberID int, " +
+                    "PRIMARY KEY (TerminID), " +
+                    "FOREIGN KEY (MitarbeiterMacherID) REFERENCES mitarbeiter(MitarbeiterID), " +
+                    "FOREIGN KEY (MitarbeiterSchreiberID) REFERENCES mitarbeiter(MitarbeiterID)" +
+                    ")";
+            con.createStatement().executeUpdate(tableFreieTermine);
+        } catch (SQLException e){
+            System.out.println("FreieTermine SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        try {
             String tableErledigteTermine="" +
                     "CREATE TABLE IF NOT EXISTS terminerledigt( " +
                     "ErledigtID int NOT NULL AUTO_INCREMENT, " +
@@ -507,6 +526,26 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+
+    }
+    public static void neuerFreierTermin (int MitarbeiterID, String Beschreibung, String start, String end , int eintrager){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "INSERT INTO termin(MitarbeiterMacherID, Beschreibung, Terminstart, Terminende, MitarbeiterSchreiberID) VALUES(" +
+                                "'"+MitarbeiterID+"','"+Beschreibung+"','"+start+"','"+end+"','"+eintrager+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Freier Termin eintragen SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
@@ -2285,6 +2324,62 @@ public class SQLHelper{
                     String eintrager = result.getString("eintrager");
                     int terminID = result.getInt("TerminID");
                     title = terminart + " ; " + vorname + " ; " + nachname + " ; " + tele + " ; " + beschreibung + " ; " + eintrager + " ; " + terminID;
+                    temp.setTitle(title);
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET TERMIN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return fb;
+    }
+    public static List<FullCalendarEventBean> getallFreieTermineRes() {//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+
+        List<FullCalendarEventBean> fb = new ArrayList<FullCalendarEventBean>();
+
+        if (con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, termin.MitarbeiterMacherID AS id, M1.kalenderfarbe, termin.Beschreibung, M2.vorname AS eintrager " +
+                                "FROM termin " +
+                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID ";
+
+
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+                    String terminstart = result.getString("Terminstart");
+                    String terminende = result.getString("Terminende");
+                    DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start = null;
+                    Date end = null;
+                    try {
+                        start = dateFormat.parse(terminstart);
+                        end = dateFormat.parse(terminende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setStart(start);
+                    temp.setResourceId(result.getInt("id") + "");
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    String beschreibung = result.getString("Beschreibung");
+                    String eintrager = result.getString("eintrager");
+                    int terminID = result.getInt("TerminID");
+                    title = beschreibung + " ; " + eintrager + " ; " + terminID;
                     temp.setTitle(title);
                     fb.add(temp);
 
