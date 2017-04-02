@@ -541,7 +541,7 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO termin(MitarbeiterMacherID, Beschreibung, Terminstart, Terminende, MitarbeiterSchreiberID) VALUES(" +
+                        "INSERT INTO freieTermine(MitarbeiterMacherID, Beschreibung, Terminstart, Terminende, MitarbeiterSchreiberID) VALUES(" +
                                 "'"+MitarbeiterID+"','"+Beschreibung+"','"+start+"','"+end+"','"+eintrager+"')";
                 query.executeUpdate(sql);
             }catch(SQLException e){
@@ -2349,8 +2349,8 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT termin.TerminID, termin.Terminstart, termin.Terminende, termin.MitarbeiterMacherID AS id, M1.kalenderfarbe, termin.Beschreibung, M2.vorname AS eintrager " +
-                                "FROM termin " +
+                        "SELECT freieTermine.TerminID, freieTermine.Terminstart, freieTermine.Terminende, freieTermine.MitarbeiterMacherID AS id, M1.kalenderfarbe, freieTermine.Beschreibung, M2.vorname AS eintrager " +
+                                "FROM freieTermine " +
                                 "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
                                 "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID ";
 

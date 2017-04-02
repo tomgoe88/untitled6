@@ -354,67 +354,71 @@
 
     <b:modal id="amodal" title="Neuer Termin" styleClass="modalPseudoClass">
         <div>
-            <h:form id="mordalForm">
 
-                <b:panelGrid columns="2" >
-                    <h:outputLabel value="Name des Mitarbeiters"/>
+                    <h:form id="mordalForm">
 
-                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
-                    <h:outputLabel value="Terminart: "></h:outputLabel>
-                    <b:selectOneMenu value="#{kalenderHelfer.terminart}">
-                        <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
-                        <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
-                        <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
-                        <f:selectItem value="Neuer Trainingsplan" itemLabel="Neuer Trainingsplan"
-                                      itemValue="Neuer Trainingsplan"/>
-                        <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
-                    </b:selectOneMenu>
-                    <h:outputLabel value="Startdatum: "/>
-                    <b:dateTimePicker value="#{kalenderHelfer.start}">
+                        <b:panelGrid columns="2" >
+                            <h:outputLabel value="Name des Mitarbeiters"/>
 
-                    </b:dateTimePicker>
-                    <h:outputLabel value="Enddatum: "/>
-                    <b:dateTimePicker value="#{kalenderHelfer.end}">
+                            <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+                            <h:outputLabel value="Terminart: "></h:outputLabel>
+                            <b:selectOneMenu value="#{kalenderHelfer.terminart}">
+                                <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
+                                <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
+                                <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
+                                <f:selectItem value="Neuer Trainingsplan" itemLabel="Neuer Trainingsplan"
+                                              itemValue="Neuer Trainingsplan"/>
+                                <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
+                            </b:selectOneMenu>
+                            <h:outputLabel value="Startdatum: "/>
+                            <b:dateTimePicker value="#{kalenderHelfer.start}">
 
-                    </b:dateTimePicker>
-                    <h:outputLabel value="Kunde: "></h:outputLabel>
-                    <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
+                            </b:dateTimePicker>
+                            <h:outputLabel value="Enddatum: "/>
+                            <b:dateTimePicker value="#{kalenderHelfer.end}">
 
-                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
-                        <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
-                                       itemValue="#{ku.kundeID}"/>
+                            </b:dateTimePicker>
+                            <h:outputLabel value="Kunde: "></h:outputLabel>
+                            <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
 
-                    </b:selectOneMenu>
-                    <h:outputLabel id="beschreibung" value="Beschreibung: "/>
-                    <b:inputText name="beschreibung" for="beschreibung"/>
-                    <h:outputLabel value="Einträger: "/>
-                    <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
-                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
-                                       itemValue="#{mitarb.mitarbeiterID}"/>
-                    </b:selectOneMenu>
-                    <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate()" />
-                    <h:outputScript>
+                                <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
+                                <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
+                                               itemValue="#{ku.kundeID}"/>
 
-                        function useCurrentDate() {
-                        $('#amodal').modal('hide');
-                        $(document).ready(function() {
-                        $('#calendar').fullCalendar('refetchEventSources', sources);
+                            </b:selectOneMenu>
+                            <h:outputLabel id="beschreibung" value="Beschreibung: "/>
+                            <b:inputText name="beschreibung" for="beschreibung"/>
+                            <h:outputLabel value="Einträger: "/>
+                            <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
+                                <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
+                                               itemValue="#{mitarb.mitarbeiterID}"/>
+                            </b:selectOneMenu>
+                            <b:button value="close" dismiss="modal" onclick="return false;"/>
+                            <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate()" />
+                            <h:outputScript>
 
-
-                        })}
+                                function useCurrentDate() {
+                                $('#amodal').modal('hide');
+                                $(document).ready(function() {
+                                $('#calendar').fullCalendar('refetchEventSources', sources);
 
 
-
-
-                    </h:outputScript>
+                                })}
 
 
 
 
-                </b:panelGrid>
+                            </h:outputScript>
 
-            </h:form>
+
+
+
+                        </b:panelGrid>
+
+                    </h:form>
+
+
+
         </div>
 
     </b:modal>
