@@ -2351,8 +2351,8 @@ public class SQLHelper{
                 String sql =
                         "SELECT freieTermine.TerminID, freieTermine.Terminstart, freieTermine.Terminende, freieTermine.MitarbeiterMacherID AS id, M1.kalenderfarbe, freieTermine.Beschreibung, M2.vorname AS eintrager " +
                                 "FROM freieTermine " +
-                                "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
-                                "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID ";
+                                "INNER JOIN mitarbeiter M1 ON freieTermine.MitarbeiterMacherID = M1.MitarbeiterID " +
+                                "INNER JOIN mitarbeiter M2 ON freieTermine.MitarbeiterSchreiberID = M2.MitarbeiterID ";
 
 
                 ResultSet result = query.executeQuery(sql);

@@ -708,20 +708,11 @@ public class KalenderHelfer {
 
 
 
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibungFreierTermin");
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
 
         SQLHelper.neuerFreierTermin(mitarbeit.getMitarbeiterID(),beschreibung,start.toString(),end.toString(), eintrager);
         System.out.println("Der Freier Termin wurde angelegt angeblich");
-        int terminidmax= SQLHelper.getMaxTerminID();
 
-
-
-        for ( Mitarbeiter m: this.mitarbeiter){
-            if(m.getMitarbeiterID()!=mitarbeit.getMitarbeiterID()){
-                SQLHelper.newSperrzeit(m.getMitarbeiterID(),start.toString(),end.toString(),mitarbeit.getMitarbeiterID(),terminidmax);
-            }
-
-        }
 
         beschreibung=null;
 
