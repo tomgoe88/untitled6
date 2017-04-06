@@ -52,7 +52,9 @@
                     <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Krankheitszeiten" href="#{pageChanger.pageKrankheitszeit}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Unizeiten" href="#{pageChanger.pageUnizeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:commandButton value="Logout" action="#{pageChanger.goLogout}"/>
                 </b:navbarLinks>
+
             </b:navBar>
         </h:form>
     </ui:composition>

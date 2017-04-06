@@ -29,6 +29,7 @@ public class PageChanger implements Serializable {
     private String pageKrankheitszeit;
     private String pageUnizeiten;
     private String pageTest;
+    private String logout;
     private static boolean tempBool= false;
     private boolean passwordBool;
     private Mitarbeiter angemeldet;
@@ -152,6 +153,24 @@ public class PageChanger implements Serializable {
         return angemeldet;
     }
 
+    public String getLogout() {
+        HttpSession session = SessionUtils.getSession();
+        session.setAttribute("username", null);
+        logout = "/login.xhtml";
+        return logout;
+    }
+    public String goLogout(){
+        String log;
+        HttpSession session = SessionUtils.getSession();
+        session.setAttribute("username", null);
+        log = "/login.xhtml";
+        return log;
+    }
+
+    public void setLogout(String logout) {
+        this.logout = logout;
+    }
+
     public void setAngemeldet(Mitarbeiter angemeldet) {
         this.angemeldet = angemeldet;
     }
@@ -200,6 +219,7 @@ public class PageChanger implements Serializable {
         }
         return login;
     }
+
 
 
         public String getPageIndex(){
