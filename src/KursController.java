@@ -4,6 +4,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -25,6 +26,7 @@ public class KursController {
     private String eingetragenerKurs;
     private String eingetrageneMA;
     private int kundenID;
+    private String javaScriptDate;
     private KundenController kundenController;
 
     public KursController(){
@@ -162,6 +164,12 @@ public class KursController {
 
         SQLHelper.newKurs(kursbezeichnung,kursstart.toString(),kursende.toString(),q);
     }
+    public void resourceGetMaId(){
+        String resID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        q= Integer.parseInt(resID);
+
+        System.out.println(resID+"   So ist die ResId");
+    }
 
     public Date getKursstart() {
         return kursstart;
@@ -216,6 +224,18 @@ public class KursController {
         kursstart= calendar.getTime();
         kursende=c2.getTime();
     }
+    public void resGetKursDate(){
+        String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        Calendar c2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
+        c2.add(Calendar.HOUR_OF_DAY,1);
+        kursstart= calendar.getTime();
+        kursende=c2.getTime();
+
+        System.out.println(kursstart+"   So ist das Start-Datum");
+    }
     public void newKursbezeichnung(){
         String vorname = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("kursBZ");
         SQLHelper.newKursbezeichnung(vorname);
@@ -235,7 +255,32 @@ public class KursController {
         this.kursID= terminspilt[2];
 
     }
+    public void resourceGetEvent(){
+        String texten = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        String [] terminspilt= texten.split(" ; ");
+
+        this.kursID=terminspilt[0];
+        this.eingetragenerKurs=terminspilt[1];
+
+        System.out.println(texten);
+
+    }
     public void neuerTeilnehmer(){
         SQLHelper.neuerTeilnehmer(Integer.parseInt(kursID),kundenID);
+    }
+    public String getJavaScriptDate() {
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        if(kursstart!=null){
+            javaScriptDate = "'"+simpleDateFormat.format(kursstart)+"'";
+        }else{
+            javaScriptDate = "'"+simpleDateFormat.format(new Date())+"'";
+        }
+
+
+        //  javaScriptDate= buf.toString();
+        System.out.println("JavaScriptDate=   "+ javaScriptDate);
+        return javaScriptDate;
     }
 }

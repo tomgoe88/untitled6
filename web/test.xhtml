@@ -38,7 +38,7 @@
 <!-- weiter sollte auf Deutsch gesetzt werden-->
 
 <h:body onload="$(document).ready(function() {
-                        $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                        $('#calendar').fullCalendar('gotoDate', #{kursController.javaScriptDate});
                         })
                         ">
     <ui:insert name="header">
@@ -113,8 +113,19 @@
 
                         // put your options and callbacks here
                         defaultView: 'agendaDay',
-                        events: #{resourceController.arbeitszeiten},
-                        resources: #{resourceController.resources}
+                        events: #{resourceController.kurse},
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
+
+                        }
+
+
                         })
 
                         });
@@ -130,14 +141,17 @@
 
 
                     <b:remoteCommand name="dateSelect" id="getDayDate"
-                                     actionListener="#{kalenderHelfer.resourcegetArbeitszeit}"
+                                     actionListener="#{kursController.resGetKursDate}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="selectResource" id="idCommand"
-                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
+                                     actionListener="#{kursController.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
                                      actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
                                      update="aufgabenformer" parameters="initialValue" />
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
+                                     actionListener="#{kursController.resourceGetEvent}"
+                                     update="mordalForm2" parameters="initialValue" />
 
 
                 </h:form>
@@ -149,16 +163,16 @@
 
                     <b:row>
                         <b:column span="12">
-                            <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
+                            <b:dataTable value="#{kursController.kursbezeichnungen}" var="kursbe"
                             >
-                                <b:dataTableColumn label="Beschreibung" >
-                                    <h:outputText value="#{aufga.beschreibung}"/>
+                                <b:dataTableColumn label="Kursbezeichnung" >
+                                    <h:outputText value="#{kursbe}"/>
                                 </b:dataTableColumn>
 
                             </b:dataTable>
 
                         </b:column>
-                        <b:commandButton value="Neue Aufgabe" onclick="javascript:$('#aufgabenIDMordal').modal('show');return false;"/>
+                        <b:commandButton value="Neuer Kurs" onclick="javascript:$('#aufgabenIDMordal').modal('show');return false;"/>
 
                     </b:row>
                 </h:form>
@@ -169,23 +183,15 @@
         </b:row>
 
     </b:container>
-    <b:modal id="aufgabenIDMordal" title="Aufgabe" styleClass="modalPseudoClass">
+    <b:modal id="aufgabenIDMordal" title="Kursbezeichnung" styleClass="modalPseudoClass">
         <div>
             <h:form id="erledigungsForm">
 
                 <b:panelGrid columns="1">
-                    <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
-                    <b:inputText id="aufgabe" name="aufgabenname"/>
-                    <h:outputText id="af" value="Wöchentlich wiederholen? "/>
-                    <p:selectBooleanButton id="af1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein"
-                                           style="width:60px"/>
+                    <h:outputText value="Kursbezeichnung: " for="kursbeze"></h:outputText>
+                    <b:inputText id="kursbeze" name="kursBZ"/>
 
-                    <div class="knob-container ui-corner-all">
-                        <p:knob value="#{kalenderHelfer.temp}">
-                            <p:ajax listener="#{kalenderHelfer.onChangeAufgabenlaenge}"/>
-                        </p:knob>
-                    </div>
-                    <b:commandButton value="OK" onclick="ajax:kalenderHelfer.neueAufgabe();javascript:$('#aufgabenIDMordal').modal('hide');" update="aufgabenformer"/>
+                    <b:commandButton value="OK" onclick="ajax:kursController.newKursbezeichnung();javascript:$('#aufgabenIDMordal').modal('hide');" update="aufgabenformer"/>
 
                 </b:panelGrid>
 
@@ -193,9 +199,43 @@
         </div>
 
     </b:modal>
+    <b:modal id="eventContentI" title="Kursinfo" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
+                <b:panelGrid columns="2">
+                    <h:outputText value="KursID: "></h:outputText>
+                    <h:outputText value="#{kursController.kursID}"></h:outputText>
+                    <h:outputText value="Kursbezeichnung: "></h:outputText>
+                    <h:outputText value="#{kursController.eingetragenerKurs}"></h:outputText>
+                </b:panelGrid>
 
 
-    <b:modal id="amodal" title="neue Arbeitszeit" styleClass="modalPseudoClass">
+                    <b:commandButton value="Löschen" onclick="ajax:kursController.deleteKursTermin();javascript:changeAppointment()"
+                    />
+
+                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
+                    />
+                    <h:outputScript>
+                        function changeAppointment() {
+                        $('#eventContentI').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+
+
+    <b:modal id="amodal" title="Neuer Kurs" styleClass="modalPseudoClass">
         <div>
 
             <h:form id="mordalForm">
@@ -203,20 +243,27 @@
                 <b:panelGrid columns="2" >
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
-                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+                    <h:outputText value="#{kursController.mitarbeit.name}"/>
 
-                    <h:outputLabel value="Arbeitsbeginn: "/>
-                    <b:dateTimePicker value="#{kalenderHelfer.start}">
-
-                    </b:dateTimePicker>
-                    <h:outputLabel value="Enddatum: "/>
-                    <b:dateTimePicker value="#{kalenderHelfer.end}">
+                    <h:outputLabel value="Kursbeginn: "/>
+                    <b:dateTimePicker value="#{kursController.kursstart}">
 
                     </b:dateTimePicker>
+                    <h:outputLabel value="Kursende: "/>
+                    <b:dateTimePicker value="#{kursController.kursende}">
+
+                    </b:dateTimePicker>
+                    <h:outputText value="Kursbezeichnung: "/>
+                    <b:selectOneMenu id="kurswahl" value="#{kursController.kursbezeichnung}">
+                        <f:selectItems value="#{kursController.kursbezeichnungen}" var="kursb" itemLabel="#{kursb}"
+                                       itemValue="#{kursb}"/>
+
+                    </b:selectOneMenu>
+
 
 
                     <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newWorktime();javascript:useCurrentDate()" />
+                    <b:commandButton value="Ok" onclick="ajax:kursController.newKurs();javascript:useCurrentDate()" />
 
                     <h:outputScript>
 
