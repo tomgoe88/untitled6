@@ -911,6 +911,19 @@ public class KalenderHelfer {
         start= work1.getTime();
         end=work2.getTime();
     }
+    public void resourcegetArbeitszeit(){
+        String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        work1= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",
+                "Date: " + date);
+        work2=javax.xml.bind.DatatypeConverter.parseDateTime(date);;
+        work2.add(Calendar.HOUR_OF_DAY,8);
+        work2.add(Calendar.MINUTE,30);
+        start= work1.getTime();
+        end=work2.getTime();
+
+        System.out.println(start+"   So ist das Start-Datum");
+    }
     public void myUrlaubDate(String date){
         Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
         final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",

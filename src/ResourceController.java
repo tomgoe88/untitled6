@@ -9,6 +9,8 @@ import java.util.ArrayList;
 @SessionScoped
 public class ResourceController {
     private String events;
+    private String arbeitszeiten;
+    private String kurse;
     private String resources;
 
     public String getEvents() {
@@ -31,6 +33,39 @@ public class ResourceController {
 
     public void setEvents(String events) {
         this.events = events;
+    }
+
+    public String getArbeitszeiten() {
+        FullCalendarEventList fl= new FullCalendarEventList();
+        fl.getList().addAll(SQLHelper.getAllArbeitszeitenRes());
+        if(fl.getList().size()==0){
+            fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            arbeitszeiten=fl.toJson();
+        } else {
+            arbeitszeiten=fl.toJson();
+        }
+        return arbeitszeiten;
+    }
+
+    public void setArbeitszeiten(String arbeitszeiten) {
+        this.arbeitszeiten = arbeitszeiten;
+    }
+
+    public String getKurse() {
+        FullCalendarEventList fl= new FullCalendarEventList();
+        fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
+        fl.getList().addAll(SQLHelper.getAllArbeitszeitenRes());
+        if(fl.getList().size()==0){
+            fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            kurse=fl.toJson();
+        } else {
+            kurse=fl.toJson();
+        }
+        return kurse;
+    }
+
+    public void setKurse(String kurse) {
+        this.kurse = kurse;
     }
 
     public String getResources() {
