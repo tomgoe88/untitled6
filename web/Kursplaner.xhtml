@@ -9,16 +9,18 @@
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 
+
       xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
-    <meta http-equiv="refresh" content="600"/>
     <title>Facelet Title</title>
+    <meta http-equiv="refresh" content="600"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
     <script type="text/javascript" src="selectdate.js"></script>
+
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
@@ -27,263 +29,280 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
 
-</h:head>
-<h:body>
 
+
+
+</h:head>
+
+<!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
+<!-- weiter sollte auf Deutsch gesetzt werden-->
+
+<h:body onload="$(document).ready(function() {
+                        $('#calendar').fullCalendar('gotoDate', #{kursController.javaScriptDate});
+                        })
+                        ">
     <ui:insert name="header">
         <ui:include src="/hauptseite.xhtml"/>
     </ui:insert>
+    <b:container id="bigContainer" fluid="true">
+        <b:row id="terminRow" >
 
 
 
-
-    <b:container fluid="true">
+        </b:row>
         <b:row>
-            <h:form id="navform">
-
-                <b:column span="4">
-
-
-                    <p:calendar showTodayButton="true" showOn="button"
-                                locale="de"
-
-                                pattern="dd.MM.yyyy"
-                                styleClass="embed-responsive-item">
-                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
-                                update="cal"/>
-                    </p:calendar>
 
 
 
-                </b:column>
+            <b:column span="9">
+                <h:form>
+                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                                                changeDay();" />
+                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                                                changeDay();" />
+                    <h:outputScript>
+                        function changeDay() {
+                        var moment= $('#calendar').fullCalendar('getDate');
+                        defaultSelect(moment.format());
 
-                <b:column span="1"/>
-                <b:column>
-                    <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
-                        <p:ajax update="cal"/>
-                    </p:selectBooleanButton>
-
-                    <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
-
-
-                    <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
-                    <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
-
-
-                    <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
-                    <b/>
-                </b:column>
+                        }
+                    </h:outputScript>
 
 
+                    <h:outputScript >
+
+                        $(document).ready(function() {
+
+                        // page is now ready, initialize the calendar...
+
+                        $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                        header: {
+                        left: 'today',
+                        center: 'title',
+                        right: 'agendaDay,agendaFiveDays,agendaWeek,month'
+                        },
+                        views: {
+                        agendaFiveDays: {
+                        type: 'agenda',
+                        duration: { days: 5 },
+                        // views that are more than a day will NOT do this behavior by default
+                        // so, we need to explicitly enable it
+                        //groupByResource: true
+                        //// uncomment this line to group by day FIRST with resources underneath
+                        groupByDateAndResource: true
+                        },
+                        agendaWeek: {
+                        type: 'agenda',
+                        duration: { days: 7 },
+                        // views that are more than a day will NOT do this behavior by default
+                        // so, we need to explicitly enable it
+                        groupByResource: true
+                        //// uncomment this line to group by day FIRST with resources underneath
+                        //groupByDateAndResource: true
+                        }
+                        },
+                        dayClick: function(date, jsEvent, view, resourceObj) {
+                        selectDate(date);
+                        getResourceid(resourceObj.id); // setTerminShow("true");
+                        $('#amodal').modal();return false;
+
+
+                        },
+
+
+                        // put your options and callbacks here
+                        defaultView: 'agendaDay',
+                        events: #{resourceController.kurse},
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
+
+                        }
+
+
+                        })
+
+                        });
+                    </h:outputScript>
+                    <h:outputScript name="JS/eventSelector.js"></h:outputScript>
+
+
+
+
+
+                    <div id='calendar'></div>
+
+
+
+                    <b:remoteCommand name="dateSelect" id="getDayDate"
+                                     actionListener="#{kursController.resGetKursDate}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectResource" id="idCommand"
+                                     actionListener="#{kursController.resourceGetMaId}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
+                                     update="aufgabenformer" parameters="initialValue" />
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
+                                     actionListener="#{kursController.resourceGetEvent}"
+                                     update="mordalForm2" parameters="initialValue" />
+
+
+                </h:form>
+            </b:column>
+            <b:column span="3">
+
+                <h:form id="aufgabenformer">
+
+
+                    <b:row>
+                        <b:column span="12">
+                            <b:dataTable value="#{kursController.kursbezeichnungen}" var="kursbe"
+                            >
+                                <b:dataTableColumn label="Kursbezeichnung" >
+                                    <h:outputText value="#{kursbe}"/>
+                                </b:dataTableColumn>
+
+                            </b:dataTable>
+
+                        </b:column>
+                        <b:commandButton value="Neuer Kurs" onclick="javascript:$('#aufgabenIDMordal').modal('show');return false;"/>
+
+                    </b:row>
+                </h:form>
+            </b:column>
+        </b:row>
+        <b:row>
+
+        </b:row>
+
+    </b:container>
+    <b:modal id="aufgabenIDMordal" title="Kursbezeichnung" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="erledigungsForm">
+
+                <b:panelGrid columns="1">
+                    <h:outputText value="Kursbezeichnung: " for="kursbeze"></h:outputText>
+                    <b:inputText id="kursbeze" name="kursBZ"/>
+
+                    <b:commandButton value="OK" onclick="ajax:kursController.newKursbezeichnung();javascript:$('#aufgabenIDMordal').modal('hide');" update="aufgabenformer"/>
+
+                </b:panelGrid>
 
             </h:form>
-        </b:row>
-        <h:form id="cal">
-            <b:row>
-                <b:column span="5">
-                    <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
-                        <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
-                    </h:outputText>
-                </b:column>
-            </b:row>
-            <b:row>
-                <b:column span="12">
+        </div>
 
-
-                </b:column>
-            </b:row>
-            <b:row>
-
-                <b:column colLg="11">
-
-                    <b:fullCalendar
-                            height="#{pageResizer.size}"
-                            lang="de"
-                            calendarHeader="false"
-                            defaultView="#{kalenderHelfer.changeAgenda}"
-                            events="#{kursController.kurplanKurse}"
-
-                            dayClick="
-                                                        function(date, jsEvent, view) {
-                                                        selectDate(date);
-                                                        PF('urlaubszeitWigdet').show();
-                                                        }"
-                            eventClick="
-                                                        function(calEvent, jsEvent, view) {
-                                                        test(calEvent);
-                                                        PF('testVar').show();
-                                                        }"
-                            defaultDate="#{kalenderHelfer.theDefaultDate}">
-                    </b:fullCalendar>
-                </b:column>
-                <b:column colLg="1">
-                    <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
-                    <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
-                </b:column>
-            </b:row>
-            <b:tabView >
-                <b:tab title="Kursbezeichnungen" rendered="#{pageChanger.angemeldet.admin==true}">
-            <b:row>
-                <b:column>
-                    <p:commandButton value="neue Kursbezeichnung" oncomplete="PF('kursbezeichnungan').show();"/>
-                </b:column>
-                <p:dataTable value="#{kursController.kursbezeichnungen}" var="kursbez">
-                    <p:column headerText="Kursbezeichnung">
-                        <h:outputText value="#{kursbez}"></h:outputText>
-                    </p:column>
-                    <p:column rendered="#{pageChanger.angemeldet.admin==true}" >
-                        <p:commandButton value="X" action="#{kursController.deleteKurs(kursbez)}" update="cal urlaubszeitfenster"/>
-                    </p:column>
-                </p:dataTable>
-            </b:row>
-                </b:tab>
-                <b:tab title="Kurstermine">
-                    <b:row>
-                        <b:column>
-                            <p:commandButton value="neue Kursbezeichnung" oncomplete="PF('kursbezeichnungan').show();"/>
-                        </b:column>
-                        <p:dataTable value="#{kursController.kurseList}" var="kursinList">
-                            <p:column headerText="Kursbezeichnung">
-                                <h:outputText value="#{kursinList.kursbezeichnung}"></h:outputText>
-                            </p:column>
-                            <p:column headerText="Tag">
-                                <h:outputText value="#{kursinList.kursstart}">
-                                    <f:convertDateTime pattern="dd.MM.yyyy"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Kursbeginn">
-                                <h:outputText value="#{kursinList.kursstart}">
-                                    <f:convertDateTime pattern="HH:mm"/>
-                                </h:outputText>
-
-                            </p:column>
-                            <p:column headerText="Kursende">
-                            <h:outputText value="#{kursinList.kursende}">
-                                <f:convertDateTime pattern="HH:mm"/>
-                            </h:outputText>
-                            </p:column>
-                            <p:column headerText="Teilnehmer">
-                                <p:selectOneMenu id="teil" >
-                                    <f:selectItems value="#{kursinList.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
-                                                   itemValue="#{mi.kundeID}"/>
-                                    <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                                </p:selectOneMenu>
-                            </p:column>
-                            <p:column headerText="Teilnehmeranzahl">
-                                <h:outputText value="#{kursinList.teilnehmeranzahl}">
-
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </b:row>
-                </b:tab>
-
-            </b:tabView>
-        </h:form>
-    </b:container>
-
-
-    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-        <h:form id="urlaubszeitfenster">
-            <p:panelGrid columns="2" id="eventDetails">
-                <h:outputLabel value="Mitarbeiter: "></h:outputLabel>
-                <p:selectOneMenu id="mitauswahl" value="#{kursController.q}" styleClass="col-lg-12" >
-                    <f:selectItems value="#{kursController.mitarbeiterList}" var="mi" itemLabel="#{mi.name}"
-                                   itemValue="#{mi.mitarbeiterID}"/>
-                    <p:ajax event="valueChange" update="cal"/>
-                </p:selectOneMenu>
-                <h:outputText value="Kursbezeichnung: "/>
-                <p:selectOneMenu id="kurswahl" value="#{kursController.kursbezeichnung}" styleClass="col-lg-12" >
-                    <f:selectItems value="#{kursController.kursbezeichnungen}" var="kursb" itemLabel="#{kursb}"
-                                   itemValue="#{kursb}"/>
-                    <p:ajax event="valueChange" update="cal"/>
-                </p:selectOneMenu>
-                <h:outputText id="Start" value="Kursbeginn: "/>
-                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de" showOn="button"
-                            value="#{kursController.kursstart}">
-                    <p:ajax event="dateSelect" listener="#{kursController.kursstartDate}"/>
-                </p:calendar>
-                <h:outputText id="End" value="Kursende: "/>
-                <p:calendar
-                        widgetVar="endDate"
-                        showOn="button"
-                        name="end"
-                        for="End"
-                        pattern="MM/dd/yyyy HH:mm"
-                        locale="de"
-                        value="#{kursController.kursende}">
-                    <p:ajax event="dateSelect" listener="#{kursController.kursEndeDate}"/>
-                </p:calendar>
-                <b/>
-                <p:commandButton action="#{kursController.newKurs}" value="go for it" update="cal"
-                                 oncomplete="PF('urlaubszeitWigdet').hide();" styleClass="btn"/>
-            </p:panelGrid>
-            <pe:remoteCommand id="urlaubszeitCommand" name="dateSelect" process="@this" update="urlaubszeitfenster"
-                              actionListener="#{kursController.myKursDate}">
-                <pe:methodSignature parameters="java.lang.String"/>
-                <pe:methodParam name="dateEvent">
-                </pe:methodParam>
-            </pe:remoteCommand>
-            <script type="text/javascript" src="selectdate.js"></script>
-        </h:form>
-    </p:dialog>
-    <p:dialog widgetVar="kursbezeichnungan" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-        <h:form id="kursbezeichnungForm">
-            <b:inputText name="kursBZ" />
-            <p:commandButton value="anlegen" action="#{kursController.newKursbezeichnung}" update="cal urlaubszeitfenster"  oncomplete="PF('kursbezeichnungan').hide();"/>
-        </h:form>
-    </p:dialog>
-
-    <p:dialog id="formId" widgetVar="testVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
-        <h:form id="ding">
-            <b:container>
+    </b:modal>
+    <b:modal id="eventContentI" title="Kursinfo" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
                 <b:panelGrid columns="2">
                     <h:outputText value="KursID: "></h:outputText>
                     <h:outputText value="#{kursController.kursID}"></h:outputText>
                     <h:outputText value="Kursbezeichnung: "></h:outputText>
                     <h:outputText value="#{kursController.eingetragenerKurs}"></h:outputText>
-                    <h:outputText value="Kursleiter: "></h:outputText>
-                    <h:outputText value="#{kursController.eingetrageneMA}"></h:outputText>
                 </b:panelGrid>
 
-                <pe:remoteCommand id="myCommand" name="sendEvent" process="@this" update="ding"
-                                  actionListener="#{kursController.myEvent}">
-                    <pe:methodSignature parameters="java.lang.String"/>
-                    <pe:methodParam name="event">
-                    </pe:methodParam>
-                </pe:remoteCommand>
-                <h:outputScript name="JS/kursEvent.js"></h:outputScript>
 
-                <b:commandButton value="OK" update="cal"
-                                 oncomplete="PF('testVar').hide();"/>
-                <b:commandButton value="Löschen" action="#{kursController.deleteKursTermin}" update="cal"
-                                 oncomplete="PF('testVar').hide();"/>
-                <b:commandButton value="Teilnehmer" update="cal"
-                                 oncomplete="PF('testVar').hide(); PF('teilnehmerVar').show();"/>
-            </b:container>
-        </h:form>
-    </p:dialog>
-    <p:dialog id="teilnehmerID" widgetVar="teilnehmerVar" header="Termininfos" showEffect="clip" hideEffect="clip" responsive="true">
-        <h:form id="teilnehmerForm">
-            <b:container>
-                <b:panelGrid columns="2">
-                    <h:outputText value="Neuer Teilnehmer: "></h:outputText>
-                    <p:selectOneMenu id="teilnehmer" value="#{kursController.kundenID}"  >
-                        <f:selectItems value="#{kursController.kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
-                                       itemValue="#{mi.kundeID}"/>
-                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                    </p:selectOneMenu>
+                <b:commandButton value="Löschen" onclick="ajax:kursController.deleteKursTermin();javascript:changeAppointment()"
+                />
+
+                <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
+                />
+                <h:outputScript>
+                    function changeAppointment() {
+                    $('#eventContentI').modal('hide');
+                    $(document).ready(function() {
+                    $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                    })}
+
+
+
+
+                </h:outputScript>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+
+
+    <b:modal id="amodal" title="Neuer Kurs" styleClass="modalPseudoClass">
+        <div>
+
+            <h:form id="mordalForm">
+
+                <b:panelGrid columns="2" >
+                    <h:outputLabel value="Name des Mitarbeiters"/>
+
+                    <h:outputText value="#{kursController.mitarbeit.name}"/>
+
+                    <h:outputLabel value="Kursbeginn: "/>
+                    <b:dateTimePicker value="#{kursController.kursstart}">
+
+                    </b:dateTimePicker>
+                    <h:outputLabel value="Kursende: "/>
+                    <b:dateTimePicker value="#{kursController.kursende}">
+
+                    </b:dateTimePicker>
+                    <h:outputText value="Kursbezeichnung: "/>
+                    <b:selectOneMenu id="kurswahl" value="#{kursController.kursbezeichnung}">
+                        <f:selectItems value="#{kursController.kursbezeichnungen}" var="kursb" itemLabel="#{kursb}"
+                                       itemValue="#{kursb}"/>
+
+                    </b:selectOneMenu>
+
+
+
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:commandButton value="Ok" onclick="ajax:kursController.newKurs();javascript:useCurrentDate()" />
+
+                    <h:outputScript>
+
+                        function useCurrentDate() {
+                        $('#amodal').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+
+
+
 
                 </b:panelGrid>
 
-                <b:commandButton value="Eintragen" action="#{kursController.neuerTeilnehmer}" update="cal"
-                                 oncomplete="PF('teilnehmerVar').hide();"/>
-            </b:container>
-        </h:form>
-    </p:dialog>
+            </h:form>
 
 
-    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+        </div>
+
+    </b:modal>
+
+
+
+
+
+
+
+
+
+
+
 
 
 </h:body>
