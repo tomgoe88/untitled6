@@ -223,6 +223,9 @@ public class KursController {
     public void deleteKurs(String bezeichnung){
         SQLHelper.deleteKursbezeichnung(bezeichnung);
     }
+    public void deleteKursTermin(){
+        SQLHelper.deleteKurs(Integer.parseInt(kursID));
+    }
     public void myEvent(String texten){
 
         String [] terminspilt= texten.split(" ; ");

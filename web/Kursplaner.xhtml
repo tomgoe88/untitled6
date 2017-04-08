@@ -255,6 +255,10 @@
                 <h:outputScript name="JS/kursEvent.js"></h:outputScript>
 
                 <b:commandButton value="OK" update="cal"
+                                 oncomplete="PF('testVar').hide();"/>
+                <b:commandButton value="Löschen" action="#{kursController.deleteKursTermin}" update="cal"
+                                 oncomplete="PF('testVar').hide();"/>
+                <b:commandButton value="Teilnehmer" update="cal"
                                  oncomplete="PF('testVar').hide(); PF('teilnehmerVar').show();"/>
             </b:container>
         </h:form>

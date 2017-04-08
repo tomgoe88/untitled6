@@ -43,7 +43,8 @@
                     <h:outputLabel value="Loginmaske"/>
                     <b/>
                     <h:outputLabel value="Name: "></h:outputLabel>
-                    <b:inputText name="benutzername">
+                    <b:inputText name="benutzername" typeahead="true"
+                                 typeahead-values="#{mitarbeiterController.mitarbeiterList}">
                         <f:facet name="append">
                             <b:icon name="user"></b:icon>
                         </f:facet>
@@ -62,7 +63,8 @@
                     <h:outputLabel value="Passworteingabe"/>
                     <b/>
                     <h:outputLabel value="Name: "></h:outputLabel>
-                    <b:inputText name="loginname" >
+                    <b:inputText name="loginname" typeahead="true"
+                                 typeahead-values="#{mitarbeiterController.mitarbeiterList}">
                         <f:facet name="append">
                             <b:icon name="user"></b:icon>
                         </f:facet>

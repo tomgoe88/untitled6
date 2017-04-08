@@ -1819,6 +1819,23 @@ public class SQLHelper{
             }
         }
     }
+    public static void deleteKurs(int kursID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM kurse WHERE KursID='"+kursID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Delete Kurs//SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
     public static void deleteKrank(int krankID){
         con = getInstance();
         if(con != null) {
@@ -2529,7 +2546,7 @@ public class SQLHelper{
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor("red");
-                    temp.setTitle(result.getInt("KursID")+" "+result.getString("Kursbezeichnung"));
+                    temp.setTitle(result.getInt("KursID")+ " ; " +result.getString("Kursbezeichnung"));
 
                     fb.add(temp);
 

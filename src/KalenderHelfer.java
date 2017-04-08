@@ -833,17 +833,25 @@ public class KalenderHelfer {
         String texten = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
             terminErledigtTest=false;
             String [] terminspilt= texten.split(" ; ");
-            this.eingetragenTerminart= terminspilt[0];
-            this.eingetragenVorname=terminspilt[1];
-            this.eingetragenNachname=terminspilt[2];
-            this.eingetrageneTelefonnummer=terminspilt[3];
-            this.eignetrageneBeschreibung=terminspilt[4];
-            this.eingetragenEintraeger=terminspilt[5];
-            this.terminID= Integer.parseInt(terminspilt[6]);
-            this.text= texten;
-            if(eignetrageneBeschreibung.equals("Dieser Termin ist abgeschlossen")){
-                this.terminErledigtTest=true;
+            if(terminspilt.length==2){
+
+                    this.terminErledigtTest=true;
+                    this.eignetrageneBeschreibung= "Kurs: "+ terminspilt[1];
+
+            }else {
+                this.eingetragenTerminart= terminspilt[0];
+                this.eingetragenVorname=terminspilt[1];
+                this.eingetragenNachname=terminspilt[2];
+                this.eingetrageneTelefonnummer=terminspilt[3];
+                this.eignetrageneBeschreibung=terminspilt[4];
+                this.eingetragenEintraeger=terminspilt[5];
+                this.terminID= Integer.parseInt(terminspilt[6]);
+                this.text= texten;
+                if(eignetrageneBeschreibung.equals("Dieser Termin ist abgeschlossen")){
+                    this.terminErledigtTest=true;
+                }
             }
+
             System.out.println(texten);
 
     }
