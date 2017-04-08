@@ -684,6 +684,10 @@ public class KalenderHelfer {
                 }
             }*//*
         }*/
+        if(mitarbeit== null){
+            PageChanger pC= new PageChanger();
+            mitarbeit= pC.getAngemeldet();
+        }
 
         SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
         System.out.println("Der Termin wurde angelegt angeblich");
