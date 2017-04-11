@@ -26,6 +26,9 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+
+
+    <h:outputScript name="fullcalendar-scheduler/lib/fullcalendar.print.min.css"/>
 </h:head>
 <h:body onload="$(document).ready(function() {
                         $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
@@ -54,6 +57,7 @@
 
                 }
             </h:outputScript>
+            <b:commandButton onclick="printPage();return false" value="Kalender drucken"/>
 
 
             <h:outputScript >
@@ -68,6 +72,11 @@
                 left: 'resourceDay',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
+                },
+                view: {
+                agendaDay: {
+                titleFormat: 'dddd   DD.MM.YYYY'
+                }
                 },
                 dayClick: function(date, jsEvent, view) {
                 selectDate(date);
@@ -96,7 +105,14 @@
                 });
             </h:outputScript>
             <h:outputScript name="JS/eventSelector.js"></h:outputScript>
+            <h:outputScript>
+                function printPage() {
 
+                window.print();
+
+                }
+
+            </h:outputScript>
 
 
 
@@ -498,6 +514,7 @@
         </div>
 
     </b:modal>
+
 
 
 

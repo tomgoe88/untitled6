@@ -206,7 +206,7 @@ public class PageChanger implements Serializable {
                         HttpSession session = SessionUtils.getSession();
                         session.setAttribute("username", m.getName());
 
-                        login="welcom";
+                        login="index";
                         break;
                     }
                     else {
@@ -262,7 +262,7 @@ public class PageChanger implements Serializable {
                 tempBool=false;
                 HttpSession session = SessionUtils.getSession();
                 session.setAttribute("username", m.getName());
-                login="hauptseite";
+                login="index";
                 break;
             }
         }
