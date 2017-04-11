@@ -2459,6 +2459,55 @@ public class SQLHelper{
 
         return fb;
     }
+    public static List<FullCalendarEventBean> getPlanerAllArbeitszeitenRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
+        con = getInstance();
+        List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM arbeitszeiten " +
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID";
+
+                ResultSet result = query.executeQuery(sql);
+
+
+                while (result.next()) {
+                    FullCalendarEventBean temp = new FullCalendarEventBean();
+
+                    String schichtbeginn=result.getString("Schichtbeginn");
+                    String schichtende=result.getString("Schichtende");
+                    DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    //DateFormat dateFormat=DateFormat.getDateTimeInstance();
+                    Date start=null;
+                    Date end= null;
+                    try {
+                        start= dateFormat.parse(schichtbeginn);
+                        end= dateFormat.parse(schichtende);
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    temp.setResourceId(result.getInt("MitarbeiterID")+"");
+                    temp.setStart(start);
+                    temp.setEnd(end);
+                    temp.setColor(result.getString("kalenderfarbe"));
+                    temp.setTitle("Arbeiteszeit");
+                    fb.add(temp);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET ARBEITSZEITEN //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+        return fb;
+    }
     public static List<FullCalendarEventBean> getUrlaubszeitenRes(){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();

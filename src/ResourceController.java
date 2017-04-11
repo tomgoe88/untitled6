@@ -37,7 +37,7 @@ public class ResourceController {
 
     public String getArbeitszeiten() {
         FullCalendarEventList fl= new FullCalendarEventList();
-        fl.getList().addAll(SQLHelper.getAllArbeitszeitenRes());
+        fl.getList().addAll(SQLHelper.getPlanerAllArbeitszeitenRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             arbeitszeiten=fl.toJson();

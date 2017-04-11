@@ -148,31 +148,7 @@
             </b:row>
         </b:tab>
     <b:tab title="Arbeitszeiten">
-    <b:row>
-        <h:form>
-            <b:column>
-                <h:outputLabel value="von: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
 
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateMA}"
-                            update="ma"/>
-                </p:calendar>
-                <h:outputLabel value="bis: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
-
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateMA}"
-                            update="ma"/>
-                </p:calendar>
-
-            </b:column>
-        </h:form>
-    </b:row>
 
 
     <h:form id="ma">
@@ -192,33 +168,33 @@
             </b:column>
         </b:row>
         <b:row>
-            <p:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
-                <p:column headerText="Schicht">
+            <b:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
+                <b:dataTableColumn label="Schicht">
                     <h:outputText value="#{az.schichtart}"></h:outputText>
-                </p:column>
-                <p:column headerText="Tag">
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Tag">
                     <h:outputText value="#{az.arbeitsstart}">
-                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
+                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+2"/>
                     </h:outputText>
-                </p:column>
-                <p:column headerText="Arbeitsbeginn">
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Arbeitsbeginn">
                     <h:outputText value="#{az.arbeitsstart}">
-                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
                     </h:outputText>
-                    <p:commandButton value="weniger" action="#{az.deleteStundeStart}" update="ma"/>
-                    <p:commandButton value="mehr" action="#{az.addStundeStart}" update="ma"/>
-                </p:column>
-                <p:column headerText="Arbeitsende">
+                    <b:commandButton value="-" onclick="ajax:az.deleteStundeStart()" update="ma"/>
+                    <b:commandButton value="+" onclick="ajax:az.addStundeStart()" update="ma"/>
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Arbeitsende">
                     <h:outputText value="#{az.arbeitsende}">
-                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
                     </h:outputText>
-                    <p:commandButton value="weniger" action="#{az.deleteStundeEnde}" update="ma"/>
-                    <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>
-                </p:column>
-                <p:column headerText="Stunden">
+                    <b:commandButton value="+" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
+                    <b:commandButton value="+" onclick="ajax:az.addStundeEnde()" update="ma"/>
+                </b:dataTableColumn>
+                <b:dataTableColumn label="Stunden">
                     <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
-                </p:column>
-            </p:dataTable>
+                </b:dataTableColumn>
+            </b:dataTable>
             <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
             <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
         </b:row>
