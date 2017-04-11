@@ -1,5 +1,6 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import java.util.*;
 
 /**
@@ -14,7 +15,17 @@ private String fruehSchicht;
 private String spaetSchicht;
 private  String mittelSchicht;
 private String wochendendschicht;
+private String arbeitszeitID;
+
 private static Date defaultDate;
+
+    public String getArbeitszeitID() {
+        return arbeitszeitID;
+    }
+
+    public void setArbeitszeitID(String arbeitszeitID) {
+        this.arbeitszeitID = arbeitszeitID;
+    }
 
     public List<Arbeitszeit> getArbeitszeitList() {
         Date start;
@@ -41,6 +52,19 @@ private static Date defaultDate;
         }
         System.out.println(defaultDate);
         return arbeitszeitList;
+    }
+    public void resourceGetEvent(){
+        String texten = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        String [] terminspilt= texten.split(" ; ");
+
+        this.arbeitszeitID=terminspilt[0];
+
+
+        System.out.println(texten);
+
+    }
+    public void deleteArbeitszeit(){
+        SQLHelper.deleteArbeitszeit(Integer.parseInt(arbeitszeitID));
     }
 
     public void setArbeitszeitList(List<Arbeitszeit> arbeitszeitList) {

@@ -114,8 +114,18 @@
                         // put your options and callbacks here
                         defaultView: 'agendaDay',
                         events: #{resourceController.arbeitszeiten},
-                        resources: #{resourceController.resources}
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
+
+                        }
                         })
+
 
                         });
                     </h:outputScript>
@@ -138,6 +148,10 @@
                     <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
                                      actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
                                      update="aufgabenformer" parameters="initialValue" />
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
+                                     actionListener="#{arbeitszeitController.resourceGetEvent}"
+                                     update="mordalForm2" parameters="initialValue" />
+
 
 
                 </h:form>
@@ -188,6 +202,40 @@
                     <b:commandButton value="OK" onclick="ajax:kalenderHelfer.neueAufgabe();javascript:$('#aufgabenIDMordal').modal('hide');" update="aufgabenformer"/>
 
                 </b:panelGrid>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="eventContentI" title="Arbeitszeit" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
+                <b:panelGrid columns="2">
+                    <h:outputText value="ArbeitszeitID: "></h:outputText>
+                    <h:outputText value="#{arbeitszeitController.arbeitszeitID}"></h:outputText>
+                    <b/>
+                    <h:outputText value="Arbeitszeit"></h:outputText>
+                </b:panelGrid>
+
+
+                <b:commandButton value="Löschen" onclick="ajax:arbeitszeitController.deleteArbeitszeit();javascript:changeAppointment()"
+                />
+
+                <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
+                />
+                <h:outputScript>
+                    function changeAppointment() {
+                    $('#eventContentI').modal('hide');
+                    $(document).ready(function() {
+                    $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                    })}
+
+
+
+
+                </h:outputScript>
 
             </h:form>
         </div>

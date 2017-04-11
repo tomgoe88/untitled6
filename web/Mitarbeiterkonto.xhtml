@@ -44,7 +44,7 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
         </h:form>
     </b:row>
-    <b:row>            <b:column span="9">
+    <b:row>            <b:column span="8">
         <h:form>
             <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
@@ -133,181 +133,139 @@
                              update="mordalForm2" parameters="initialValue" />
 
         </h:form>
-    </b:column></b:row>
-    <b:tabView>
-        <b:tab title="Benutzerdaten">
-            <b:row>
-                <b:column>
-                    <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
-                </b:column>
-            </b:row>
-            <b:row>
-                <b:column>
-                    <p:commandButton value="Passwort ändern" oncomplete="PF('passwordchange').show();"></p:commandButton>
-                </b:column>
-            </b:row>
-        </b:tab>
-    <b:tab title="Arbeitszeiten">
+    </b:column>
+        <b:column span="4">
+            <b:tabView>
+                <b:tab title="Benutzerdaten">
+                    <h:form>
+                        <b:row>
+                            <b:column>
+                                <h:outputText value="#{pageChanger.angemeldet.name}"></h:outputText>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <b:commandButton value="Passwort ändern" onclick="$('#passwordChange').modal('show');return false;" ></b:commandButton>
+                            </b:column>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Arbeitszeiten">
 
 
 
-    <h:form id="ma">
-        <b:row>
-            <b:column>
-                <h:outputLabel value="Frühschichten: "></h:outputLabel>
-                <h:outputText value="#{pageChanger.angemeldet.fruehSchicht}"/>
-                <b/>
-                <h:outputLabel value="Mittelschichten: "></h:outputLabel>
-                <h:outputText value="#{pageChanger.angemeldet.mittelSchicht}"/>
-                <b/>
-                <h:outputLabel value="Spätschichten: "></h:outputLabel>
-                <h:outputText value="#{pageChanger.angemeldet.spaetSchicht}"/>
-                <b/>
-                <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
-                <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
-            </b:column>
-        </b:row>
-        <b:row>
-            <b:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
-                <b:dataTableColumn label="Schicht">
-                    <h:outputText value="#{az.schichtart}"></h:outputText>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Tag">
-                    <h:outputText value="#{az.arbeitsstart}">
-                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+2"/>
-                    </h:outputText>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Arbeitsbeginn">
-                    <h:outputText value="#{az.arbeitsstart}">
-                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
-                    </h:outputText>
-                    <b:commandButton value="-" onclick="ajax:az.deleteStundeStart()" update="ma"/>
-                    <b:commandButton value="+" onclick="ajax:az.addStundeStart()" update="ma"/>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Arbeitsende">
-                    <h:outputText value="#{az.arbeitsende}">
-                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
-                    </h:outputText>
-                    <b:commandButton value="+" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
-                    <b:commandButton value="+" onclick="ajax:az.addStundeEnde()" update="ma"/>
-                </b:dataTableColumn>
-                <b:dataTableColumn label="Stunden">
-                    <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
-                </b:dataTableColumn>
-            </b:dataTable>
-            <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
-            <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
-        </b:row>
-    </h:form>
-    </b:tab>
-        <b:tab title="Urlaubszeiten">
-            <b:row>
-                <h:form>
-                    <b:column>
-                        <h:outputLabel value="von: "/>
-                        <p:calendar showTodayButton="true" showOn="button"
-                                    locale="de"
+                    <h:form id="ma">
+                        <b:row>
+                            <b:column>
+                                <h:outputLabel value="Frühschichten: "></h:outputLabel>
+                                <h:outputText value="#{pageChanger.angemeldet.fruehSchicht}"/>
+                                <b/>
+                                <h:outputLabel value="Mittelschichten: "></h:outputLabel>
+                                <h:outputText value="#{pageChanger.angemeldet.mittelSchicht}"/>
+                                <b/>
+                                <h:outputLabel value="Spätschichten: "></h:outputLabel>
+                                <h:outputText value="#{pageChanger.angemeldet.spaetSchicht}"/>
+                                <b/>
+                                <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
+                                <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
+                                <b:dataTableColumn label="Schicht">
+                                    <h:outputText value="#{az.schichtart}"></h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Tag">
+                                    <h:outputText value="#{az.arbeitsstart}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+2"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Arbeitsbeginn">
+                                    <h:outputText value="#{az.arbeitsstart}">
+                                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
+                                    </h:outputText>
+                                    <b:commandButton value="-" onclick="ajax:az.deleteStundeStart()" update="ma"/>
+                                    <b:commandButton value="+" onclick="ajax:az.addStundeStart()" update="ma"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Arbeitsende">
+                                    <h:outputText value="#{az.arbeitsende}">
+                                        <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
+                                    </h:outputText>
+                                    <b:commandButton value="+" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
+                                    <b:commandButton value="+" onclick="ajax:az.addStundeEnde()" update="ma"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Stunden">
+                                    <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                            <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
+                            <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Urlaubszeiten">
 
-                                    pattern="dd.MM.yyyy"
-                                    styleClass="embed-responsive-item">
-                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateUrlaub}"
-                                    update="urma"/>
-                        </p:calendar>
-                        <h:outputLabel value="bis: "/>
-                        <p:calendar showTodayButton="true" showOn="button"
-                                    locale="de"
+                    <b:row>
+                        <h:form id="urma">
+                            <b:dataTable value="#{pageChanger.angemeldet.urlaubList}" var="mitarbeiterurlaub">
+                                <b:dataTableColumn label="Urlaubsbeginn">
+                                    <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Urlaubsende">
+                                    <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Urlaubstage">
+                                    <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </h:form>
+                    </b:row>
+                </b:tab>
 
-                                    pattern="dd.MM.yyyy"
-                                    styleClass="embed-responsive-item">
-                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateUrlaub}"
-                                    update="urma"/>
-                        </p:calendar>
+                <b:tab title="Krankheitstage">
 
-                    </b:column>
-                </h:form>
-            </b:row>
-            <b:row>
-                <h:form id="urma">
-                <p:dataTable value="#{pageChanger.angemeldet.urlaubList}" var="mitarbeiterurlaub">
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
-                    </p:column>
-                </p:dataTable>
-                </h:form>
-            </b:row>
-        </b:tab>
+                    <b:row>
+                        <h:form id="krama">
+                            <b:dataTable value="#{pageChanger.angemeldet.krankheitslist}" var="mitkrank">
+                                <b:dataTableColumn label="Krankheitsbeginn">
+                                    <h:outputText value="#{mitkrank.urlaubBeginn}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Krankheitsende">
+                                    <h:outputText value="#{mitkrank.urlaubEnde}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Krankheitstage">
+                                    <h:outputText value="#{mitkrank.urlaubstage}"/>
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </h:form>
+                    </b:row>
+                </b:tab>
+            </b:tabView>
+        </b:column>
+    </b:row>
 
-    <b:tab title="Krankheitstage">
-        <b:row>
-            <h:form>
-                <b:column>
-                    <h:outputLabel value="von: "/>
-                    <p:calendar showTodayButton="true" showOn="button"
-                                locale="de"
-
-                                pattern="dd.MM.yyyy"
-                                styleClass="embed-responsive-item">
-                        <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDateUrlaub}"
-                                update="krama"/>
-                    </p:calendar>
-                    <h:outputLabel value="bis: "/>
-                    <p:calendar showTodayButton="true" showOn="button"
-                                locale="de"
-
-                                pattern="dd.MM.yyyy"
-                                styleClass="embed-responsive-item">
-                        <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDateUrlaub}"
-                                update="krama"/>
-                    </p:calendar>
-
-                </b:column>
-            </h:form>
-        </b:row>
-        <b:row>
-            <h:form id="krama">
-                <p:dataTable value="#{pageChanger.angemeldet.krankheitslist}" var="mitkrank">
-                    <p:column>
-                        <h:outputText value="#{mitkrank.urlaubBeginn}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitkrank.urlaubEnde}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitkrank.urlaubstage}"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </b:row>
-    </b:tab>
-    </b:tabView>
 </b:container>
 
-<p:dialog id="passwordChange" widgetVar="passwordchange" header="Passwort ändern" showEffect="clip" hideEffect="clip">
+<b:modal id="passwordChange" title="Passwort ändern" styleClass="modalPseudoClass">
     <h:form id="passwordForm">
         <b:panelGrid columns="1">
             <h:outputText value="Altes Passwort: " for="altP"></h:outputText>
             <b:inputSecret id="altP" name="altP"/>
             <h:outputText value="Neues Passwort: " for="neuP"></h:outputText>
             <b:inputSecret id="neuP" name="neuP"/>
-            <b:commandButton value="Passwort ändern" action="#{mitarbeiterController.changePassword}"
-                             oncomplete="PF('passwordchange').hide();"/>
+            <b:commandButton value="Passwort ändern" onclick="ajax:mitarbeiterController.changePassword;javascript:$('#passwordChange').modal('hide');return false;"
+                             />
         </b:panelGrid>
     </h:form>
-</p:dialog>
+</b:modal>
     <b:modal id="eventContentI" title="Termininfo" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm2">

@@ -2495,7 +2495,7 @@ public class SQLHelper{
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
-                    temp.setTitle("Arbeiteszeit");
+                    temp.setTitle(result.getInt("ArbeitszeitID")+ " ; " +"Arbeitszeit");
                     fb.add(temp);
 
                 }
