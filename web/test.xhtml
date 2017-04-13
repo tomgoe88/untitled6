@@ -38,7 +38,7 @@
 <!-- weiter sollte auf Deutsch gesetzt werden-->
 
 <h:body onload="$(document).ready(function() {
-                        $('#calendar').fullCalendar('gotoDate', #{kursController.javaScriptDate});
+                        $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
                         })
                         ">
     <ui:insert name="header">
@@ -113,7 +113,7 @@
 
                         // put your options and callbacks here
                         defaultView: 'agendaDay',
-                        events: #{resourceController.kurse},
+                        events: #{resourceController.ausfallzeiten},
                         resources: #{resourceController.resources},
                         eventClick: function(calEvent, jsEvent, view) {
                         eventTitle(calEvent.title);
@@ -140,41 +140,18 @@
 
 
 
+
                     <b:remoteCommand name="dateSelect" id="getDayDate"
-                                     actionListener="#{kursController.resGetKursDate}"
+                                     actionListener="#{kalenderHelfer.resourcegetDate}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="selectResource" id="idCommand"
-                                     actionListener="#{kursController.resourceGetMaId}"
+                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
-                    <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
-                                     actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
-                                     update="aufgabenformer" parameters="initialValue" />
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
-                                     actionListener="#{kursController.resourceGetEvent}"
+                                     actionListener="#{kalenderHelfer.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />
 
 
-                </h:form>
-            </b:column>
-            <b:column span="3">
-
-                <h:form id="aufgabenformer">
-
-
-                    <b:row>
-                        <b:column span="12">
-                            <b:dataTable value="#{kursController.kursbezeichnungen}" var="kursbe"
-                            >
-                                <b:dataTableColumn label="Kursbezeichnung" >
-                                    <h:outputText value="#{kursbe}"/>
-                                </b:dataTableColumn>
-
-                            </b:dataTable>
-
-                        </b:column>
-                        <b:commandButton value="Neuer Kurs" onclick="javascript:$('#aufgabenIDMordal').modal('show');return false;"/>
-
-                    </b:row>
                 </h:form>
             </b:column>
         </b:row>
@@ -183,22 +160,7 @@
         </b:row>
 
     </b:container>
-    <b:modal id="aufgabenIDMordal" title="Kursbezeichnung" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="erledigungsForm">
 
-                <b:panelGrid columns="1">
-                    <h:outputText value="Kursbezeichnung: " for="kursbeze"></h:outputText>
-                    <b:inputText id="kursbeze" name="kursBZ"/>
-
-                    <b:commandButton value="OK" onclick="ajax:kursController.newKursbezeichnung();javascript:$('#aufgabenIDMordal').modal('hide');" update="aufgabenformer"/>
-
-                </b:panelGrid>
-
-            </h:form>
-        </div>
-
-    </b:modal>
     <b:modal id="eventContentI" title="Kursinfo" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm2">
@@ -239,31 +201,36 @@
         <div>
 
             <h:form id="mordalForm">
+                <b:panelGrid columns="1" rendered="#{terminEintragController.wert==0}">
+                    <b:selectOneMenu id="vorauswahl" value="#{terminEintragController.wert}">
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Urlaubszeit" itemValue="1"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Unizeit" itemValue="2"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Krankheitszeit" itemValue="3"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="OK"  update="mordalForm"/>
+                </b:panelGrid>
 
-                <b:panelGrid columns="2" >
+                <b:panelGrid columns="2" rendered="#{terminEintragController.wert!=0}">
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
-                    <h:outputText value="#{kursController.mitarbeit.name}"/>
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
 
-                    <h:outputLabel value="Kursbeginn: "/>
-                    <b:dateTimePicker value="#{kursController.kursstart}">
-
-                    </b:dateTimePicker>
-                    <h:outputLabel value="Kursende: "/>
-                    <b:dateTimePicker value="#{kursController.kursende}">
+                    <h:outputLabel value="Urlaubsbeginn: " rendered="#{terminEintragController.wert==1}"/>
+                    <h:outputLabel value="Unibeginn: " rendered="#{terminEintragController.wert==2}"/>
+                    <h:outputLabel value="Krankheitsbeginn: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:dateTimePicker value="#{kalenderHelfer.start}">
 
                     </b:dateTimePicker>
-                    <h:outputText value="Kursbezeichnung: "/>
-                    <b:selectOneMenu id="kurswahl" value="#{kursController.kursbezeichnung}">
-                        <f:selectItems value="#{kursController.kursbezeichnungen}" var="kursb" itemLabel="#{kursb}"
-                                       itemValue="#{kursb}"/>
+                    <h:outputLabel value="Urlaubsende: " rendered="#{terminEintragController.wert==1}"/>
+                    <h:outputLabel value="Uniende: " rendered="#{terminEintragController.wert==2}"/>
+                    <h:outputLabel value="Krankheitsende: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:dateTimePicker value="#{kalenderHelfer.end}">
 
-                    </b:selectOneMenu>
-
-
-
+                    </b:dateTimePicker>
                     <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kursController.newKurs();javascript:useCurrentDate()" />
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUrlaub();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==1}"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUni();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==2}"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newKrankheit();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==3}"/>
 
                     <h:outputScript>
 

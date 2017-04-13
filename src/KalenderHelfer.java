@@ -645,6 +645,15 @@ public class KalenderHelfer {
     }
 
     //bei click auf neuer Termin
+
+    public void newTerminNeuerKunde(){
+        /*        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+        String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");*/
+      /*  String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;*/
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibungNeuerKunde");
+        //   String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
+    }
     public void newTermin(){
         calendarBean=null;
 
@@ -712,7 +721,7 @@ public class KalenderHelfer {
 
 
 
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibungFreierTermin");
 
         SQLHelper.neuerFreierTermin(mitarbeit.getMitarbeiterID(),beschreibung,start.toString(),end.toString(), eintrager);
         System.out.println("Der Freier Termin wurde angelegt angeblich");

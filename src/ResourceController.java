@@ -12,6 +12,7 @@ public class ResourceController {
     private String arbeitszeiten;
     private String kurse;
     private String resources;
+    private String ausfallzeiten;
 
     public String getEvents() {
         FullCalendarEventList fl= new FullCalendarEventList();
@@ -31,6 +32,26 @@ public class ResourceController {
         return events;
     }
 
+    public String getAusfallzeiten() {
+        FullCalendarEventList fl= new FullCalendarEventList();
+        fl.getList().addAll(SQLHelper.getPlanerAllArbeitszeitenRes());
+        fl.getList().addAll(SQLHelper.getUniRes());
+        fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
+        fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
+        fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());
+        if(fl.getList().size()==0){
+            fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
+            ausfallzeiten=fl.toJson();
+        } else {
+            ausfallzeiten=fl.toJson();
+        }
+        return ausfallzeiten;
+    }
+
+    public void setAusfallzeiten(String ausfallzeiten) {
+        this.ausfallzeiten = ausfallzeiten;
+    }
+
     public void setEvents(String events) {
         this.events = events;
     }
@@ -38,6 +59,9 @@ public class ResourceController {
     public String getArbeitszeiten() {
         FullCalendarEventList fl= new FullCalendarEventList();
         fl.getList().addAll(SQLHelper.getPlanerAllArbeitszeitenRes());
+        fl.getList().addAll(SQLHelper.getUniRes());
+        fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
+        fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             arbeitszeiten=fl.toJson();
