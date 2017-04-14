@@ -148,7 +148,7 @@
                                      actionListener="#{kalenderHelfer.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
-                                     actionListener="#{kalenderHelfer.resourceGetEvent}"
+                                     actionListener="#{terminEintragController.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />
 
 
@@ -161,18 +161,18 @@
 
     </b:container>
 
-    <b:modal id="eventContentI" title="Kursinfo" styleClass="modalPseudoClass">
+    <b:modal id="eventContentI" title="Info" styleClass="modalPseudoClass">
         <div>
             <h:form id="mordalForm2">
                 <b:panelGrid columns="2">
-                    <h:outputText value="KursID: "></h:outputText>
-                    <h:outputText value="#{kursController.kursID}"></h:outputText>
-                    <h:outputText value="Kursbezeichnung: "></h:outputText>
-                    <h:outputText value="#{kursController.eingetragenerKurs}"></h:outputText>
+                    <h:outputText value="TerminID: "></h:outputText>
+                    <h:outputText value="#{terminEintragController.terminID}"></h:outputText>
+                    <h:outputText value="Bezeichnung: "></h:outputText>
+                    <h:outputText value="#{terminEintragController.terminBezeichnung}"></h:outputText>
                 </b:panelGrid>
 
 
-                    <b:commandButton value="Löschen" onclick="ajax:kursController.deleteKursTermin();javascript:changeAppointment()"
+                    <b:commandButton value="Löschen" onclick="ajax:terminEintragController.deleteTermin();javascript:changeAppointment()"
                     />
 
                     <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
@@ -197,7 +197,7 @@
     </b:modal>
 
 
-    <b:modal id="amodal" title="Neuer Kurs" styleClass="modalPseudoClass">
+    <b:modal id="amodal" title="Ausfallzeit" styleClass="modalPseudoClass">
         <div>
 
             <h:form id="mordalForm">

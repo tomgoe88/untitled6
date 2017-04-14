@@ -9,15 +9,18 @@
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 
+
       xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
     <title>Facelet Title</title>
+    <meta http-equiv="refresh" content="600"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
     <script type="text/javascript" src="mobiletest.js"></script>
     <script type="text/javascript" src="selectdate.js"></script>
+
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
     <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
     <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
@@ -26,204 +29,245 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
 
+
+
+
 </h:head>
-<h:body>
 
-        <ui:insert name="header">
-            <ui:include src="/hauptseite.xhtml"/>
-        </ui:insert>
+<!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
+<!-- weiter sollte auf Deutsch gesetzt werden-->
 
-
-
-
-        <b:container fluid="true">
-            <b:row>
-                <h:form id="navform">
-
-                    <b:column span="4">
-
-
-                        <p:calendar showTodayButton="true" showOn="button"
-                                    locale="de"
-
-                                    pattern="dd.MM.yyyy"
-                                    styleClass="embed-responsive-item">
-                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
-                                    update="cal"/>
-                        </p:calendar>
+<h:body onload="$(document).ready(function() {
+                        $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                        })
+                        ">
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
+    <b:container id="bigContainer" fluid="true">
+        <b:row id="terminRow" >
 
 
 
-                    </b:column>
-
-                    <b:column span="1"/>
-                    <b:column>
-                        <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
-                            <p:ajax update="cal"/>
-                        </p:selectBooleanButton>
-
-                        <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal"></p:commandButton>
+        </b:row>
+        <b:row>
 
 
-                        <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal"></p:commandButton>
-                        <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal"></p:commandButton>
+
+            <b:column span="9">
+                <h:form>
+                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                                                changeDay();" />
+                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                                                changeDay();" />
+                    <h:outputScript>
+                        function changeDay() {
+                        var moment= $('#calendar').fullCalendar('getDate');
+                        defaultSelect(moment.format());
+
+                        }
+                    </h:outputScript>
 
 
-                        <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal"></p:commandButton>
-                        <b/>
-                    </b:column>
+                    <h:outputScript >
 
+                        $(document).ready(function() {
+
+                        // page is now ready, initialize the calendar...
+
+                        $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                        header: {
+                        left: 'today',
+                        center: 'title',
+                        right: 'agendaDay,agendaFiveDays,agendaWeek,month'
+                        },
+                        views: {
+                        agendaFiveDays: {
+                        type: 'agenda',
+                        duration: { days: 5 },
+                        // views that are more than a day will NOT do this behavior by default
+                        // so, we need to explicitly enable it
+                        //groupByResource: true
+                        //// uncomment this line to group by day FIRST with resources underneath
+                        groupByDateAndResource: true
+                        },
+                        agendaWeek: {
+                        type: 'agenda',
+                        duration: { days: 7 },
+                        // views that are more than a day will NOT do this behavior by default
+                        // so, we need to explicitly enable it
+                        groupByResource: true
+                        //// uncomment this line to group by day FIRST with resources underneath
+                        //groupByDateAndResource: true
+                        }
+                        },
+                        dayClick: function(date, jsEvent, view, resourceObj) {
+                        selectDate(date);
+                        getResourceid(resourceObj.id); // setTerminShow("true");
+                        $('#amodal').modal();return false;
+
+
+                        },
+
+
+                        // put your options and callbacks here
+                        defaultView: 'agendaDay',
+                        events: #{resourceController.ausfallzeiten},
+                        resources: #{resourceController.resources},
+                        eventClick: function(calEvent, jsEvent, view) {
+                        eventTitle(calEvent.title);
+                        selectDate(calEvent.start);
+                        //butter.modal.open('eventContentI');
+                        $('#eventContentI').modal('show');return false;
+
+
+
+                        }
+
+
+                        })
+
+                        });
+                    </h:outputScript>
+                    <h:outputScript name="JS/eventSelector.js"></h:outputScript>
+
+
+
+
+
+                    <div id='calendar'></div>
+
+
+
+
+                    <b:remoteCommand name="dateSelect" id="getDayDate"
+                                     actionListener="#{kalenderHelfer.resourcegetDate}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="selectResource" id="idCommand"
+                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
+                                     update="mordalForm" parameters="initialValue" />
+                    <b:remoteCommand name="getTheEvent" id="showEventContent"
+                                     actionListener="#{terminEintragController.resourceGetEvent}"
+                                     update="mordalForm2" parameters="initialValue" />
 
 
                 </h:form>
-            </b:row>
-            <h:form id="cal">
-                <b:row>
-                    <b:column span="5">
-                        <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
-                            <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
-                        </h:outputText>
-                    </b:column>
-                </b:row>
-            <b:row>
-                <b:column span="12">
+            </b:column>
+        </b:row>
+        <b:row>
 
-                    <p:selectOneMenu id="mitauswahl" value="#{kalenderHelfer.q}" styleClass="col-lg-12" >
-                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
-                                       itemValue="#{mi.mitarbeiterID}"/>
-                        <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                        <p:ajax event="valueChange" update="cal"/>
-                    </p:selectOneMenu>
-                </b:column>
-            </b:row>
-                <b:row>
+        </b:row>
 
-                <b:column colLg="11">
-                    <b:label text="#{mit.name}"/>
-                    <b:fullCalendar
-                            height="#{pageResizer.size}"
-                            lang="de"
-                            calendarHeader="false"
-                            defaultView="#{kalenderHelfer.changeAgenda}"
-                            events="#{kalenderHelfer.mitarbeit.urlaubszeiten}"
+    </b:container>
 
-                            dayClick="
-                                                        function(date, jsEvent, view) {
-                                                        selectDate(date);
-                                                        PF('urlaubszeitWigdet').show();
-                                                        }"
-                            defaultDate="#{kalenderHelfer.theDefaultDate}">
-                    </b:fullCalendar>
-                </b:column>
-                    <b:column colLg="1">
-                        <p:commandButton value="+" action="#{pageResizer.changingPlus}" rendered="#{pageResizer.size==10}" update="cal"/>
-                        <p:commandButton value="-" action="#{pageResizer.changingMinus}" rendered="#{pageResizer.size==940}" update="cal"/>
-                    </b:column>
-                </b:row>
-                <b:row>
+    <b:modal id="eventContentI" title="Info" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="mordalForm2">
+                <b:panelGrid columns="2">
+                    <h:outputText value="TerminID: "></h:outputText>
+                    <h:outputText value="#{terminEintragController.terminID}"></h:outputText>
+                    <h:outputText value="Bezeichnung: "></h:outputText>
+                    <h:outputText value="#{terminEintragController.terminBezeichnung}"></h:outputText>
+                </b:panelGrid>
 
-                        <b:column>
-                            <h:outputLabel value="von: "/>
-                            <p:calendar showTodayButton="true" showOn="button"
-                                        locale="de"
 
-                                        pattern="dd.MM.yyyy"
-                                        styleClass="embed-responsive-item">
-                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDateUrlaubStatic}"
-                                        update="cal"/>
-                            </p:calendar>
-                            <h:outputLabel value="bis: "/>
-                            <p:calendar showTodayButton="true" showOn="button"
-                                        locale="de"
+                <b:commandButton value="Löschen" onclick="ajax:terminEintragController.deleteTermin();javascript:changeAppointment()"
+                />
 
-                                        pattern="dd.MM.yyyy"
-                                        styleClass="embed-responsive-item">
-                                <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDateUrlaubStatic}"
-                                        update="cal"/>
-                            </p:calendar>
+                <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
+                />
+                <h:outputScript>
+                    function changeAppointment() {
+                    $('#eventContentI').modal('hide');
+                    $(document).ready(function() {
+                    $('#calendar').fullCalendar('refetchEventSources', sources);
 
-                        </b:column>
-                </b:row>
-            <b:row>
-                <p:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub">
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
-                    </p:column>
-                    <p:column>
-                       <p:commandButton value="Löschen" action="#{kalenderHelfer.deleteUrlaub(mitarbeiterurlaub.urlaubsID)}" update="cal"/>
-                    </p:column>
-                </p:dataTable>
-            </b:row>
+
+                    })}
+
+
+
+
+                </h:outputScript>
+
             </h:form>
-        </b:container>
+        </div>
+
+    </b:modal>
 
 
-    <p:dialog widgetVar="urlaubszeitWigdet" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-        <h:form id="urlaubszeitfenster">
-            <p:panelGrid columns="2" id="eventDetails">
-                <h:outputLabel value="Termin für: "/>
-                <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
-                <h:outputText id="Start" value="Urlaubsstart: "/>
-                <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy" locale="de" showOn="button"
-                            value="#{kalenderHelfer.start}">
-                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
-                </p:calendar>
-                <h:outputText id="End" value="Urlaubsende: "/>
-                <p:calendar
-                        widgetVar="endDate"
-                        showOn="button"
-                        name="end"
-                        for="End"
-                        pattern="MM/dd/yyyy"
-                        locale="de"
-                        value="#{kalenderHelfer.end}">
-                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
-                </p:calendar>
-                <b/>
-                <p:commandButton action="#{kalenderHelfer.newUrlaub}" value="go for it" update="cal"
-                                 oncomplete="PF('urlaubszeitWigdet').hide();" styleClass="btn"/>
-            </p:panelGrid>
-            <pe:remoteCommand id="urlaubszeitCommand" name="dateSelect" process="@this" update="urlaubszeitfenster"
-                              actionListener="#{kalenderHelfer.myUrlaubDate}">
-                <pe:methodSignature parameters="java.lang.String"/>
-                <pe:methodParam name="dateEvent">
-                </pe:methodParam>
-            </pe:remoteCommand>
-            <script type="text/javascript" src="selectdate.js"></script>
-        </h:form>
-    </p:dialog>
-    <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
-        <h:form id="deng">
-            <b:panelGrid columns="2">
-                <h:outputLabel for="mvor" value="Voranme "/>
-                <b:inputText id="mvor" name="mitarbeitervorname"/>
-                <h:outputLabel for="mnach" value="Nachname "/>
-                <b:inputText id="mnach" name="mitarbeiternachname"/>
-                <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
-                <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
-            </b:panelGrid>
-            <p:commandButton value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('mitarbeiter').hide();" styleClass="btn"/>
-        </h:form>
-    </p:dialog>
-    <p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
-        <h:form id="aufgabenForm">
-            <b:panelGrid columns="1">
-                <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
-                <b:inputText id="aufgabe" name="aufgabenname"/>
-                <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"  oncomplete="PF('NeueAufgabe').hide();"/>
-            </b:panelGrid>
-        </h:form>
-    </p:dialog>
+    <b:modal id="amodal" title="Ausfallzeit" styleClass="modalPseudoClass">
+        <div>
+
+            <h:form id="mordalForm">
+                <b:panelGrid columns="1" rendered="#{terminEintragController.wert==0}">
+                    <b:selectOneMenu id="vorauswahl" value="#{terminEintragController.wert}">
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Urlaubszeit" itemValue="1"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Unizeit" itemValue="2"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Krankheitszeit" itemValue="3"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="OK"  update="mordalForm"/>
+                </b:panelGrid>
+
+                <b:panelGrid columns="2" rendered="#{terminEintragController.wert!=0}">
+                    <h:outputLabel value="Name des Mitarbeiters"/>
+
+                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+
+                    <h:outputLabel value="Urlaubsbeginn: " rendered="#{terminEintragController.wert==1}"/>
+                    <h:outputLabel value="Unibeginn: " rendered="#{terminEintragController.wert==2}"/>
+                    <h:outputLabel value="Krankheitsbeginn: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:dateTimePicker value="#{kalenderHelfer.start}">
+
+                    </b:dateTimePicker>
+                    <h:outputLabel value="Urlaubsende: " rendered="#{terminEintragController.wert==1}"/>
+                    <h:outputLabel value="Uniende: " rendered="#{terminEintragController.wert==2}"/>
+                    <h:outputLabel value="Krankheitsende: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:dateTimePicker value="#{kalenderHelfer.end}">
+
+                    </b:dateTimePicker>
+                    <b:commandButton value="close" dismiss="modal" onclick="ajax:terminEintragController.wertNull();javascript:useCurrentDate();" update="mordalForm"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUrlaub();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==1}"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUni();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==2}"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newKrankheit();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==3}"/>
+
+                    <h:outputScript>
+
+                        function useCurrentDate() {
+                        $('#amodal').modal('hide');
+                        $(document).ready(function() {
+                        $('#calendar').fullCalendar('refetchEventSources', sources);
+
+
+                        })}
+
+
+
+
+                    </h:outputScript>
+
+
+
+
+                </b:panelGrid>
+
+            </h:form>
+
+
+
+        </div>
+
+    </b:modal>
+
+
+
+
+
+
+
+
+
 
 
 

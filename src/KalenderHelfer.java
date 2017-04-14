@@ -31,6 +31,7 @@ import sun.security.jca.GetInstance;
 @ManagedBean
 @ViewScoped
 public class KalenderHelfer {
+    private String [] terminspilt;
     private boolean showTermineintrag;
     private boolean wocheTag;
     private int temp=0;
@@ -95,6 +96,14 @@ public class KalenderHelfer {
 
     public String getSchichtart() {
         return schichtart;
+    }
+
+    public String[] getTerminspilt() {
+        return terminspilt;
+    }
+
+    public void setTerminspilt(String[] terminspilt) {
+        this.terminspilt = terminspilt;
     }
 
     public void setSchichtart(String schichtart) {
@@ -647,21 +656,30 @@ public class KalenderHelfer {
     //bei click auf neuer Termin
 
     public void newTerminNeuerKunde(){
-        /*        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
+
+        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
-        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");*/
-      /*  String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;*/
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibungNeuerKunde");
+        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");
+
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
         //   String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
+        SQLHelper.neuerKunde(vorname,nachname,tele, null);
+        kundenID=SQLHelper.getMaxKundenID();
+        SQLHelper.neuerTermin(mitarbeit.getMitarbeiterID(),kundenID,beschreibung,terminart,start.toString(),end.toString(), eintrager);
+        System.out.println("Der Termin mit Neukunde wurde angelegt angeblich");
+        int terminidmax= SQLHelper.getMaxTerminID();
+
+
+
+        for ( Mitarbeiter m: this.mitarbeiter){
+            if(m.getMitarbeiterID()!=mitarbeit.getMitarbeiterID()){
+                SQLHelper.newSperrzeit(m.getMitarbeiterID(),start.toString(),end.toString(),mitarbeit.getMitarbeiterID(),terminidmax);
+            }
+
+        }
     }
     public void newTermin(){
         calendarBean=null;
-
-
-/*        String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
-        String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
-        String tele =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tele");*/
-      /*  String email=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailInput");;*/
         String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
      //   String title= terminart+" ; "+vorname+" ; "+nachname+" ; "+tele+" ; "+beschreibung+" ; "+eintrager;
         Kunde temoKunde=null;
@@ -721,7 +739,7 @@ public class KalenderHelfer {
 
 
 
-        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibungFreierTermin");
+        String beschreibung =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("beschreibung");
 
         SQLHelper.neuerFreierTermin(mitarbeit.getMitarbeiterID(),beschreibung,start.toString(),end.toString(), eintrager);
         System.out.println("Der Freier Termin wurde angelegt angeblich");
@@ -841,13 +859,16 @@ public class KalenderHelfer {
     public void resourceGetEvent(){
         String texten = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
             terminErledigtTest=false;
-            String [] terminspilt= texten.split(" ; ");
+            terminspilt= texten.split(" ; ");
             if(terminspilt.length==2){
 
                     this.terminErledigtTest=true;
                     this.eignetrageneBeschreibung= "Kurs: "+ terminspilt[1];
 
-            }else {
+            } else if(terminspilt.length==3){
+                this.terminErledigtTest=true;
+                this.eignetrageneBeschreibung= "Info: "+ terminspilt[0]+" von: "+terminspilt[1];
+            } else {
                 this.eingetragenTerminart= terminspilt[0];
                 this.eingetragenVorname=terminspilt[1];
                 this.eingetragenNachname=terminspilt[2];

@@ -380,13 +380,21 @@
         <div>
 
             <h:form id="mordalForm">
+                <b:panelGrid columns="1" rendered="#{terminEintragController.wert==0}">
+                    <b:selectOneMenu id="vorauswahl" value="#{terminEintragController.wert}">
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Freier Termin" itemValue="1"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Termin mit bestehendem Kunde" itemValue="2"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Termin mit Neukunde" itemValue="3"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="OK"  update="mordalForm"/>
+                </b:panelGrid>
 
-                <b:panelGrid columns="2" >
+                <b:panelGrid columns="2" rendered="#{terminEintragController.wert!=0}">
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
                     <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
-                    <h:outputLabel value="Terminart: "></h:outputLabel>
-                    <b:selectOneMenu value="#{kalenderHelfer.terminart}">
+                    <h:outputLabel value="Terminart: " rendered="#{terminEintragController.wert!=1}"></h:outputLabel>
+                    <b:selectOneMenu value="#{kalenderHelfer.terminart}" rendered="#{terminEintragController.wert!=1}">
                         <f:selectItem value="Check-up" itemLabel="Check-up" itemValue="Check-up"/>
                         <f:selectItem value="Ersteinweisung" itemLabel="Ersteinweisung" itemValue="Ersteinweisung"/>
                         <f:selectItem value="Re-Check" itemLabel="Re-Check" itemValue="Re-Check"/>
@@ -404,14 +412,28 @@
                     <b:dateTimePicker value="#{kalenderHelfer.end}">
 
                     </b:dateTimePicker>
-                    <h:outputLabel value="Kunde: "></h:outputLabel>
-                    <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}"  >
+                    <h:outputLabel value="Kunde: " rendered="#{terminEintragController.wert==2}"></h:outputLabel>
+                    <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}" rendered="#{terminEintragController.wert==2}" >
 
                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
                         <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
                                        itemValue="#{ku.kundeID}"/>
 
                     </b:selectOneMenu>
+
+                    <h:outputText id="vorname" value="Vorname: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:inputText name="vorname" for="vorname" typeahead="true" rendered="#{terminEintragController.wert==3}"
+                                 typeahead-values="#{kalenderHelfer.kundenNames}"/>
+                    <h:outputText id="nachname" value="Nachname: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:inputText name="nachname" for="nachname" typeahead="true"  rendered="#{terminEintragController.wert==3}"
+                                 typeahead-values="#{kalenderHelfer.kundeNachname}"/>
+                    <h:outputText id="tele" value="Telefonnummer: " rendered="#{terminEintragController.wert==3}"/>
+                    <b:inputText id="teleid" name="tele" for="tele"  rendered="#{terminEintragController.wert==3}">
+                        <f:validateRegex pattern="[0-9]+" />
+                        <f:ajax event="keyup" render="messages" />
+                        <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="messages"/>
+                    </b:inputText>
+
                     <h:outputLabel id="beschreibung" value="Beschreibung: "/>
                     <b:inputText name="beschreibung" for="beschreibung"/>
                     <h:outputLabel value="Einträger: "/>
@@ -419,9 +441,12 @@
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
                                        itemValue="#{mitarb.mitarbeiterID}"/>
                     </b:selectOneMenu>
-                    <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate()" />
-                    <b:commandButton value="Freier Termin" onclick="ajax:kalenderHelfer.newFreierTermin();javascript:useCurrentDate()" />
+                    <b:commandButton value="close" dismiss="modal" onclick="ajax:terminEintragController.wertNull();javascript:useCurrentDate();" update="mordalForm"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTerminNeuerKunde();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==3}" look="primary"/>
+                    <b/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==2}" look="primary"/>
+                    <b/>
+                    <b:commandButton value="Freier Termin" onclick="ajax:kalenderHelfer.newFreierTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==1}" look="primary"/>
                     <h:outputScript>
 
                         function useCurrentDate() {

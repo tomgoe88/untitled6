@@ -2545,7 +2545,7 @@ public class SQLHelper{
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
-                    temp.setTitle("Urlaub");
+                    temp.setTitle(result.getInt("UrlaubszeitID")+ " ; " +"Urlaub");
 
                     fb.add(temp);
 
@@ -2645,7 +2645,7 @@ public class SQLHelper{
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
-                    temp.setTitle("Krank");
+                    temp.setTitle(result.getInt("KrankID")+ " ; " +"Krank");
 
                     fb.add(temp);
 
@@ -2695,7 +2695,7 @@ public class SQLHelper{
                     temp.setStart(start);
                     temp.setEnd(end);
                     temp.setColor(result.getString("kalenderfarbe"));
-                    temp.setTitle("Uni");
+                    temp.setTitle(result.getInt("UniID")+ " ; " +"Uni");
 
                     fb.add(temp);
 

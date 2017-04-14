@@ -49,10 +49,8 @@
                 <b:navbarLinks pull="right">
                     <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Urlaubszeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Krankheitszeiten" href="#{pageChanger.pageKrankheitszeit}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Unizeiten" href="#{pageChanger.pageUnizeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Testseite" href="#{pageChanger.pageTest}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+                    <b:navLink value="Ausfallzeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+
                     <b:commandButton value="Logout" action="#{pageChanger.goLogout}"/>
                 </b:navbarLinks>
 
