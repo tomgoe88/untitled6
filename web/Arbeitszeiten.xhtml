@@ -82,7 +82,12 @@
                         center: 'title',
                         right: 'agendaDay,agendaFiveDays,agendaWeek,month'
                         },
+                        minTime: "06:30:00",
+                        maxTime: "23:30:00",
                         views: {
+                        agendaDay: {
+                        titleFormat: 'dddd   DD.MM.YYYY'
+                        },
                         agendaFiveDays: {
                         type: 'agenda',
                         duration: { days: 5 },
@@ -102,6 +107,8 @@
                         //groupByDateAndResource: true
                         }
                         },
+
+
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
                         getResourceid(resourceObj.id); // setTerminShow("true");
@@ -252,6 +259,13 @@
                     <h:outputLabel value="Name des Mitarbeiters"/>
 
                     <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
+                    <h:outputLabel value="Schichtart"></h:outputLabel>
+                    <b:selectOneMenu value="#{kalenderHelfer.schichtart}">
+                        <f:selectItem value="Frühschicht" itemLabel="Frühschicht" itemValue="Frühschicht"></f:selectItem>
+                        <f:selectItem value="Mittelschicht" itemLabel="Mittelschicht" itemValue="Mittelschicht"></f:selectItem>
+                        <f:selectItem value="Spätschicht" itemLabel="Spätschicht" itemValue="Spätschicht"></f:selectItem>
+                        <f:selectItem value="Wochenendschicht" itemLabel="Wochenendschicht" itemValue="Wochenendschicht"></f:selectItem>
+                    </b:selectOneMenu>
 
                     <h:outputLabel value="Arbeitsbeginn: "/>
                     <b:dateTimePicker value="#{kalenderHelfer.start}">

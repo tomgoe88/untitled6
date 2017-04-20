@@ -41,8 +41,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     private Date urlaubEnd=null;
     private List<Urlaub> urlaubList;
     private List<Arbeitszeit> arbeitszeitList;
-    private static Date filteredDatestart;
-    private static Date filterDateEnd;
+    private Date filteredDatestart;
+    private Date filterDateEnd;
     private static Date filterdUrlaubStart;
     private static Date filteredUrlaubEnd;
     private String arbeitsdauer;
@@ -138,19 +138,19 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.staticEnd = staticEnd;
     }
 
-    public static Date getFilteredDatestart() {
+    public Date getFilteredDatestart() {
         return filteredDatestart;
     }
 
-    public static void setFilteredDatestart(Date filteredDatestart) {
+    public void setFilteredDatestart(Date filteredDatestart) {
         filteredDatestart = filteredDatestart;
     }
 
-    public static Date getFilterDateEnd() {
+    public Date getFilterDateEnd() {
         return filterDateEnd;
     }
 
-    public static void setFilterDateEnd(Date filterDateEnd) {
+    public void setFilterDateEnd(Date filterDateEnd) {
         filterDateEnd = filterDateEnd;
     }
 
@@ -428,7 +428,9 @@ public class Mitarbeiter extends FullCalendarEventList {
                 arbeitszeitList=new ArrayList<Arbeitszeit>();
                 arbeitszeitList.addAll(tempList);
                 tempList=null;
+                System.out.println("Die filteredDate wenn nicht null = "+ filteredDatestart.toString());
             }
+
         } else {
             if (staticEnd == null) {
                 staticEnd=new Date();

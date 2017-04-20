@@ -792,6 +792,19 @@ public class KalenderHelfer {
         SQLHelper.newKrankheit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
 
     }
+    public void newAusgleichstag(){
+        GregorianCalendar startDate= new GregorianCalendar();
+        GregorianCalendar endDate= new GregorianCalendar();
+        startDate.setTime(start);
+        endDate.setTime(end);
+        startDate.set(Calendar.HOUR_OF_DAY, 1);
+        endDate.set(Calendar.HOUR_OF_DAY,23);
+        Date starting= startDate.getTime();
+        Date ending=endDate.getTime();
+        System.out.println("Ausgleichstag wurde ausgeführt");
+        SQLHelper.newAusgleichtag(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+
+    }
     public void newUni(){
         GregorianCalendar startDate= new GregorianCalendar();
         GregorianCalendar endDate= new GregorianCalendar();

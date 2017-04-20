@@ -73,6 +73,8 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
                 },
+                minTime: "06:30:00",
+                maxTime: "23:30:00",
                 view: {
                 agendaDay: {
                 titleFormat: 'dddd   DD.MM.YYYY'
@@ -153,8 +155,8 @@
                 <b:tab title="Arbeitszeiten">
 
 
-
                     <h:form id="ma">
+
                         <b:row>
                             <b:column>
                                 <h:outputLabel value="Frühschichten: "></h:outputLabel>
@@ -191,7 +193,7 @@
                                     <h:outputText value="#{az.arbeitsende}">
                                         <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
                                     </h:outputText>
-                                    <b:commandButton value="+" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
+                                    <b:commandButton value="-" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
                                     <b:commandButton value="+" onclick="ajax:az.addStundeEnde()" update="ma"/>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn label="Stunden">

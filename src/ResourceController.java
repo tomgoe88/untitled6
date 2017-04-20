@@ -23,6 +23,7 @@ public class ResourceController {
         fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
         fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
         fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());
+        fl.getList().addAll(SQLHelper.getAusgleichtageRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             events=fl.toJson();
@@ -39,6 +40,7 @@ public class ResourceController {
         fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
         fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
         fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());
+        fl.getList().addAll(SQLHelper.getAusgleichtageRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             ausfallzeiten=fl.toJson();
@@ -62,6 +64,7 @@ public class ResourceController {
         fl.getList().addAll(SQLHelper.getUniRes());
         fl.getList().addAll(SQLHelper.getKrankheitszeitenRes());
         fl.getList().addAll(SQLHelper.getUrlaubszeitenRes());
+        fl.getList().addAll(SQLHelper.getAusgleichtageRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             arbeitszeiten=fl.toJson();
@@ -79,6 +82,7 @@ public class ResourceController {
         FullCalendarEventList fl= new FullCalendarEventList();
         fl.getList().addAll(SQLHelper.getKurszeitenMitarbeiterRes());
         fl.getList().addAll(SQLHelper.getAllArbeitszeitenRes());
+        fl.getList().addAll(SQLHelper.getAllEventsRes());
         if(fl.getList().size()==0){
             fl.getList().addAll(new ArrayList<FullCalendarEventBean>());
             kurse=fl.toJson();

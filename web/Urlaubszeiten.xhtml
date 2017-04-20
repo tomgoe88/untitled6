@@ -82,7 +82,12 @@
                         center: 'title',
                         right: 'agendaDay,agendaFiveDays,agendaWeek,month'
                         },
+                        minTime: "06:30:00",
+                        maxTime: "23:30:00",
                         views: {
+                        agendaDay: {
+                        titleFormat: 'dddd   DD.MM.YYYY'
+                        },
                         agendaFiveDays: {
                         type: 'agenda',
                         duration: { days: 5 },
@@ -206,6 +211,7 @@
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Urlaubszeit" itemValue="1"/>
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Unizeit" itemValue="2"/>
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Krankheitszeit" itemValue="3"/>
+                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Ausgleichstag" itemValue="4"/>
                     </b:selectOneMenu>
                     <b:commandButton value="OK"  update="mordalForm"/>
                 </b:panelGrid>
@@ -218,12 +224,14 @@
                     <h:outputLabel value="Urlaubsbeginn: " rendered="#{terminEintragController.wert==1}"/>
                     <h:outputLabel value="Unibeginn: " rendered="#{terminEintragController.wert==2}"/>
                     <h:outputLabel value="Krankheitsbeginn: " rendered="#{terminEintragController.wert==3}"/>
+                    <h:outputLabel value="Ausgleichstagbeginn: " rendered="#{terminEintragController.wert==4}"/>
                     <b:dateTimePicker value="#{kalenderHelfer.start}">
 
                     </b:dateTimePicker>
                     <h:outputLabel value="Urlaubsende: " rendered="#{terminEintragController.wert==1}"/>
                     <h:outputLabel value="Uniende: " rendered="#{terminEintragController.wert==2}"/>
                     <h:outputLabel value="Krankheitsende: " rendered="#{terminEintragController.wert==3}"/>
+                    <h:outputLabel value="Ausgleichstagende: " rendered="#{terminEintragController.wert==4}"/>
                     <b:dateTimePicker value="#{kalenderHelfer.end}">
 
                     </b:dateTimePicker>
@@ -231,6 +239,7 @@
                     <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUrlaub();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==1}"/>
                     <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUni();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==2}"/>
                     <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newKrankheit();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==3}"/>
+                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newAusgleichstag();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==4}"/>
 
                     <h:outputScript>
 

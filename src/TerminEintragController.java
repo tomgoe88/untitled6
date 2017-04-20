@@ -56,6 +56,8 @@ public class TerminEintragController {
             SQLHelper.deleteUni(Integer.parseInt(terminID));
         } else if(terminBezeichnung.equals("Krank")){
             SQLHelper.deleteKrank(Integer.parseInt(terminID));
+        } else if(terminBezeichnung.equals("Ausgleichtag")) {
+            SQLHelper.deleteAusgleichtag(Integer.parseInt(terminID));
         } else {
             SQLHelper.deleteUrlaub(Integer.parseInt(terminID));
         }
