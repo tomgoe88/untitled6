@@ -29,9 +29,6 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
 
-
-
-
 </h:head>
 
 <!-- geht soweit, Ziel ist es jetzt noch alle Terminanlege funktionen einzubauceh und remotecommand mit bootsfaces zu nutzen um das default Date für die Aufgabenzu bekommen-->
@@ -49,6 +46,7 @@
 
 
 
+
         </b:row>
         <b:row>
 
@@ -56,10 +54,17 @@
 
             <b:column span="9">
                 <h:form>
+                    <p:panelGrid columns="2">
+                        <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
+                        <b:commandButton value="ok" onclick="
+                                $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                            ;changeDay();"/>
+                    </p:panelGrid>
                     <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
                     <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
                                                 changeDay();" />
+
                     <h:outputScript>
                         function changeDay() {
                         var moment= $('#calendar').fullCalendar('getDate');
@@ -69,11 +74,18 @@
                     </h:outputScript>
 
 
+
+
+
+
+
                     <h:outputScript >
 
                         $(document).ready(function() {
 
                         // page is now ready, initialize the calendar...
+
+
 
                         $('#calendar').fullCalendar({
                         schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
@@ -425,19 +437,19 @@
 
                     <h:outputText id="vorname" value="Vorname: " rendered="#{terminEintragController.wert==3}"/>
                     <b:inputText name="vorname" for="vorname" typeahead="true" rendered="#{terminEintragController.wert==3}"
-                                 typeahead-values="#{kalenderHelfer.kundenNames}"/>
+                                 typeahead-values="#{kalenderHelfer.kundenNames}" required="true" requiredMessage="Bitte gebe einen Vorname ein"/>
                     <h:outputText id="nachname" value="Nachname: " rendered="#{terminEintragController.wert==3}"/>
                     <b:inputText name="nachname" for="nachname" typeahead="true"  rendered="#{terminEintragController.wert==3}"
-                                 typeahead-values="#{kalenderHelfer.kundeNachname}"/>
+                                 typeahead-values="#{kalenderHelfer.kundeNachname}" required="true" requiredMessage="Bitte geben einen Nachname ein"/>
                     <h:outputText id="tele" value="Telefonnummer: " rendered="#{terminEintragController.wert==3}"/>
-                    <b:inputText id="teleid" name="tele" for="tele"  rendered="#{terminEintragController.wert==3}">
+                    <b:inputText id="teleid" name="tele" for="tele"  rendered="#{terminEintragController.wert==3}" required="true" requiredMessage="Bitte geben einen Telefonnummer an">
                         <f:validateRegex pattern="[0-9]+" />
                         <f:ajax event="keyup" render="messages" />
                         <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="messages"/>
                     </b:inputText>
 
                     <h:outputLabel id="beschreibung" value="Beschreibung: "/>
-                    <b:inputText name="beschreibung" for="beschreibung"/>
+                    <b:inputText name="beschreibung" for="beschreibung" required="true" requiredMessage="Bitte gebe eine Beschreibung zum dem Termin ein"/>
                     <h:outputLabel value="Einträger: "/>
                     <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"

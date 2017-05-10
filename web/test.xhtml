@@ -56,102 +56,18 @@
 
             <b:column span="9">
                 <h:form>
-                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
-                                                changeDay();" />
-                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
-                                                changeDay();" />
-                    <h:outputScript>
-                        function changeDay() {
-                        var moment= $('#calendar').fullCalendar('getDate');
-                        defaultSelect(moment.format());
-
-                        }
-                    </h:outputScript>
-
-
-                    <h:outputScript >
-
-                        $(document).ready(function() {
-
-                        // page is now ready, initialize the calendar...
-
-                        $('#calendar').fullCalendar({
-                        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                        header: {
-                        left: 'today',
-                        center: 'title',
-                        right: 'agendaDay,agendaFiveDays,agendaWeek,month'
-                        },
-                        views: {
-                        agendaFiveDays: {
-                        type: 'agenda',
-                        duration: { days: 5 },
-                        // views that are more than a day will NOT do this behavior by default
-                        // so, we need to explicitly enable it
-                        //groupByResource: true
-                        //// uncomment this line to group by day FIRST with resources underneath
-                        groupByDateAndResource: true
-                        },
-                        agendaWeek: {
-                        type: 'agenda',
-                        duration: { days: 7 },
-                        // views that are more than a day will NOT do this behavior by default
-                        // so, we need to explicitly enable it
-                        groupByResource: true
-                        //// uncomment this line to group by day FIRST with resources underneath
-                        //groupByDateAndResource: true
-                        }
-                        },
-                        dayClick: function(date, jsEvent, view, resourceObj) {
-                        selectDate(date);
-                        getResourceid(resourceObj.id); // setTerminShow("true");
-                        $('#amodal').modal();return false;
-
-
-                        },
-
-
-                        // put your options and callbacks here
-                        defaultView: 'agendaDay',
-                        events: #{resourceController.ausfallzeiten},
-                        resources: #{resourceController.resources},
-                        eventClick: function(calEvent, jsEvent, view) {
-                        eventTitle(calEvent.title);
-                        selectDate(calEvent.start);
-                        //butter.modal.open('eventContentI');
-                        $('#eventContentI').modal('show');return false;
-
-
-
-                        }
-
-
-                        })
-
-                        });
-                    </h:outputScript>
-                    <h:outputScript name="JS/eventSelector.js"></h:outputScript>
-
-
-
-
-
-                    <div id='calendar'></div>
-
-
-
-
-                    <b:remoteCommand name="dateSelect" id="getDayDate"
-                                     actionListener="#{kalenderHelfer.resourcegetDate}"
-                                     update="mordalForm" parameters="initialValue" />
-                    <b:remoteCommand name="selectResource" id="idCommand"
-                                     actionListener="#{kalenderHelfer.resourceGetMaId}"
-                                     update="mordalForm" parameters="initialValue" />
-                    <b:remoteCommand name="getTheEvent" id="showEventContent"
-                                     actionListener="#{terminEintragController.resourceGetEvent}"
-                                     update="mordalForm2" parameters="initialValue" />
-
-
+                    <b:gyroscope onrotation="ajax:gyroController.onRotation()"
+                                 alpha="#{gyroController.alpha}"
+                                 beta="#{gyroController.beta}"
+                                 gamma="#{gyroController.gamma}"
+                                 update="@form:server"/>
+                    <b:panel title="Values reported to the server" id="server"  look="primary">
+                        <p>Alpha: #{gyroController.alpha} (rotation around z-axis - i.e. rotation while the smartphone lies flat on the table)</p>
+                        <p>Beta: #{gyroController.beta} (rotation around x-axis)</p>
+                        <p>Gamma: #{gyroController.gamma} (rotation around y-axis)</p>
+                        <p>Winkel: #{gyroController.winkel}</p>
+                    </b:panel>
+                    <b:commandButton value="OK" onclick="ajax:gyroController.onAlphaClick()" update="@form:server"/>
                 </h:form>
             </b:column>
         </b:row>
@@ -160,116 +76,6 @@
         </b:row>
 
     </b:container>
-
-    <b:modal id="eventContentI" title="Info" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="mordalForm2">
-                <b:panelGrid columns="2">
-                    <h:outputText value="TerminID: "></h:outputText>
-                    <h:outputText value="#{terminEintragController.terminID}"></h:outputText>
-                    <h:outputText value="Bezeichnung: "></h:outputText>
-                    <h:outputText value="#{terminEintragController.terminBezeichnung}"></h:outputText>
-                </b:panelGrid>
-
-
-                    <b:commandButton value="Löschen" onclick="ajax:terminEintragController.deleteTermin();javascript:changeAppointment()"
-                    />
-
-                    <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
-                    />
-                    <h:outputScript>
-                        function changeAppointment() {
-                        $('#eventContentI').modal('hide');
-                        $(document).ready(function() {
-                        $('#calendar').fullCalendar('refetchEventSources', sources);
-
-
-                        })}
-
-
-
-
-                    </h:outputScript>
-
-            </h:form>
-        </div>
-
-    </b:modal>
-
-
-    <b:modal id="amodal" title="Ausfallzeit" styleClass="modalPseudoClass">
-        <div>
-
-            <h:form id="mordalForm">
-                <b:panelGrid columns="1" rendered="#{terminEintragController.wert==0}">
-                    <b:selectOneMenu id="vorauswahl" value="#{terminEintragController.wert}">
-                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Urlaubszeit" itemValue="1"/>
-                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Unizeit" itemValue="2"/>
-                        <f:selectItem value="#{terminEintragController.wert}" itemLabel="Krankheitszeit" itemValue="3"/>
-                    </b:selectOneMenu>
-                    <b:commandButton value="OK"  update="mordalForm"/>
-                </b:panelGrid>
-
-                <b:panelGrid columns="2" rendered="#{terminEintragController.wert!=0}">
-                    <h:outputLabel value="Name des Mitarbeiters"/>
-
-                    <h:outputText value="#{kalenderHelfer.mitarbeit.name}"/>
-
-                    <h:outputLabel value="Urlaubsbeginn: " rendered="#{terminEintragController.wert==1}"/>
-                    <h:outputLabel value="Unibeginn: " rendered="#{terminEintragController.wert==2}"/>
-                    <h:outputLabel value="Krankheitsbeginn: " rendered="#{terminEintragController.wert==3}"/>
-                    <b:dateTimePicker value="#{kalenderHelfer.start}">
-
-                    </b:dateTimePicker>
-                    <h:outputLabel value="Urlaubsende: " rendered="#{terminEintragController.wert==1}"/>
-                    <h:outputLabel value="Uniende: " rendered="#{terminEintragController.wert==2}"/>
-                    <h:outputLabel value="Krankheitsende: " rendered="#{terminEintragController.wert==3}"/>
-                    <b:dateTimePicker value="#{kalenderHelfer.end}">
-
-                    </b:dateTimePicker>
-                    <b:button value="close" dismiss="modal" onclick="return false;"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUrlaub();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==1}"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newUni();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==2}"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newKrankheit();javascript:useCurrentDate();ajax:terminEintragController.wertNull()"  rendered="#{terminEintragController.wert==3}"/>
-
-                    <h:outputScript>
-
-                        function useCurrentDate() {
-                        $('#amodal').modal('hide');
-                        $(document).ready(function() {
-                        $('#calendar').fullCalendar('refetchEventSources', sources);
-
-
-                        })}
-
-
-
-
-                    </h:outputScript>
-
-
-
-
-                </b:panelGrid>
-
-            </h:form>
-
-
-
-        </div>
-
-    </b:modal>
-
-
-
-
-
-
-
-
-
-
-
 
 
 </h:body>

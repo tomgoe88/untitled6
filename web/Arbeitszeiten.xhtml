@@ -56,6 +56,12 @@
 
             <b:column span="9">
                 <h:form>
+                    <p:panelGrid columns="2">
+                        <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
+                        <b:commandButton value="ok" onclick="
+                                $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                            ;changeDay();"/>
+                    </p:panelGrid>
                     <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
                     <b:button value="vor" onclick="$('#calendar').fullCalendar('next');

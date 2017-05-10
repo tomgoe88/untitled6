@@ -46,6 +46,12 @@
     </b:row>
     <b:row>            <b:column span="8">
         <h:form>
+            <p:panelGrid columns="2">
+                <b:datepicker value="#{kalenderHelfer.start}"/>
+                <b:commandButton value="ok" onclick="
+                                $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
+                            ;changeDay();"/>
+            </p:panelGrid>
             <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
             <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
@@ -179,7 +185,17 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn label="Tag">
                                     <h:outputText value="#{az.arbeitsstart}">
-                                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+2"/>
+                                        <f:convertDateTime pattern="dd" timeZone="GMT+2"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Monat">
+                                    <h:outputText value="#{az.arbeitsstart}">
+                                        <f:convertDateTime pattern="MMMM" timeZone="GMT+2"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Jahr">
+                                    <h:outputText value="#{az.arbeitsstart}">
+                                        <f:convertDateTime pattern="yyyy" timeZone="GMT+2"/>
                                     </h:outputText>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn label="Arbeitsbeginn">
@@ -199,9 +215,12 @@
                                 <b:dataTableColumn label="Stunden">
                                     <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
                                 </b:dataTableColumn>
+                                <f:facet name="footer">
+                                    <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
+                                    <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
+                                </f:facet>
                             </b:dataTable>
-                            <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
-                            <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
+
                         </b:row>
                     </h:form>
                 </b:tab>

@@ -53,6 +53,9 @@
                             <p:column label="Löschen" >
                                 <p:commandButton value="Löschen" action="#{kalenderHelfer.deleteMitarbeiter(arbeiter.mitarbeiterID)}" update="mitburger"/>
                             </p:column>
+                            <p:column label="Ändern" >
+                                <p:commandButton value="Ändern" action="#{kalenderHelfer.mitarbeiterTempSet(arbeiter.mitarbeiterID)}" oncomplete="PF('dlg3').show();"  update="mitburger"/>
+                            </p:column>
                         </p:dataTable>
 
                     </b:column>
@@ -61,7 +64,7 @@
             </h:form>
         </b:container>
 
-
+<!-- hier muss noch eine Änderung eingebaut werden, um den Mitabeiter abändern zu können, somit muss auch um SQLHelper eine update-Funktion eingebaut werden. -->
         <p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip">
             <h:form id="deng">
                 <p:panelGrid columns="2">
@@ -71,15 +74,30 @@
                     <b:inputText id="mnach" name="mitarbeiternachname"/>
                     <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
                     <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
-                    <b/>
+                    <h:outputLabel value="Admin: "></h:outputLabel>
+
                     <p:selectBooleanButton id="adminBool" value="#{kalenderHelfer.adminbool}" onLabel="Ja" offLabel="Nein" style="width:60px" />
+                    <h:outputLabel value="Kalendereintrag: "></h:outputLabel>
+                    <p:selectBooleanButton id="kalenderbool" value="#{kalenderHelfer.kalenderBool}" onLabel="Ja" offLabel="Nein" style="width:60px" />
                     <p:commandButton action="#{kalenderHelfer.newWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg2').hide();" styleClass="btn">
                     </p:commandButton>
                 </p:panelGrid>
 
             </h:form>
         </p:dialog>
+    <p:dialog widgetVar="dlg3" header="Event Details" showEffect="clip" hideEffect="clip">
+        <h:form id="dendong">
+            <p:panelGrid columns="2">
+                <h:outputLabel for="mfarb1" value="Kalenderfarbe "/>
+                <p:colorPicker id="mfarb1" value="#{kalenderHelfer.tempColor}" mode="inline" />
+                <h:outputLabel value="Kalendereintrag: "></h:outputLabel>
+                <p:selectBooleanButton id="kalenderbool1" value="#{kalenderHelfer.kalenderBool}" onLabel="Ja" offLabel="Nein" style="width:60px" />
+                <p:commandButton action="#{kalenderHelfer.updateWorker}" value="Speichern" update="mitburger"   oncomplete="PF('dlg3').hide();" styleClass="btn">
+                </p:commandButton>
+            </p:panelGrid>
 
+        </h:form>
+    </p:dialog>
 
 </h:body>
 </html>

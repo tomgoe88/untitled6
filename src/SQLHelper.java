@@ -98,7 +98,7 @@ public class SQLHelper{
     }
     public static void initAnmeldung(){
         if(getMaxMitarbeiterID()==0){
-            newMitarbeiter("Admin","Admin","red");
+            newMitarbeiter("Admin","Admin","red", "true");
             newPassword(1,"admin", "true");
         }
     }
@@ -113,6 +113,7 @@ public class SQLHelper{
                     "vorname VARCHAR(45), " +
                     "nachname VARCHAR(45), " +
                     "kalenderfarbe VARCHAR(45), " +
+                    "kalendereintrag VARCHAR(45), " +
                     "PRIMARY KEY (MitarbeiterID)" +
                     ")";
             con.createStatement().executeUpdate(tableMitarbeiter);
@@ -450,7 +451,7 @@ public class SQLHelper{
         }
         return m;
     }
-    public static void newMitarbeiter(String vorname, String nachname, String farbe){
+    public static void newMitarbeiter(String vorname, String nachname, String farbe, String kalenderbool){
         con = getInstance();
         if(con != null) {
             // Abfrage-Statement erzeugen.
@@ -458,7 +459,28 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql=
-                        "INSERT INTO mitarbeiter(vorname,nachname,kalenderfarbe) VALUES('"+vorname+"','"+nachname+"','"+farbe+"')";
+                        "INSERT INTO mitarbeiter(vorname,nachname,kalenderfarbe,kalendereintrag) VALUES('"+vorname+"','"+nachname+"','"+farbe+"','"+kalenderbool+"')";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+    }
+
+    public static void updateMitarbeiter(String farbe, String kalenderbool, int mitarbeiterID){
+        con = getInstance();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "UPDATE mitarbeiter SET kalenderfarbe='"+farbe+"',kalendereintrag='"+kalenderbool+"' " +
+                                "WHERE MitarbeiterID='"+mitarbeiterID+"'";
+
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("SQLException: " + e.getMessage());
@@ -2361,7 +2383,8 @@ public class SQLHelper{
                                 "FROM termin " +
                                 "INNER JOIN mitarbeiter M1 ON termin.MitarbeiterMacherID = M1.MitarbeiterID " +
                                 "INNER JOIN mitarbeiter M2 ON termin.MitarbeiterSchreiberID = M2.MitarbeiterID " +
-                                "INNER JOIN kunde ON termin.KundenID = kunde.KundenID";
+                                "INNER JOIN kunde ON termin.KundenID = kunde.KundenID " +
+                                "WHERE M1.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
                 String title;
@@ -2420,7 +2443,8 @@ public class SQLHelper{
                         "SELECT freieTermine.TerminID, freieTermine.Terminstart, freieTermine.Terminende, freieTermine.MitarbeiterMacherID AS id, M1.kalenderfarbe, freieTermine.Beschreibung, M2.vorname AS eintrager " +
                                 "FROM freieTermine " +
                                 "INNER JOIN mitarbeiter M1 ON freieTermine.MitarbeiterMacherID = M1.MitarbeiterID " +
-                                "INNER JOIN mitarbeiter M2 ON freieTermine.MitarbeiterSchreiberID = M2.MitarbeiterID ";
+                                "INNER JOIN mitarbeiter M2 ON freieTermine.MitarbeiterSchreiberID = M2.MitarbeiterID " +
+                                "WHERE M1.kalendereintrag LIKE 'true'";
 
 
                 ResultSet result = query.executeQuery(sql);
@@ -2472,7 +2496,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM arbeitszeiten " +
-                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2522,7 +2547,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM arbeitszeiten " +
-                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON arbeitszeiten.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2571,7 +2597,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM urlaubszeit " +
-                                "INNER JOIN mitarbeiter ON urlaubszeit.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON urlaubszeit.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2622,7 +2649,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM kurse " +
-                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON kurse.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2672,7 +2700,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM krankheitstage " +
-                                "INNER JOIN mitarbeiter ON krankheitstage.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON krankheitstage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2722,7 +2751,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM unitage " +
-                                "INNER JOIN mitarbeiter ON unitage.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON unitage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2772,7 +2802,8 @@ public class SQLHelper{
 
                 String sql =
                         "SELECT * FROM ausgleichtage " +
-                                "INNER JOIN mitarbeiter ON ausgleichtage.MitarbeiterID = mitarbeiter.MitarbeiterID";
+                                "INNER JOIN mitarbeiter ON ausgleichtage.MitarbeiterID = mitarbeiter.MitarbeiterID " +
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
                 ResultSet result = query.executeQuery(sql);
 
@@ -2821,7 +2852,8 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT * FROM mitarbeiter";
+                        "SELECT * FROM mitarbeiter "+
+                                "WHERE mitarbeiter.kalendereintrag LIKE 'true'";
 
 
                 ResultSet result = query.executeQuery(sql);
@@ -2831,12 +2863,16 @@ public class SQLHelper{
                     FullcalendarRessouceBean temp = new FullcalendarRessouceBean();
 
 
-                    temp.setId(result.getInt("MitarbeiterID")+"");
+
+                        temp.setId(result.getInt("MitarbeiterID")+"");
 
 
-                    temp.setTitle(result.getString("vorname"));
+                        temp.setTitle(result.getString("vorname"));
+
+
 
                     fb.add(temp);
+
 
                 }
             } catch (SQLException e) {

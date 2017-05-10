@@ -26,6 +26,7 @@ public class KursController {
     private String eingetragenerKurs;
     private String eingetrageneMA;
     private int kundenID;
+    private Date initDate;
     private String javaScriptDate;
     private KundenController kundenController;
 
@@ -38,6 +39,14 @@ public class KursController {
         kurseList= new ArrayList<Kurse>();
         kurseList.addAll(SQLHelper.getKursList());
         return kurseList;
+    }
+
+    public Date getInitDate() {
+        return initDate;
+    }
+
+    public void setInitDate(Date initDate) {
+        this.initDate = initDate;
     }
 
     public void setKurseList(List<Kurse> kurseList) {
@@ -163,6 +172,7 @@ public class KursController {
     public void newKurs(){
 
         SQLHelper.newKurs(kursbezeichnung,kursstart.toString(),kursende.toString(),q);
+        initDate=kursstart;
     }
     public void resourceGetMaId(){
         String resID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
@@ -272,8 +282,8 @@ public class KursController {
 
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        if(kursstart!=null){
-            javaScriptDate = "'"+simpleDateFormat.format(kursstart)+"'";
+        if(initDate!=null){
+            javaScriptDate = "'"+simpleDateFormat.format(initDate)+"'";
         }else{
             javaScriptDate = "'"+simpleDateFormat.format(new Date())+"'";
         }

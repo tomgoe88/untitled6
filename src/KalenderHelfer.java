@@ -34,8 +34,10 @@ public class KalenderHelfer {
     private String [] terminspilt;
     private boolean showTermineintrag;
     private boolean wocheTag;
+    private boolean kalenderBool;
     private int temp=0;
     private int currentWeek;
+    private Date intitDATE;
     private String tempColor;
     private String currentMonth;
     private String test;
@@ -54,7 +56,7 @@ public class KalenderHelfer {
     private int ma;
     private int q=0;
     private Mitarbeiter mitarbeit;
-    private Date start;
+    private Date start = new Date();
     private Date end;
     private static KalenderHelfer instance= new KalenderHelfer();
     private KalenderHelfer helfer;
@@ -160,6 +162,25 @@ public class KalenderHelfer {
 
     public int getTemp() {
         return temp;
+    }
+
+    public boolean isKalenderBool() {
+        return kalenderBool;
+    }
+
+    public Date getIntitDATE() {
+        return intitDATE;
+    }
+
+    public void setIntitDATE(Date intitDATE) {
+        this.intitDATE = intitDATE;
+    }
+    public void changeDefaultAfter(){
+        defaultDate=intitDATE;
+    }
+
+    public void setKalenderBool(boolean kalenderBool) {
+        this.kalenderBool = kalenderBool;
     }
 
     public void setTemp(int temp) {
@@ -638,6 +659,7 @@ public class KalenderHelfer {
     }
 
     public Date getStart() {
+        System.out.println("Vorübergehend ist start:"+ start.toString());
         return start;
     }
 
@@ -677,6 +699,7 @@ public class KalenderHelfer {
             }
 
         }
+        intitDATE=start;
     }
     public void newTermin(){
         calendarBean=null;
@@ -732,6 +755,7 @@ public class KalenderHelfer {
         nachname=null;
         tele=null;*/
         beschreibung=null;
+        intitDATE=start;
 
     }
     public void newFreierTermin(){
@@ -746,6 +770,7 @@ public class KalenderHelfer {
 
 
         beschreibung=null;
+        intitDATE=start;
 
     }
     public void newWorktime(){
@@ -764,6 +789,7 @@ public class KalenderHelfer {
                 i++;
             }
         }
+        intitDATE=start;
 
 
 
@@ -778,6 +804,7 @@ public class KalenderHelfer {
         Date starting= startDate.getTime();
         Date ending=endDate.getTime();
         SQLHelper.newUrlaubszeit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+        intitDATE=start;
 
     }
     public void newKrankheit(){
@@ -790,6 +817,7 @@ public class KalenderHelfer {
         Date starting= startDate.getTime();
         Date ending=endDate.getTime();
         SQLHelper.newKrankheit(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+        intitDATE=start;
 
     }
     public void newAusgleichstag(){
@@ -803,6 +831,7 @@ public class KalenderHelfer {
         Date ending=endDate.getTime();
         System.out.println("Ausgleichstag wurde ausgeführt");
         SQLHelper.newAusgleichtag(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+        intitDATE=start;
 
     }
     public void newUni(){
@@ -815,6 +844,7 @@ public class KalenderHelfer {
         Date starting= startDate.getTime();
         Date ending=endDate.getTime();
         SQLHelper.newUni(mitarbeit.getMitarbeiterID(),starting.toString(),ending.toString());
+        intitDATE=start;
 
     }
 
@@ -903,8 +933,8 @@ public class KalenderHelfer {
 
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        if(start!=null){
-            javaScriptDate = "'"+simpleDateFormat.format(start)+"'";
+        if(intitDATE!=null){
+            javaScriptDate = "'"+simpleDateFormat.format(intitDATE)+"'";
         }else{
             javaScriptDate = "'"+simpleDateFormat.format(new Date())+"'";
         }
@@ -1001,9 +1031,16 @@ public class KalenderHelfer {
         int macidd=0;
         String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeitervorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mitarbeiternachname");
-        SQLHelper.newMitarbeiter(vorname, nachname, tempColor);
+        SQLHelper.newMitarbeiter(vorname, nachname, tempColor, Boolean.toString(kalenderBool));
         macidd= SQLHelper.getMaxMitarbeiterID();
         SQLHelper.newPassword(macidd,null,Boolean.toString(adminbool));
+    }
+    public void mitarbeiterTempSet(int tempid){
+        this.temp=tempid;
+    }
+    public void updateWorker(){
+        SQLHelper.updateMitarbeiter(tempColor,Boolean.toString(kalenderBool),temp);
+        temp=0;
     }
 
 
