@@ -293,4 +293,15 @@ public class KursController {
         System.out.println("JavaScriptDate=   "+ javaScriptDate);
         return javaScriptDate;
     }
+    public void resourceGetCurrentDate(){
+        String date = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("initialValue");
+        Calendar calendar= javax.xml.bind.DatatypeConverter.parseDateTime(date);
+
+
+
+        initDate=calendar.getTime();
+
+
+        System.out.println(initDate+"   So ist das Default-Datum");
+    }
 }

@@ -625,7 +625,6 @@ public class KalenderHelfer {
 
 
 
-
     public String getChangedDate() {
         return changedDate;
     }
@@ -677,7 +676,7 @@ public class KalenderHelfer {
 
     //bei click auf neuer Termin
 
-    public void newTerminNeuerKunde(){
+    public void  newTerminNeuerKunde(){
 
         String vorname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vorname");
         String nachname =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nachname");
@@ -895,6 +894,8 @@ public class KalenderHelfer {
 
 
         defaultDate= calendar.getTime();
+        intitDATE=calendar.getTime();
+
 
 
         System.out.println(defaultDate+"   So ist das Default-Datum");
@@ -935,8 +936,10 @@ public class KalenderHelfer {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         if(intitDATE!=null){
             javaScriptDate = "'"+simpleDateFormat.format(intitDATE)+"'";
+            defaultDate=intitDATE;
         }else{
             javaScriptDate = "'"+simpleDateFormat.format(new Date())+"'";
+
         }
 
 

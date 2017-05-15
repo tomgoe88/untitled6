@@ -55,17 +55,29 @@
 
 
             <b:column span="9">
-                <h:form>
-                    <p:panelGrid columns="2">
-                        <b:datepicker value="#{kursController.initDate}"/>
-                        <b:commandButton value="ok" onclick="
-                                $('#calendar').fullCalendar('gotoDate', #{kursController.javaScriptDate});
+                <b:row>
+                    <b:column span="6">
+                        <h:form id="pickerForm">
+                            <p:panelGrid columns="2">
+                                <b:datepicker value="#{kursController.initDate}"/>
+                                <b:commandButton value="ok" onclick="
+                                $('#calendar').fullCalendar('gotoDate', #{kursCrontroller.javaScriptDate});
                             ;changeDay();"/>
-                    </p:panelGrid>
-                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                            </p:panelGrid>
+                        </h:form>
+                    </b:column>
+                    <b:column span="6">
+                        <h:form>
+                            <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
-                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                            <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
                                                 changeDay();" />
+                        </h:form>
+                    </b:column>
+                </b:row>
+
+                <h:form>
+
                     <h:outputScript>
                         function changeDay() {
                         var moment= $('#calendar').fullCalendar('getDate');
@@ -158,8 +170,8 @@
                                      actionListener="#{kursController.resourceGetMaId}"
                                      update="mordalForm" parameters="initialValue" />
                     <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
-                                     actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
-                                     update="aufgabenformer" parameters="initialValue" />
+                                     actionListener="#{kursController.resourceGetCurrentDate}"
+                                     update="aufgabenformer pickerForm" parameters="initialValue" />
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
                                      actionListener="#{kursController.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />

@@ -53,17 +53,31 @@
 
 
             <b:column span="9">
-                <h:form>
-                    <p:panelGrid columns="2">
-                        <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
-                        <b:commandButton value="ok" onclick="
+                <b:row>
+                    <b:column span="6">
+                        <h:form id="pickerForm">
+                            <p:panelGrid columns="2">
+                                <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
+                                <b:commandButton value="ok" onclick="
                                 $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
                             ;changeDay();"/>
-                    </p:panelGrid>
-                    <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
+                            </p:panelGrid>
+                        </h:form>
+                    </b:column>
+                    <b:column span="6">
+                        <h:form>
+                            <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
-                    <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
+                            <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
                                                 changeDay();" />
+                        </h:form>
+                    </b:column>
+                </b:row>
+
+
+                <h:form>
+
+
 
                     <h:outputScript>
                         function changeDay() {
@@ -92,8 +106,9 @@
                         header: {
                         left: 'today',
                         center: 'title',
-                        right: 'agendaDay,agendaFiveDays,agendaWeek,month'
+                        right: 'agendaDay,agendaFiveDays,agendaWeek,month,timelineWeek'
                         },
+                        contentHeight: 'auto',
                         minTime: "06:30:00",
                         maxTime: "23:30:00",
                         views: {
@@ -158,7 +173,7 @@
 
                     <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
                                      actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
-                                     update="aufgabenformer" parameters="initialValue" />
+                                     update="aufgabenformer pickerForm" parameters="initialValue" />
                     <b:remoteCommand name="dateSelect" id="getDayDate"
                                      actionListener="#{kalenderHelfer.resourcegetDate}"
                                      update="mordalForm" parameters="initialValue" />
