@@ -106,34 +106,44 @@
                         header: {
                         left: 'today',
                         center: 'title',
-                        right: 'agendaDay,agendaFiveDays,agendaWeek,month,timelineWeek'
+                        right: 'agendaDay,timelineYear,timelineMonth,timelineWeek'
                         },
                         contentHeight: 'auto',
                         minTime: "06:30:00",
-                        maxTime: "23:30:00",
+                        maxTime: "24:00:00",
                         views: {
                         agendaDay: {
                         titleFormat: 'dddd   DD.MM.YYYY'
                         },
-                        agendaFiveDays: {
-                        type: 'agenda',
-                        duration: { days: 5 },
+                        //agendaFiveDays: {
+                        //type: 'agenda',
+                        //duration: { days: 5 },
                         // views that are more than a day will NOT do this behavior by default
                         // so, we need to explicitly enable it
                         //groupByResource: true
                         //// uncomment this line to group by day FIRST with resources underneath
-                        groupByDateAndResource: true
-                        },
-                        agendaWeek: {
-                        type: 'agenda',
-                        duration: { days: 7 },
-                        // views that are more than a day will NOT do this behavior by default
-                        // so, we need to explicitly enable it
-                        groupByResource: true
-                        //// uncomment this line to group by day FIRST with resources underneath
                         //groupByDateAndResource: true
-                        }
+                        //},
+                        // agendaWeek: {
+                        // type: 'agenda',
+                        // duration: { days: 7 },
+                        // // views that are more than a day will NOT do this behavior by default
+                        // // so, we need to explicitly enable it
+                        // groupByResource: true
+                        // //// uncomment this line to group by day FIRST with resources underneath
+                        // //groupByDateAndResource: true
+                        // }
                         },
+                        // editable: true,
+                        // eventDrop: function(event, delta, revertFunc) {
+                        //
+                        // alert(event.title + " was dropped on " + event.start.format());
+                        //
+                        // if (!confirm("Are you sure about this change?")) {
+                        // revertFunc();
+                        // }
+                        //
+                        // },
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
                         getResourceid(resourceObj.id); // setTerminShow("true");
@@ -145,6 +155,14 @@
 
                         // put your options and callbacks here
                         defaultView: 'agendaDay',
+                        resourceAreaWidth:'10%',
+                        resourceColumns:[
+                        {
+                        labelText:'Mitarbeiter',
+                        width:'10%',
+                        field:'title'
+                        }
+                        ],
                         events: #{resourceController.events},
 
                         resources: #{resourceController.resources},
@@ -432,6 +450,7 @@
                         <f:selectItem value="Probetraining" itemLabel="Probetraining" itemValue="Probetraining"/>
                         <f:selectItem value="Reha-Beratung" itemLabel="Reha-Beratung" itemValue="Reha-Beratung"/>
                         <f:selectItem value="Tanitatest" itemLabel="Tanitatest" itemValue="Tanitatest"/>
+                        <f:selectItem value="Massage" itemLabel="Massage" itemValue="Massage"/>
                     </b:selectOneMenu>
                     <h:outputLabel value="Startdatum: "/>
                     <b:dateTimePicker value="#{kalenderHelfer.start}">
@@ -456,26 +475,28 @@
                     <h:outputText id="nachname" value="Nachname: " rendered="#{terminEintragController.wert==3}"/>
                     <b:inputText name="nachname" for="nachname" typeahead="true"  rendered="#{terminEintragController.wert==3}"
                                  typeahead-values="#{kalenderHelfer.kundeNachname}" required="true" requiredMessage="Bitte geben einen Nachname ein"/>
-                    <h:outputText id="tele" value="Telefonnummer: " rendered="#{terminEintragController.wert==3}"/>
-                    <b:inputText id="teleid" name="tele" for="tele"  rendered="#{terminEintragController.wert==3}" required="true" requiredMessage="Bitte geben einen Telefonnummer an">
+                    <h:outputText id="tele" value="Telefonnummer: "  rendered="#{terminEintragController.wert==3}" />
+                    <b:inputText placeholder="Gebe eine Telefonnummer an..." id="teleid" name="tele" for="tele"  rendered="#{terminEintragController.wert==3}" >
                         <f:validateRegex pattern="[0-9]+" />
                         <f:ajax event="keyup" render="messages" />
                         <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="messages"/>
                     </b:inputText>
 
                     <h:outputLabel id="beschreibung" value="Beschreibung: "/>
-                    <b:inputText name="beschreibung" for="beschreibung" required="true" requiredMessage="Bitte gebe eine Beschreibung zum dem Termin ein"/>
+                    <b:inputText name="beschreibung" for="beschreibung" placeholder="Gebe eine Beschreibung an...."/>
                     <h:outputLabel value="Einträger: "/>
                     <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"
                                        itemValue="#{mitarb.mitarbeiterID}"/>
                     </b:selectOneMenu>
                     <b:commandButton value="close" dismiss="modal" onclick="ajax:terminEintragController.wertNull();javascript:useCurrentDate();" update="mordalForm"/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTerminNeuerKunde();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==3}" look="primary"/>
-                    <b/>
-                    <b:commandButton value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==2}" look="primary"/>
-                    <b/>
-                    <b:commandButton value="Freier Termin" onclick="ajax:kalenderHelfer.newFreierTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==1}" look="primary"/>
+
+                        <b:commandButton tooltip="Hast du alle Angaben gemacht?" id="neuerTerminButton" value="Ok" onclick="ajax:kalenderHelfer.newTerminNeuerKunde();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==3}" look="primary"/>
+                        <b/>
+                        <b:commandButton tooltip="Hast du alle Angaben gemacht?" value="Ok" onclick="ajax:kalenderHelfer.newTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==2}" look="primary"/>
+                        <b/>
+                        <b:commandButton tooltip="Hast du alle Angaben gemacht?" value="Freier Termin" onclick="ajax:kalenderHelfer.newFreierTermin();javascript:useCurrentDate();ajax:terminEintragController.wertNull()" rendered="#{terminEintragController.wert==1}" look="primary"/>
+
                     <h:outputScript>
 
                         function useCurrentDate() {

@@ -98,32 +98,33 @@
                         header: {
                         left: 'today',
                         center: 'title',
-                        right: 'agendaDay,agendaFiveDays,agendaWeek,month'
+                        right: 'timelineWeek,agendaDay,timelineYear,timelineMonth'
                         },
+                        contentHeight: 'auto',
                         minTime: "06:30:00",
-                        maxTime: "23:30:00",
+                        maxTime: "24:00:00",
                         views: {
                         agendaDay: {
                         titleFormat: 'dddd   DD.MM.YYYY'
                         },
-                        agendaFiveDays: {
-                        type: 'agenda',
-                        duration: { days: 5 },
+                        //agendaFiveDays: {
+                        //type: 'agenda',
+                        //duration: { days: 5 },
                         // views that are more than a day will NOT do this behavior by default
                         // so, we need to explicitly enable it
                         //groupByResource: true
                         //// uncomment this line to group by day FIRST with resources underneath
-                        groupByDateAndResource: true
-                        },
-                        agendaWeek: {
-                        type: 'agenda',
-                        duration: { days: 7 },
-                        // views that are more than a day will NOT do this behavior by default
-                        // so, we need to explicitly enable it
-                        groupByResource: true
-                        //// uncomment this line to group by day FIRST with resources underneath
                         //groupByDateAndResource: true
-                        }
+                        //},
+                        // agendaWeek: {
+                        // type: 'agenda',
+                        // duration: { days: 7 },
+                        // // views that are more than a day will NOT do this behavior by default
+                        // // so, we need to explicitly enable it
+                        // groupByResource: true
+                        // //// uncomment this line to group by day FIRST with resources underneath
+                        // //groupByDateAndResource: true
+                        // }
                         },
 
 
@@ -137,7 +138,15 @@
 
 
                         // put your options and callbacks here
-                        defaultView: 'agendaDay',
+                        defaultView: 'timelineWeek',
+                        resourceAreaWidth:'10%',
+                        resourceColumns:[
+                        {
+                            labelText:'Mitarbeiter',
+                            width:'10%',
+                            field:'title'
+                        }
+                        ],
                         events: #{resourceController.arbeitszeiten},
                         resources: #{resourceController.resources},
                         eventClick: function(calEvent, jsEvent, view) {
