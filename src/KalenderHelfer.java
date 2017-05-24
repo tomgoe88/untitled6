@@ -34,7 +34,9 @@ public class KalenderHelfer {
     private String [] terminspilt;
     private boolean showTermineintrag;
     private boolean wocheTag;
+    private int freieTerminID;
     private boolean kalenderBool;
+    private boolean freierTerminKorrekt =false;
     private int temp=0;
     private int currentWeek;
     private Date intitDATE;
@@ -126,6 +128,14 @@ public class KalenderHelfer {
 
     public int getKundenID() {
         return kundenID;
+    }
+
+    public int getFreieTerminID() {
+        return freieTerminID;
+    }
+
+    public void setFreieTerminID(int freieTerminID) {
+        this.freieTerminID = freieTerminID;
     }
 
     public void setKundenID(int kundenID) {
@@ -398,6 +408,14 @@ public class KalenderHelfer {
 
     public int getMa() {
         return ma;
+    }
+
+    public boolean isFreierTerminKorrekt() {
+        return freierTerminKorrekt;
+    }
+
+    public void setFreierTerminKorrekt(boolean freierTerminKorrekt) {
+        this.freierTerminKorrekt = freierTerminKorrekt;
     }
 
     public void setMa(int ma) {
@@ -912,6 +930,8 @@ public class KalenderHelfer {
             } else if(terminspilt.length==3){
                 this.terminErledigtTest=true;
                 this.eignetrageneBeschreibung= "Info: "+ terminspilt[0]+" von: "+terminspilt[1];
+                this.freieTerminID=Integer.parseInt(terminspilt[2]);
+                this.freierTerminKorrekt=true;
             } else {
                 this.eingetragenTerminart= terminspilt[0];
                 this.eingetragenVorname=terminspilt[1];
@@ -968,6 +988,10 @@ public class KalenderHelfer {
 
         System.out.println(resID+"   Show Termin ist so und der Boolean wert ist: "+ showTermineintrag);
     }
+    public void deleteFreierTermin(){
+        SQLHelper.deleteFreierTermin(freieTerminID);
+        this.freierTerminKorrekt=false;
+    }
 
     public void resourceDefaultDate(){
 
@@ -977,6 +1001,7 @@ public class KalenderHelfer {
         defaultDate= calendar.getTime();
 
     }
+
     public void myWorkDate(String date){
         work1= javax.xml.bind.DatatypeConverter.parseDateTime(date);
         final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ActionListener called",

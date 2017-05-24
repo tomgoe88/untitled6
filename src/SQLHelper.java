@@ -591,6 +591,25 @@ public class SQLHelper{
 
 
     }
+    public static void deleteFreierTermin (int terminID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM freieTermine WHERE TerminID='"+terminID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Freier Termin löschen SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+
+    }
     public static void neuerTeilnehmer (int kursID, int kundeiD){
         con = getInstance();
         if(con != null) {
@@ -2264,6 +2283,63 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("Update Termin// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void updateTerminEvent(String date, String endDate, int resourceId, int terminID){
+        con = getInstance();
+
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update termin SET Terminstart='"+date+"', Terminende='"+endDate+"', MitarbeiterMacherID='"+resourceId+"' WHERE TerminID = '"+terminID+"'";
+                query.executeUpdate(sql);
+                System.out.println(sql);
+            }catch(SQLException e){
+                System.out.println("Update Termin mit Event// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void updateKursEvent(String date, String endDate, int resourceId, int terminID){
+        con = getInstance();
+
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update kurse SET Kursbeginn='"+date+"', Kursende='"+endDate+"', MitarbeiterID='"+resourceId+"' WHERE KursID = '"+terminID+"'";
+                query.executeUpdate(sql);
+                System.out.println(sql);
+            }catch(SQLException e){
+                System.out.println("Update Kurse mit Event// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
+    public static void updateFreierTerminEvent(String date, String endDate, int resourceId, int terminID){
+        con = getInstance();
+
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update freieTermine SET Terminstart='"+date+"', Terminende='"+endDate+"', MitarbeiterMacherID='"+resourceId+"' WHERE TerminID = '"+terminID+"'";
+                query.executeUpdate(sql);
+                System.out.println(sql);
+            }catch(SQLException e){
+                System.out.println("Update freieTermine mit Event// SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

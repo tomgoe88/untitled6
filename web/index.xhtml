@@ -14,7 +14,7 @@
 <!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
 <h:head>
     <title>Facelet Title</title>
-    <meta http-equiv="refresh" content="600"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="theme.css"/>
     <script type="text/javascript" src="de.js"></script>
@@ -134,16 +134,26 @@
                         // //groupByDateAndResource: true
                         // }
                         },
-                        // editable: true,
-                        // eventDrop: function(event, delta, revertFunc) {
-                        //
-                        // alert(event.title + " was dropped on " + event.start.format());
-                        //
-                        // if (!confirm("Are you sure about this change?")) {
-                        // revertFunc();
-                        // }
-                        //
-                        // },
+                        editable: true,
+                        eventDrop: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+
+                         },
+                        eventResize: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+                        },
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
                         getResourceid(resourceObj.id); // setTerminShow("true");
@@ -204,6 +214,29 @@
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
                                      actionListener="#{kalenderHelfer.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />
+                    <!--hier muss noch das Event geändert werden-->
+                    <b:remoteCommand name="changeEventGetResource" id="changeEventResourceID"
+                                     actionListener="#{eventChangeController.changeResourceId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventGetDate" id="changeEventDateID"
+                                     actionListener="#{eventChangeController.changeDateEvent}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="getTerminID" id="getTerminIDID"
+                                     actionListener="#{eventChangeController.getTerminId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventDateEnd" id="changeEventEndID"
+                                     actionListener="#{eventChangeController.changeEndDateEvent}"
+                                     parameters="initialValue" />
+
+                    <h:outputScript>
+                        function changeEvent(date, endDate, id,resource){
+                            changeEventGetResource(resource);
+                            getTerminID(id);
+                            changeEventDateEnd(endDate);
+                            changeEventGetDate(date);
+                        }
+                    </h:outputScript>
+
 
                 </h:form>
             </b:column>
@@ -336,6 +369,8 @@
                         </b:column>
                     </b:row>
                     <b:commandButton value="Löschen" onclick="ajax:kalenderHelfer.deleteAppointment();javascript:changeAppointment()" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                    />
+                    <b:commandButton value="Löschen" onclick="ajax:kalenderHelfer.deleteFreierTermin();javascript:changeAppointment()" rendered="#{kalenderHelfer.freierTerminKorrekt==true}"
                     />
                     <b:commandButton value="Erledigen" onclick="$('#eventContentI').modal('hide');$('#terminErlefigtID').modal('show');return false;"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
                     />
