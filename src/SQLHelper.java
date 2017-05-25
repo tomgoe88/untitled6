@@ -2326,6 +2326,25 @@ public class SQLHelper{
             }
         }
     }
+    public static void updateArbeitszeitEvent(String date, String endDate, int resourceId, int terminID){
+        con = getInstance();
+
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "Update arbeitszeiten SET Schichtbeginn='"+date+"', Schichtende='"+endDate+"', MitarbeiterID='"+resourceId+"' WHERE ArbeitszeitID = '"+terminID+"'";
+                query.executeUpdate(sql);
+                System.out.println(sql);
+            }catch(SQLException e){
+                System.out.println("Update Kurse mit Event// SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+    }
     public static void updateFreierTerminEvent(String date, String endDate, int resourceId, int terminID){
         con = getInstance();
 

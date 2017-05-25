@@ -126,6 +126,26 @@
                         // //groupByDateAndResource: true
                         // }
                         },
+                        editable: true,
+                        eventDrop: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+
+                        },
+                        eventResize: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+                        },
 
 
                         dayClick: function(date, jsEvent, view, resourceObj) {
@@ -138,7 +158,7 @@
 
 
                         // put your options and callbacks here
-                        defaultView: 'timelineWeek',
+                        defaultView: 'agendaDay',
                         resourceAreaWidth:'10%',
                         resourceColumns:[
                         {
@@ -185,6 +205,28 @@
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
                                      actionListener="#{arbeitszeitController.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />
+
+                    <b:remoteCommand name="changeEventGetResource" id="changeEventResourceID"
+                                     actionListener="#{arbeitszeitChangeCorntroller.changeResourceId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventGetDate" id="changeEventDateID"
+                                     actionListener="#{arbeitszeitChangeCorntroller.changeDateEvent}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="getTerminID" id="getTerminIDID"
+                                     actionListener="#{arbeitszeitChangeCorntroller.getTerminId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventDateEnd" id="changeEventEndID"
+                                     actionListener="#{arbeitszeitChangeCorntroller.changeEndDateEvent}"
+                                     parameters="initialValue" />
+
+                    <h:outputScript>
+                        function changeEvent(date, endDate, id,resource){
+                        changeEventGetResource(resource);
+                        getTerminID(id);
+                        changeEventDateEnd(endDate);
+                        changeEventGetDate(date);
+                        }
+                    </h:outputScript>
 
 
 

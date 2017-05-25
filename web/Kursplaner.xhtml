@@ -125,6 +125,26 @@
                         //groupByDateAndResource: true
                         }
                         },
+                        editable: true,
+                        eventDrop: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+
+                        },
+                        eventResize: function(event, delta, revertFunc) {
+                        if (!confirm("Soll der Termin wirklich verschoben werden?")) {
+                        revertFunc();
+                        } else {
+                        changeEvent(event.start.format(),event.end.format(),event.title, event.resourceId);
+                        }
+
+
+                        },
                         dayClick: function(date, jsEvent, view, resourceObj) {
                         selectDate(date);
                         getResourceid(resourceObj.id); // setTerminShow("true");
@@ -175,6 +195,28 @@
                     <b:remoteCommand name="getTheEvent" id="showEventContent"
                                      actionListener="#{kursController.resourceGetEvent}"
                                      update="mordalForm2" parameters="initialValue" />
+                    <!--hier muss noch das Event geändert werden-->
+                    <b:remoteCommand name="changeEventGetResource" id="changeEventResourceID"
+                                     actionListener="#{eventChangeController.changeResourceId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventGetDate" id="changeEventDateID"
+                                     actionListener="#{eventChangeController.changeDateEvent}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="getTerminID" id="getTerminIDID"
+                                     actionListener="#{eventChangeController.getTerminId}"
+                                     parameters="initialValue" />
+                    <b:remoteCommand name="changeEventDateEnd" id="changeEventEndID"
+                                     actionListener="#{eventChangeController.changeEndDateEvent}"
+                                     parameters="initialValue" />
+
+                    <h:outputScript>
+                        function changeEvent(date, endDate, id,resource){
+                        changeEventGetResource(resource);
+                        getTerminID(id);
+                        changeEventDateEnd(endDate);
+                        changeEventGetDate(date);
+                        }
+                    </h:outputScript>
 
 
                 </h:form>
