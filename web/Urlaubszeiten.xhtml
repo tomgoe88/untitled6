@@ -28,6 +28,9 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+    <h:outputStylesheet name="css/bootstrap.min.css"></h:outputStylesheet>
+    <h:outputStylesheet name="css/prime.css"></h:outputStylesheet>
+
 
 
 
@@ -58,12 +61,17 @@
                 <b:row>
                     <b:column span="6">
                         <h:form id="pickerForm">
-                            <p:panelGrid columns="2">
-                                <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
-                                <b:commandButton value="ok" onclick="
+                            <b:row>
+                                <b:column span="4">
+                                    <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
+
+                                </b:column>
+                                <b:column span="1">
+                                    <b:commandButton value="ok" onclick="
                                 $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
                             ;changeDay();"/>
-                            </p:panelGrid>
+                                </b:column>
+                            </b:row>
                         </h:form>
                     </b:column>
                     <b:column span="6">

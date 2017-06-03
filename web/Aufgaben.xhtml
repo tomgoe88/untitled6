@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:bu="http://butterfaces.org/components" xmlns:g="http://java.sun.com/jsf/html">
+<!--es muss noch überall die richtige Liate der Übungen eingefügt werden-->
+<h:head>
+    <title>Facelet Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="theme.css"/>
+    <script type="text/javascript" src="de.js"></script>
+    <script type="text/javascript" src="mobiletest.js"></script>
+    <script type="text/javascript" src="selectdate.js"></script>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+    <script type="text/javascript" src='fullcalendar/lib/moment.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/lib/fullcalendar.min.js'></script>
+    <script type="text/javascript" src='fullcalendar-scheduler/scheduler.js'></script>
+    <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
+    <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
+    <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+
+    <h:outputStylesheet name="css/prime.css"></h:outputStylesheet>
+
+
+</h:head>
+<h:body >
+    <ui:insert name="header">
+        <ui:include src="/hauptseite.xhtml"/>
+    </ui:insert>
+
+
+
+        <b:container fluid="true">
+
+            <b:row>
+                <h:form id="ranking">
+                <b:column colLg="12">
+                    <p:chart type="bar" model="#{chartController.barChartModel}" responsive="true"/>
+                </b:column>
+                </h:form>
+            </b:row>
+            <b:row>
+                <b:tabView>
+                    <b:tab title="Aufgabe">
+                        <h:form id="aufgabenformer">
+
+
+                            <b:row>
+                                <b:column span="12">
+                                    <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
+                                    >
+                                        <b:dataTableColumn label="Beschreibung" >
+                                            <h:outputText value="#{aufga.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erledigen" >
+                                            <b:commandButton value="OK" onclick="ajax:kalenderHelfer.aufgabeErledigen(aufga.aufgabeID);javascript:$('#aufgabenErledigtIDMordal').modal('show');return false;"/>
+
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+
+                                </b:column>
+
+                            </b:row>
+                        </h:form>
+                    </b:tab>
+                    <b:tab title="Memos">
+                        <h:form id="memoFormer">
+
+
+                            <b:row>
+
+                                <b:column span="12">
+                                    <b:commandButton value="Neue Memo" onclick="$('#memoIDMordal').modal('show');return false;"/>
+
+                                    <b:dataTable value="#{memoController.memoList}" var="memos"
+                                    >
+                                        <b:dataTableColumn label="Beschreibung">
+                                            <h:outputText value="#{memos.beschreibung}"/>
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Mitarbeiter">
+                                            <h:outputText value="#{memos.mitarbeiterM}"/>
+
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn label="Erstelldatum">
+                                            <h:outputText value="#{memos.eintragDatum}">
+                                                <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
+                                            </h:outputText>
+
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+                                </b:column>
+
+                            </b:row>
+                        </h:form>
+                    </b:tab>
+                </b:tabView>
+            </b:row>
+        </b:container>
+
+
+
+
+    <b:modal id="aufgabenErledigtIDMordal" title="Aufgabe" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="erledigungsForm">
+
+                <b:panelGrid columns="2" >
+                    <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
+                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
+                                       itemValue="#{erlediger.mitarbeiterID}"/>
+                    </b:selectOneMenu>
+                    <b:commandButton value="Aufgabe erledigen" onclick="ajax:kalenderHelfer.aufgabeErledigt();javascript:$('#aufgabenErledigtIDMordal').modal('hide');" update="aufgabenformer ranking"/>
+
+
+
+
+                </b:panelGrid>
+
+            </h:form>
+        </div>
+
+    </b:modal>
+    <b:modal id="memoIDMordal" title="Memo" styleClass="modalPseudoClass">
+        <div>
+            <h:form id="memoForm">
+                <b:selectOneMenu value="#{memoController.q}">
+                    <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
+                                   itemValue="#{memoEin.mitarbeiterID}"/>
+                </b:selectOneMenu>
+                <h:outputText value="Memo: "></h:outputText>
+                <b:inputText name="memobeschreibung" ></b:inputText>
+                <b:commandButton value="eintragen" onclick="ajax:memoController.neueMemo();javascript:$('#memoIDMordal').modal('hide');" update="memoFormer"/>
+            </h:form>
+        </div>
+
+    </b:modal>
+
+
+</h:body>
+
+</html>

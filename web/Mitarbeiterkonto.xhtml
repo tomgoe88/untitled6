@@ -26,6 +26,10 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+    <h:outputStylesheet name="css/bootstrap.min.css"></h:outputStylesheet>
+    <h:outputStylesheet name="css/prime.css"></h:outputStylesheet>
+    <script type="text/javascript" src="de.js"></script>
+
 
 
     <h:outputScript name="fullcalendar-scheduler/lib/fullcalendar.print.min.css"/>
@@ -46,12 +50,17 @@
     </b:row>
     <b:row>            <b:column span="8">
         <h:form>
-            <p:panelGrid columns="2">
-                <b:datepicker value="#{kalenderHelfer.start}"/>
-                <b:commandButton value="ok" onclick="
+            <b:row>
+                <b:column span="4">
+                    <b:datepicker value="#{kalenderHelfer.start}"/>
+
+                </b:column>
+                <b:column span="1">
+                    <b:commandButton value="ok" onclick="
                                 $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
                             ;changeDay();"/>
-            </p:panelGrid>
+                </b:column>
+            </b:row>
             <b:button value="zurück" onclick="$('#calendar').fullCalendar('prev');
                                                 changeDay();" />
             <b:button value="vor" onclick="$('#calendar').fullCalendar('next');
@@ -159,7 +168,23 @@
                     </h:form>
                 </b:tab>
                 <b:tab title="Arbeitszeiten">
+                    <b:row>
+                        <h:form>
+                        <b:column span="4">
+                            <p:calendar id="event" value="#{pageChanger.angemeldet.filteredDatestart}" locale="de">
+                                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDate}"/>
+                            </p:calendar>
 
+                        </b:column>
+                        <b:column span="4">
+                            <p:calendar id="caöe" value="#{pageChanger.angemeldet.filterDateEnd}" locale="de">
+                                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDate}" update="ma" />
+                            </p:calendar>
+
+                        </b:column>
+
+                        </h:form>
+                    </b:row>
 
                     <h:form id="ma">
 
@@ -178,7 +203,9 @@
                                 <h:outputText value="#{pageChanger.angemeldet.wochendendschicht}"/>
                             </b:column>
                         </b:row>
+
                         <b:row>
+
                             <b:dataTable value="#{pageChanger.angemeldet.arbeitszeitList}" var="az">
                                 <b:dataTableColumn label="Schicht">
                                     <h:outputText value="#{az.schichtart}"></h:outputText>
@@ -215,11 +242,12 @@
                                 <b:dataTableColumn label="Stunden">
                                     <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
                                 </b:dataTableColumn>
-                                <f:facet name="footer">
-                                    <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
-                                    <h:outputText id="arbeistd" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
-                                </f:facet>
+
                             </b:dataTable>
+
+                                <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
+                                <h:outputText id="arbeistd" style="width: 60px; height: auto" value="#{pageChanger.angemeldet.arbeitsdauer}"/>
+
 
                         </b:row>
                     </h:form>

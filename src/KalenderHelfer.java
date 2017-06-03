@@ -1152,15 +1152,7 @@ public class KalenderHelfer {
     public List<Aufgabe> getAufgaben(){
         List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
         String date;
-        if(defaultDate!= null){
-            Calendar c= Calendar.getInstance();
-            c.setTime(defaultDate);
-            c.set(Calendar.HOUR_OF_DAY, 1);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
 
-            date= c.getTime().toString();
-        } else {
             Calendar c= Calendar.getInstance();
             c.setTime(new Date());
             c.set(Calendar.HOUR_OF_DAY, 1);
@@ -1168,7 +1160,7 @@ public class KalenderHelfer {
             c.set(Calendar.SECOND, 0);
 
             date= c.getTime().toString();
-        }
+
         aufgaben =SQLHelper.getAufgaben(date);
         if(aufgaben.size()==0){
             Aufgabe temp= new Aufgabe();

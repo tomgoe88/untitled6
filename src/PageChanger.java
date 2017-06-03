@@ -91,7 +91,7 @@ public class PageChanger implements Serializable {
     }
 
     public String getPageTest() {
-        page="test";
+        page="Aufgaben";
         return  "/"+page+".xhtml";
     }
 

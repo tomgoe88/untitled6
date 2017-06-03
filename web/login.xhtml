@@ -22,9 +22,16 @@
     <h:outputStylesheet library="primefaces-bootstrap" name="theme.css"/>
 
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+    <h:outputStylesheet name="css/bootstrap.min.css"></h:outputStylesheet>
+    <h:outputStylesheet name="css/prime.css"></h:outputStylesheet>
+
 </h:head>
 <h:body onload="testMobile()">
-    <b:navBar brand="Palestro" inverse="true"></b:navBar>
+    <div class="topnav" id="myTopnav">
+
+
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+    </div>
 
 
 <b:container fluid="true">

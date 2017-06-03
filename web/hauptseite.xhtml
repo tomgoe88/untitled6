@@ -25,22 +25,27 @@
     <link rel='stylesheet' href='fullcalendar-scheduler/lib/fullcalendar.min.css' />
     <link rel='stylesheet' href='fullcalendar-scheduler/scheduler.css' />
     <script type="text/javascript" src='fullcalendar/locale/de-at.js'></script>
+    <h:outputStylesheet name="css/prime.css"></h:outputStylesheet>
+
+
 
 </h:head>
 <h:body >
 
 
-    <ui:composition>
 
+
+    <ui:composition>
         <h:form  id="bar">
             <b:navBar  brand="Palestro" brandHref="/welcom.xhtml" rendered="#{pageChanger.angemeeldetUser!=null}" styleClass="barbar" inverse="true">
                 <b:navbarLinks pull="left" >
                     <b:navLink value="Terminplaner" href="#{pageChanger.pageIndex}" />
+                    <b:navLink value="Aufgaben" href="#{pageChanger.pageTest}"/>
                     <b:navLink value="Erledigte Termine" href="#{pageChanger.pageErledigteTermine}" />
                     <b:navLink value="Konto" href="#{pageChanger.pageMitarbeiterkonto}" />
                     <b:navLink value="Kunde" href="#{pageChanger.pageKunde}" />
                     <b:navLink></b:navLink>
-                        <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
+                    <b:navLink value="Kursplaner" href="#{pageChanger.pageKursplaner}" />
                     />
 
 
@@ -50,12 +55,16 @@
                     <b:navLink value="Arbeitszeiten" href="#{pageChanger.pageArbeitszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Mitarbeiter" href="#{pageChanger.pageMitarbeiter}" rendered="#{pageChanger.angemeldet.admin==true}"/>
                     <b:navLink value="Ausfallzeiten" href="#{pageChanger.pageUrlaubszeiten}" rendered="#{pageChanger.angemeldet.admin==true}"/>
-                    <b:navLink value="Test" href="#{pageChanger.pageTest}" rendered="#{pageChanger.angemeldet.admin==true}"/>
+
                     <b:commandButton value="Logout" action="#{pageChanger.goLogout}"/>
                 </b:navbarLinks>
 
             </b:navBar>
         </h:form>
+
+
+
+
     </ui:composition>
 
 

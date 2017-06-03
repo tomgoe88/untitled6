@@ -1113,6 +1113,37 @@ public class SQLHelper{
         }
         return aufgaben;
     }
+    public static List<Aufgabe> getAllAufgaben(){
+        con= getInstance();
+        List<Aufgabe> aufgaben = new ArrayList<Aufgabe>();
+        if(con != null) {
+            // Abfrage-Statement erzeugen.
+            Statement query;
+            try {
+                query = con.createStatement();
+
+
+                String sql =
+                        "SELECT * FROM aufgabenErledigt";
+
+                ResultSet result = query.executeQuery(sql);
+                String title;
+
+                while (result.next()) {
+                    Aufgabe aufgabe= new Aufgabe();
+
+                    aufgabe.setMitarbeiterID(result.getInt("MitarbeiterID"));
+                    aufgaben.add(aufgabe);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("SET AufgabenErledigt //SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return aufgaben;
+    }
     public static List<Memo> getMemo(){
         List<Memo> memos = new ArrayList<Memo>();
         if(con != null) {

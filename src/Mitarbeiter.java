@@ -35,8 +35,8 @@ public class Mitarbeiter extends FullCalendarEventList {
     private String urlaubszeiten;
     private String password;
     private boolean admin;
-    private Date staticStart=null;
-    private Date staticEnd=null;
+    private static Date staticStart;
+    private static Date staticEnd;
     private Date urlabuStart=null;
     private Date urlaubEnd=null;
     private List<Urlaub> urlaubList;
@@ -122,20 +122,20 @@ public class Mitarbeiter extends FullCalendarEventList {
         this.arbeitdauer = arbeitdauer;
     }
 
-    public  Date getStaticStart() {
+    public static   Date getStaticStart() {
         return staticStart;
     }
 
-    public  void setStaticStart(Date staticStart) {
-        this.staticStart = staticStart;
+    public static   void setStaticStart(Date staticStart) {
+        staticStart = staticStart;
     }
 
-    public Date getStaticEnd() {
+    public static Date getStaticEnd() {
         return staticEnd;
     }
 
-    public  void setStaticEnd(Date staticEnd) {
-        this.staticEnd = staticEnd;
+    public static   void setStaticEnd(Date staticEnd) {
+        staticEnd = staticEnd;
     }
 
     public Date getFilteredDatestart() {
@@ -301,7 +301,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         gc.add(Calendar.HOUR_OF_DAY,1);
         // }
         //
-        this.filteredDatestart= gc.getTime();// auch hier schauen, welches Datum raus komme
+        staticStart= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
     public void filterDateEndDate(SelectEvent event) {
@@ -315,7 +315,7 @@ public class Mitarbeiter extends FullCalendarEventList {
         gc.add(Calendar.HOUR_OF_DAY,23);
         // }
         //
-        this.filterDateEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
+        staticEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
     public void filterDateStartDateUrlaubStatic(SelectEvent event) {
@@ -415,35 +415,25 @@ public class Mitarbeiter extends FullCalendarEventList {
         arbeitszeitList = new ArrayList<Arbeitszeit>();
         arbeitszeitList.addAll(SQLHelper.getArbeitszeiten(MitarbeiterID));
         List<Arbeitszeit> tempList= new ArrayList<Arbeitszeit>();
-        if(staticStart==null){
-            if(filteredDatestart!=null){
-                if (filterDateEnd == null) {
-                    filterDateEnd=new Date();
+
+            if(staticStart!=null){
+                if (staticEnd == null) {
+                    staticEnd=new Date();
                 }
                 for(Arbeitszeit a:arbeitszeitList){
-                    if(!a.getArbeitsstart().before(filteredDatestart)&& !a.getArbeitsstart().after(filterDateEnd)){
+                    if(!a.getArbeitsstart().before(staticStart)&& !a.getArbeitsstart().after(staticEnd)){
                         tempList.add(a);
                     }
                 }
                 arbeitszeitList=new ArrayList<Arbeitszeit>();
                 arbeitszeitList.addAll(tempList);
                 tempList=null;
-                System.out.println("Die filteredDate wenn nicht null = "+ filteredDatestart.toString());
+
             }
 
-        } else {
-            if (staticEnd == null) {
-                staticEnd=new Date();
-            }
-            for(Arbeitszeit a:arbeitszeitList){
-                if(!a.getArbeitsstart().before(staticStart)&& !a.getArbeitsstart().after(staticEnd)){
-                    tempList.add(a);
-                }
-            }
-            arbeitszeitList=new ArrayList<Arbeitszeit>();
-            arbeitszeitList.addAll(tempList);
-            tempList=null;
-        }
+
+
+
 
 
         Collections.sort(arbeitszeitList, new Comparator<Arbeitszeit>() {

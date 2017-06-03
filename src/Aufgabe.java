@@ -13,6 +13,7 @@ public class Aufgabe
     private String beschreibung;
     private boolean erledig;
     private Date aufgabendatum;
+    private int mitarbeiterID;
 
     public int getAufgabeID() {
         return aufgabeID;
@@ -44,5 +45,13 @@ public class Aufgabe
 
     public void setAufgabendatum(Date aufgabendatum) {
         this.aufgabendatum = aufgabendatum;
+    }
+
+    public int getMitarbeiterID() {
+        return mitarbeiterID;
+    }
+
+    public void setMitarbeiterID(int mitarbeiterID) {
+        this.mitarbeiterID = mitarbeiterID;
     }
 }

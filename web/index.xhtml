@@ -52,16 +52,23 @@
 
 
 
-            <b:column span="9">
+            <b:column span="12">
                 <b:row>
                     <b:column span="6">
                         <h:form id="pickerForm">
-                            <p:panelGrid columns="2">
-                                <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
-                                <b:commandButton value="ok" onclick="
+
+                                <b:row>
+                                    <b:column span="4">
+                                        <b:datepicker value="#{kalenderHelfer.intitDATE}"/>
+
+                                    </b:column>
+                                    <b:column span="1">
+                                        <b:commandButton value="ok" onclick="
                                 $('#calendar').fullCalendar('gotoDate', #{kalenderHelfer.javaScriptDate});
                             ;changeDay();"/>
-                            </p:panelGrid>
+                                    </b:column>
+                                </b:row>
+
                         </h:form>
                     </b:column>
                     <b:column span="6">
@@ -201,7 +208,7 @@
 
                     <b:remoteCommand name="defaultSelect" id="getCurrentDateCommand"
                                      actionListener="#{kalenderHelfer.resourceGetCurrentDate}"
-                                     update="aufgabenformer pickerForm" parameters="initialValue" />
+                                     update="pickerForm" parameters="initialValue" />
                     <b:remoteCommand name="dateSelect" id="getDayDate"
                                      actionListener="#{kalenderHelfer.resourcegetDate}"
                                      update="mordalForm" parameters="initialValue" />
@@ -240,62 +247,7 @@
 
                 </h:form>
             </b:column>
-            <b:column span="3">
-                <b:tabView>
-                    <b:tab title="Aufgabe">
-                        <h:form id="aufgabenformer">
 
-
-                            <b:row>
-                                <b:column span="12">
-                                    <b:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga"
-                                    >
-                                        <b:dataTableColumn label="Beschreibung" >
-                                            <h:outputText value="#{aufga.beschreibung}"/>
-                                        </b:dataTableColumn>
-                                        <b:dataTableColumn label="Erledigen" >
-                                            <b:commandButton value="OK" onclick="ajax:kalenderHelfer.aufgabeErledigen(aufga.aufgabeID);javascript:$('#aufgabenErledigtIDMordal').modal('show');return false;"/>
-
-                                        </b:dataTableColumn>
-                                    </b:dataTable>
-
-                                </b:column>
-
-                            </b:row>
-                        </h:form>
-                    </b:tab>
-                    <b:tab title="Memos">
-                        <h:form id="memoFormer">
-
-
-                            <b:row>
-
-                                <b:column span="12">
-                                    <b:commandButton value="Neue Memo" onclick="$('#memoIDMordal').modal('show');return false;"/>
-
-                                    <b:dataTable value="#{memoController.memoList}" var="memos"
-                                    >
-                                        <b:dataTableColumn label="Beschreibung">
-                                            <h:outputText value="#{memos.beschreibung}"/>
-                                        </b:dataTableColumn>
-                                        <b:dataTableColumn label="Mitarbeiter">
-                                            <h:outputText value="#{memos.mitarbeiterM}"/>
-
-                                        </b:dataTableColumn>
-                                        <b:dataTableColumn label="Erstelldatum">
-                                            <h:outputText value="#{memos.eintragDatum}">
-                                                <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
-                                            </h:outputText>
-
-                                        </b:dataTableColumn>
-                                    </b:dataTable>
-                                </b:column>
-
-                            </b:row>
-                        </h:form>
-                    </b:tab>
-                </b:tabView>
-            </b:column>
 
 
 
@@ -394,40 +346,7 @@
         </div>
 
     </b:modal>
-    <b:modal id="aufgabenErledigtIDMordal" title="Aufgabe" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="erledigungsForm">
 
-                <b:panelGrid columns="2" >
-                    <b:selectOneMenu value="#{kalenderHelfer.aufgabenErledigerID}">
-                        <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="erlediger" itemLabel="#{erlediger.name}"
-                                       itemValue="#{erlediger.mitarbeiterID}"/>
-                    </b:selectOneMenu>
-                    <b:commandButton value="Aufgabe erledigen" onclick="ajax:kalenderHelfer.aufgabeErledigt();javascript:$('#aufgabenErledigtIDMordal').modal('hide');" update="aufgabenformer"/>
-
-
-
-
-                </b:panelGrid>
-
-            </h:form>
-        </div>
-
-    </b:modal>
-    <b:modal id="memoIDMordal" title="Memo" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="memoForm">
-                <b:selectOneMenu value="#{memoController.q}">
-                    <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
-                                   itemValue="#{memoEin.mitarbeiterID}"/>
-                </b:selectOneMenu>
-                <h:outputText value="Memo: "></h:outputText>
-                <b:inputText name="memobeschreibung" ></b:inputText>
-                <b:commandButton value="eintragen" onclick="ajax:memoController.neueMemo();javascript:$('#memoIDMordal').modal('hide');" update="memoFormer"/>
-            </h:form>
-        </div>
-
-    </b:modal>
     <b:modal id="terminErlefigtID" title="Termin erledigen" styleClass="modalPseudoClass">
         <h:form id="aufgabenForm">
             <b:panelGrid columns="1">
