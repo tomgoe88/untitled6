@@ -40,6 +40,7 @@
         <b:container fluid="true">
 
             <b:row>
+                <h:outputText value="#{resourceController.events}"></h:outputText>
                 <h:form id="ranking">
                 <b:column colLg="12">
                     <p:chart type="bar" model="#{chartController.barChartModel}" responsive="true"/>
@@ -71,34 +72,7 @@
                         </h:form>
                     </b:tab>
                     <b:tab title="Memos">
-                        <h:form id="memoFormer">
 
-
-                            <b:row>
-
-                                <b:column span="12">
-                                    <b:commandButton value="Neue Memo" onclick="$('#memoIDMordal').modal('show');return false;"/>
-
-                                    <b:dataTable value="#{memoController.memoList}" var="memos"
-                                    >
-                                        <b:dataTableColumn label="Beschreibung">
-                                            <h:outputText value="#{memos.beschreibung}"/>
-                                        </b:dataTableColumn>
-                                        <b:dataTableColumn label="Mitarbeiter">
-                                            <h:outputText value="#{memos.mitarbeiterM}"/>
-
-                                        </b:dataTableColumn>
-                                        <b:dataTableColumn label="Erstelldatum">
-                                            <h:outputText value="#{memos.eintragDatum}">
-                                                <f:convertDateTime pattern="dd.MM. yyyy" locale="de"/>
-                                            </h:outputText>
-
-                                        </b:dataTableColumn>
-                                    </b:dataTable>
-                                </b:column>
-
-                            </b:row>
-                        </h:form>
                     </b:tab>
                 </b:tabView>
             </b:row>
@@ -127,20 +101,7 @@
         </div>
 
     </b:modal>
-    <b:modal id="memoIDMordal" title="Memo" styleClass="modalPseudoClass">
-        <div>
-            <h:form id="memoForm">
-                <b:selectOneMenu value="#{memoController.q}">
-                    <f:selectItems value="#{memoController.mitarbeiterList}" var="memoEin" itemLabel="#{memoEin.name}"
-                                   itemValue="#{memoEin.mitarbeiterID}"/>
-                </b:selectOneMenu>
-                <h:outputText value="Memo: "></h:outputText>
-                <b:inputText name="memobeschreibung" ></b:inputText>
-                <b:commandButton value="eintragen" onclick="ajax:memoController.neueMemo();javascript:$('#memoIDMordal').modal('hide');" update="memoFormer"/>
-            </h:form>
-        </div>
 
-    </b:modal>
 
 
 </h:body>

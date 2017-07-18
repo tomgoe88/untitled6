@@ -48,6 +48,7 @@
                 <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
                 <p:ajax event="valueChange" update="cal ma obe kundenWidget"/>
             </p:selectOneMenu>
+
         </b:column>
         <p:commandButton value="Neuer Kunde" oncomplete="PF('kundenanlegen').show();"/>
     </b:row>
@@ -108,31 +109,34 @@
     <b:row>
 
 
-                <b:dataTable value="#{kundenController.kunde.termineList}" var="termi" span="12">
-                    <b:dataTableColumn label="Terminart">
+                <p:dataTable value="#{kundenController.kunde.termineList}" var="termi" span="12">
+                    <p:column headerText="Terminart">
                         <h:outputText value="#{termi.terminart}"></h:outputText>
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Tag">
+                    </p:column>
+                    <p:column headerText="Tag">
                         <h:outputText value="#{termi.terminstart}">
                             <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
                         </h:outputText>
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Terminbeginn">
+                    </p:column>
+                    <p:column headerText="Terminbeginn">
                         <h:outputText value="#{termi.terminstart}">
                             <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                         </h:outputText>
 
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Terminende">
+                    </p:column>
+                    <p:column headerText="Terminende">
                         <h:outputText value="#{termi.terminende}">
                             <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
                         </h:outputText>
 
-                    </b:dataTableColumn>
-                    <b:dataTableColumn label="Dauer">
+                    </p:column>
+                    <p:column headerText="Dauer">
                         <h:outputText value="#{termi.termindauer}"></h:outputText>
-                    </b:dataTableColumn>
-                </b:dataTable>
+                    </p:column>
+                    <p:column headerText="Ergebnis">
+                        <h:outputText value="#{termi.hinweis}"></h:outputText>
+                    </p:column>
+                </p:dataTable>
 
 
 

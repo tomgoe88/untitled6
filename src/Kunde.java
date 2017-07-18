@@ -1,11 +1,15 @@
 import org.primefaces.event.SelectEvent;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.*;
 
 /**
  * Created by Jutom on 27.01.2017.
  */
+@ManagedBean
+@ViewScoped
 public class Kunde {
    private int KundeID;
     private String vorname;
@@ -15,10 +19,10 @@ public class Kunde {
     private String strasse;
     private String plz;
     private String ort;
-    private Date staticStart=null;
-    private Date staticEnd=null;
+    private Date staticStart;
+    private Date staticEnd;
 
-    private List<Termine> termineList;
+    private List<ErledigteTermine> termineList;
 
 
     public int getKundeID() {
@@ -84,40 +88,7 @@ public class Kunde {
     public void setOrt(String ort) {
         this.ort = ort;
     }
-
-    public List<Termine> getTermineList() {
-        termineList = new ArrayList<Termine>();
-        termineList.addAll(SQLHelper.getKundeTermine(KundeID));
-        List<Termine> tempList= new ArrayList<Termine>();
-
-            if(staticStart!=null) {
-                if (staticEnd == null) {
-                    staticEnd = new Date();
-                }
-
-                for (Termine a : termineList) {
-                    if (!a.getTerminstart().before(staticStart) && !a.getTerminstart().after(staticEnd)) {
-                        tempList.add(a);
-                    }
-                }
-                termineList = new ArrayList<Termine>();
-                termineList.addAll(tempList);
-                tempList = null;
-            }
-
-
-        Collections.sort(termineList, new Comparator<Termine>() {
-            public int compare(Termine o1, Termine o2) {
-                return o2.getTerminstart().compareTo(o1.getTerminstart());
-            }
-        });
-
-        return termineList;
-    }
-
-
-
-    public void setTermineList(List<Termine> termineList) {
+    public void setTermineList(List<ErledigteTermine> termineList) {
         this.termineList = termineList;
     }
 
@@ -165,6 +136,40 @@ public class Kunde {
         this.staticEnd= gc.getTime();// auch hier schauen, welches Datum raus komme
 
     }
+
+    public List<ErledigteTermine> getTermineList() {
+        termineList = new ArrayList<ErledigteTermine>();
+        termineList.addAll(SQLHelper.getKundeTermine(KundeID));
+        List<ErledigteTermine> tempList= new ArrayList<ErledigteTermine>();
+
+            if(this.staticStart!=null) {
+                if (staticEnd == null) {
+                    staticEnd = new Date();
+                }
+
+                for (ErledigteTermine a : termineList) {
+                    if (!a.getTerminstart().before(this.staticStart) && !a.getTerminstart().after(staticEnd)) {
+                        tempList.add(a);
+                    }
+                }
+                termineList = new ArrayList<ErledigteTermine>();
+                termineList.addAll(tempList);
+                tempList = null;
+            }
+
+
+        Collections.sort(termineList, new Comparator<Termine>() {
+            public int compare(Termine o1, Termine o2) {
+                return o2.getTerminstart().compareTo(o1.getTerminstart());
+            }
+        });
+
+        return termineList;
+    }
+
+
+
+
     @Override
     public String toString(){
 return this.getEmail()+" "+this.getOrt();    }

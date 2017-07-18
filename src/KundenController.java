@@ -36,8 +36,12 @@ public class KundenController {
     }
 
     public List<Kunde> getKundeList() {
-        this.kundeList= new ArrayList<>();
-        kundeList.addAll(SQLHelper.getKundeList());
+        //this.kundeList= new ArrayList<>();
+        if(kundeList ==null){
+            this.kundeList= new ArrayList<>();
+            kundeList.addAll(SQLHelper.getKundeList());
+        }
+
         Collections.sort(kundeList, new Comparator<Kunde>() {
             public int compare(Kunde o1, Kunde o2) {
                 return o2.getNachname().compareTo(o1.getNachname());

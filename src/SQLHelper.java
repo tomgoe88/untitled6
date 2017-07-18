@@ -1257,6 +1257,13 @@ public class SQLHelper{
 
         return fb;
     }
+    ///////
+    //TODO:hier beginnt der Column add
+
+    //TODO:hier endet der Column add
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
     public static List<FullCalendarEventBean> getKurszeitenMitarbeiter(int mitarbeiter){ //hier sollen die Arbeitszeiten geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
         List<FullCalendarEventBean> fb= new ArrayList<FullCalendarEventBean>();
@@ -2110,10 +2117,10 @@ public class SQLHelper{
         }
     }
 
-    public static List<Termine> getKundeTermine(int kundenid){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
+    public static List<ErledigteTermine> getKundeTermine(int kundenid){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
 
-        List<Termine> fb= new ArrayList<Termine>();
+        List<ErledigteTermine> fb= new ArrayList<ErledigteTermine>();
 
         if(con != null) {
             // Abfrage-Statement erzeugen.
@@ -2123,14 +2130,19 @@ public class SQLHelper{
 
 
                 String sql =
-                        "SELECT *" +
-                                "FROM termin " +
-                                "WHERE KundenID = '"+kundenid+"'";
+                        "SELECT * FROM termin " +
+                                "LEFT JOIN terminerledigt " +
+                                "ON   termin.TerminID = terminerledigt.TerminID " +
+                                "INNER JOIN kunde " +
+                                "ON termin.KundenID = kunde.KundenID " +
+                                "INNER JOIN mitarbeiter " +
+                                "ON termin.MitarbeiterMacherID = mitarbeiter.MitarbeiterID " +
+                                "WHERE termin.KundenID ='"+kundenid+"'";
                 ResultSet result = query.executeQuery(sql);
                 String title;
 
                 while (result.next()) {
-                    Termine temp = new Termine();
+                    ErledigteTermine temp = new ErledigteTermine();
                     String terminstart=result.getString("Terminstart");
                     String terminende=result.getString("Terminende");
                     DateFormat dateFormat=new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
@@ -2146,8 +2158,11 @@ public class SQLHelper{
                     temp.setTerminstart(start);
                     temp.setTerminende(end);
                     String terminart= result.getString("Terminart");
-
                     temp.setTerminart(terminart);
+                    temp.setErgebnis(result.getString("Ergebnis"));
+                    temp.setHinweis(result.getString("Hinweis"));
+                    temp.setKundeName(result.getString("kunde.vorname")+" "+result.getString("kunde.nachname"));
+                    temp.setMitarbeiterName(result.getString("mitarbeiter.vorname")+" "+result.getString("mitarbeiter.nachname"));
                     fb.add(temp);
 
                 }
