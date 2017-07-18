@@ -949,6 +949,11 @@ public class KalenderHelfer {
             System.out.println(texten);
 
     }
+    public String changeKundenID(){
+        int id= SQLHelper.selectKundenID(terminID);
+        KundenController.d=id;
+        return  "/Kunden.xhtml";
+    }
 
     public String getJavaScriptDate() {
 

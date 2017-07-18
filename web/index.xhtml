@@ -326,6 +326,8 @@
                     />
                     <b:commandButton value="Erledigen" onclick="$('#eventContentI').modal('hide');$('#terminErlefigtID').modal('show');return false;"  rendered="#{kalenderHelfer.terminErledigtTest==false}"
                     />
+                    <b:commandButton value="Zum Kunde" action="#{kalenderHelfer.changeKundenID}" rendered="#{kalenderHelfer.terminErledigtTest==false}"
+                    />
                     <b:commandButton value="OK"  onclick=" $('#eventContentI').modal('hide');return false;"
                     />
                     <h:outputScript>

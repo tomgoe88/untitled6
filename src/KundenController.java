@@ -15,6 +15,7 @@ public class KundenController {
     private int q=-1;
     private Kunde kunde;
     private List<Kunde> kundeList;
+    public static int d=0;
 
     public KundenController(){
 
@@ -57,7 +58,9 @@ public class KundenController {
 
 
     public Kunde getKunde() {
-
+        if (d!=0){
+            q=d;
+        }
         if(q != 0){
             for(Kunde m: getKundeList()){
                 //  if(m.getName().equalsIgnoreCase(q)){

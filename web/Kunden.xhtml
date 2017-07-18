@@ -40,26 +40,35 @@
 <b:container fluid="true">
    <h:form id="obe">
     <b:row>
-        <b:column span="12">
+        <b:column span="10">
 
-            <p:selectOneMenu id="mitauswahl" value="#{kundenController.q}" styleClass="col-lg-12" >
+            <p:selectOneMenu id="mitauswahl" value="#{kundenController.q}" filter="true" filterMatchMode="startsWith" styleClass="col-lg-12" >
                 <f:selectItems value="#{kundenController.kundeList}" var="mi" itemLabel="#{mi.vorname} #{mi.nachname}"
                                itemValue="#{mi.kundeID}"/>
                 <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                <p:ajax event="valueChange" update="cal ma obe kundenWidget"/>
+                <p:ajax event="valueChange" update="cal ma obe kundenWidget namee"/>
             </p:selectOneMenu>
 
         </b:column>
-        <p:commandButton value="Neuer Kunde" oncomplete="PF('kundenanlegen').show();"/>
+        <b:column span="2">
+            <p:commandButton value="Neuer Kunde" oncomplete="PF('kundenanlegen').show();"/>
+        </b:column>
+
     </b:row>
+       <b:row style="height:60px">
+            <h1>
+                <h:outputText id="namee" value="#{kundenController.kunde.vorname} #{kundenController.kunde.nachname}"></h:outputText>
+            </h1>
+       </b:row>
    </h:form>
 
-<b:tabView >
-    <b:tab title="Adressdaten" >
-    <h:form id="cal">
+
+
+
     <b:row>
-        <b:column span="12">
-            <p:panelGrid columns="2">
+        <b:column span="2">
+            <h:form id="cal">
+            <p:panelGrid columns="1">
             <h:outputLabel value="Telefonnummer: "></h:outputLabel>
             <h:outputText value="#{kundenController.kunde.telefonnummer}"/>
             <h:outputLabel value="E-Mail: "></h:outputLabel>
@@ -73,77 +82,79 @@
                 <b/>
                 <p:commandButton value="ändern" oncomplete="PF('kundenaender').show();"/>
             </p:panelGrid>
+            </h:form>
+        </b:column>
+        <b:column span="9">
+            <b:row>
+                <h:form>
+                    <b:column>
+                        <h:outputLabel value="von: "/>
+                        <p:calendar showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateStartDateMA}"
+                                    update="ma"/>
+                        </p:calendar>
+                        <h:outputLabel value="bis: "/>
+                        <p:calendar showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateEndDateMA}"
+                                    update="ma"/>
+                        </p:calendar>
+
+                    </b:column>
+                </h:form>
+            </b:row>
+            <h:form id="ma">
+                <b:row>
+
+
+                    <p:dataTable value="#{kundenController.kunde.termineList}" var="termi" span="12">
+                        <p:column headerText="Terminart">
+                            <h:outputText value="#{termi.terminart}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Tag">
+                            <h:outputText value="#{termi.terminstart}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Terminbeginn">
+                            <h:outputText value="#{termi.terminstart}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                            </h:outputText>
+
+                        </p:column>
+                        <p:column headerText="Terminende">
+                            <h:outputText value="#{termi.terminende}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                            </h:outputText>
+
+                        </p:column>
+                        <p:column headerText="Dauer">
+                            <h:outputText value="#{termi.termindauer}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Ergebnis">
+                            <h:outputText value="#{termi.hinweis}"></h:outputText>
+                        </p:column>
+                    </p:dataTable>
+
+
+
+                </b:row>
+            </h:form>
 
         </b:column>
     </b:row>
-    </h:form>
-    </b:tab>
-
-    <b:tab title="Termine" >
-    <b:row>
-        <h:form>
-            <b:column>
-                <h:outputLabel value="von: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
-
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateStartDateMA}"
-                            update="ma"/>
-                </p:calendar>
-                <h:outputLabel value="bis: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
-
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{kundenController.kunde.filterDateEndDateMA}"
-                            update="ma"/>
-                </p:calendar>
-
-            </b:column>
-        </h:form>
-    </b:row>
-        <h:form id="ma">
-    <b:row>
-
-
-                <p:dataTable value="#{kundenController.kunde.termineList}" var="termi" span="12">
-                    <p:column headerText="Terminart">
-                        <h:outputText value="#{termi.terminart}"></h:outputText>
-                    </p:column>
-                    <p:column headerText="Tag">
-                        <h:outputText value="#{termi.terminstart}">
-                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Terminbeginn">
-                        <h:outputText value="#{termi.terminstart}">
-                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
-                        </h:outputText>
-
-                    </p:column>
-                    <p:column headerText="Terminende">
-                        <h:outputText value="#{termi.terminende}">
-                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
-                        </h:outputText>
-
-                    </p:column>
-                    <p:column headerText="Dauer">
-                        <h:outputText value="#{termi.termindauer}"></h:outputText>
-                    </p:column>
-                    <p:column headerText="Ergebnis">
-                        <h:outputText value="#{termi.hinweis}"></h:outputText>
-                    </p:column>
-                </p:dataTable>
 
 
 
-    </b:row>
-        </h:form>
-    </b:tab>
-</b:tabView>
+
+
 </b:container>
 
 <p:dialog widgetVar="kundenaender" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">

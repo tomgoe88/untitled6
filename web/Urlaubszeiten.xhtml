@@ -144,7 +144,7 @@
 
 
                         // put your options and callbacks here
-                        defaultView: 'timelineWeek',
+                        defaultView: 'agendaDay',
                         resourceAreaWidth:'10%',
                         resourceColumns:[
                         {
@@ -243,6 +243,7 @@
             <h:form id="mordalForm">
                 <b:panelGrid columns="1" rendered="#{terminEintragController.wert==0}">
                     <b:selectOneMenu id="vorauswahl" value="#{terminEintragController.wert}">
+
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Urlaubszeit" itemValue="1"/>
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Unizeit" itemValue="2"/>
                         <f:selectItem value="#{terminEintragController.wert}" itemLabel="Krankheitszeit" itemValue="3"/>
@@ -260,6 +261,7 @@
                     <h:outputLabel value="Unibeginn: " rendered="#{terminEintragController.wert==2}"/>
                     <h:outputLabel value="Krankheitsbeginn: " rendered="#{terminEintragController.wert==3}"/>
                     <h:outputLabel value="Ausgleichstagbeginn: " rendered="#{terminEintragController.wert==4}"/>
+
                     <b:dateTimePicker value="#{kalenderHelfer.start}">
 
                     </b:dateTimePicker>
@@ -267,6 +269,7 @@
                     <h:outputLabel value="Uniende: " rendered="#{terminEintragController.wert==2}"/>
                     <h:outputLabel value="Krankheitsende: " rendered="#{terminEintragController.wert==3}"/>
                     <h:outputLabel value="Ausgleichstagende: " rendered="#{terminEintragController.wert==4}"/>
+
                     <b:dateTimePicker value="#{kalenderHelfer.end}">
 
                     </b:dateTimePicker>

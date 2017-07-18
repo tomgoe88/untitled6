@@ -42,50 +42,10 @@
 
 <b:container fluid="true">
     <b:row>
-        <h:form id="navform">
-
-            <b:column span="4">
-
-
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
-
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleDateSelect}"
-                            update="cal aufgabenformer"/>
-                </p:calendar>
-
-
-
-            </b:column>
-
-            <b:column span="1"/>
-            <p:selectBooleanButton id="wocheTag"  value="#{kalenderHelfer.wocheTag}" onLabel="Woche" offLabel="Tag" style="width:110px"  >
-                <p:ajax update="cal aufgabenformer"/>
-            </p:selectBooleanButton>
-
-            <p:commandButton value="letzter Tag" action="#{kalenderHelfer.preDay}" update="cal aufgabenformer"></p:commandButton>
-
-
-            <p:commandButton value="nächster Tag" action="#{kalenderHelfer.nextDay}" update="cal aufgabenformer"></p:commandButton>
-            <p:commandButton value="letzte Woche" action="#{kalenderHelfer.preWeek}" update="cal aufgabenformer"></p:commandButton>
-
-
-            <p:commandButton value="nächste Woche" action="#{kalenderHelfer.nextWeek}" update="cal aufgabenformer"></p:commandButton>
-            <b/>
-
-
-        </h:form>
+       
     </b:row>
     <h:form id="cal">
-        <b:row>
-            <b:column span="5">
-                <h:outputText value="#{kalenderHelfer.defaultDate}" style="font-size: 24px">
-                    <f:convertDateTime pattern="dd. MMMM yyyy" locale="de"/>
-                </h:outputText>
-            </b:column>
-        </b:row>
+     
         <b:row>
 
             <b:column span="12">
@@ -94,178 +54,164 @@
                     <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mi" itemLabel="#{mi.name}"
                                    itemValue="#{mi.mitarbeiterID}"/>
                     <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="0"/>
-                    <p:ajax event="valueChange" update="cal ma"/>
+                    <p:ajax event="valueChange" update="ma tet"/>
                 </p:selectOneMenu>
             </b:column>
         </b:row>
-
-        <b:label text="#{mit.name}"/>
-        <b:fullCalendar
-                lang="de"
-                calendarHeader="false"
-                defaultView="#{kalenderHelfer.changeAgenda}"
-                events="#{kalenderHelfer.mitarbeit.arbeitszeiten}"
-
-                dayClick="
-                                                        function(date, jsEvent, view) {
-                                                        selectDate(date);
-                                                        PF('arbeitszeitWidget').show();
-                                                        }"
-                defaultDate="#{kalenderHelfer.theDefaultDate}">
-        </b:fullCalendar>
     </h:form>
+<b:row>
+    <b:column span="1"></b:column>
+    <b:column span="10">
+    <b:tabView>
+     
+        <b:tab title="Arbeitszeiten">
+            <b:row>
+                <h:form id="tet">
+                    <b:column span="4">
+                        <p:calendar id="event" showTodayButton="true" showOn="button"
 
-    <b:row>
-        <b:column span="12">
-            <b:panel look="success" collapsible="true" title="Aufgaben">
-                <b:container fluid="true">
-                    <h:form id="aufgabenformer">
-                        <b:row >
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item" value="#{kalenderHelfer.mitarbeit.filteredDatestart}" locale="de">
+                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDate}"/>
+                        </p:calendar>
+                        <p:calendar id="caöe" value="#{kalenderHelfer.mitarbeit.filterDateEnd}" showTodayButton="true" showOn="button"
+                                    locale="de"
+
+                                    pattern="dd.MM.yyyy"
+                                    styleClass="embed-responsive-item">
+                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDate}" update="ma" />
+                        </p:calendar>
 
 
-                            <p:commandButton value="Neue Aufgabe"  oncomplete="PF('NeueAufgabe').show();" styleClass="btn"/>
-                        </b:row>
-                        <b:row >
-                            <b:column span="6">
-                                <p:dataTable value="#{kalenderHelfer.aufgaben}" var="aufga">
-                                    <p:column>
-                                        <h:outputText value="#{aufga.beschreibung}"/>
-                                    </p:column>
+                    </b:column>
+                    <b:column span="4">
 
-                                </p:dataTable>
-                            </b:column>
-                            <b:column span="6">
+                    </b:column>
 
-                            </b:column>
+                </h:form>
+            </b:row>
 
-                        </b:row>
-                    </h:form>
-                </b:container>
-            </b:panel>
-        </b:column>
-    </b:row>
-    <b:row>
-        <h:form>
-            <b:column>
-                <h:outputLabel value="von: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
+            <h:form id="ma">
 
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDate}"
-                            update="ma"/>
-                </p:calendar>
-                <h:outputLabel value="bis: "/>
-                <p:calendar showTodayButton="true" showOn="button"
-                            locale="de"
+                <b:row>
+                    <b:column>
+                        <h:outputLabel value="Frühschichten: "></h:outputLabel>
+                        <h:outputText value="#{kalenderHelfer.mitarbeit.fruehSchicht}"/>
+                        <b/>
+                        <h:outputLabel value="Mittelschichten: "></h:outputLabel>
+                        <h:outputText value="#{kalenderHelfer.mitarbeit.mittelSchicht}"/>
+                        <b/>
+                        <h:outputLabel value="Spätschichten: "></h:outputLabel>
+                        <h:outputText value="#{kalenderHelfer.mitarbeit.spaetSchicht}"/>
+                        <b/>
+                        <h:outputLabel value="Wochenendschichten: "></h:outputLabel>
+                        <h:outputText value="#{kalenderHelfer.mitarbeit.wochendendschicht}"/>
+                    </b:column>
+                </b:row>
 
-                            pattern="dd.MM.yyyy"
-                            styleClass="embed-responsive-item">
-                    <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDate}"
-                            update="ma"/>
-                </p:calendar>
+                <b:row>
 
-            </b:column>
-        </h:form>
-        <h:form id="ma">
-            <b:column>
-                <p:dataTable value="#{kalenderHelfer.mitarbeit.arbeitszeitList}" var="az" >
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.arbeitszeitList}" var="az">
+                        <b:dataTableColumn label="Schicht">
+                            <h:outputText value="#{az.schichtart}"></h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Tag">
+                            <h:outputText value="#{az.arbeitsstart}">
+                                <f:convertDateTime pattern="dd" timeZone="GMT+2"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Monat">
+                            <h:outputText value="#{az.arbeitsstart}">
+                                <f:convertDateTime pattern="MMMM" timeZone="GMT+2"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Jahr">
+                            <h:outputText value="#{az.arbeitsstart}">
+                                <f:convertDateTime pattern="yyyy" timeZone="GMT+2"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Arbeitsbeginn">
+                            <h:outputText value="#{az.arbeitsstart}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
+                            </h:outputText>
+                            <b:commandButton value="-" onclick="ajax:az.deleteStundeStart()" update="ma"/>
+                            <b:commandButton value="+" onclick="ajax:az.addStundeStart()" update="ma"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Arbeitsende">
+                            <h:outputText value="#{az.arbeitsende}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT+2"/>
+                            </h:outputText>
+                            <b:commandButton value="-" onclick="ajax:az.deleteStundeEnde()" update="ma"/>
+                            <b:commandButton value="+" onclick="ajax:az.addStundeEnde()" update="ma"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Stunden">
+                            <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
+                        </b:dataTableColumn>
 
-                    <p:column headerText="Tag">
-                        <h:outputText value="#{az.arbeitsstart}">
-                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT+1"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Arbeitsbeginn">
-                        <h:outputText value="#{az.arbeitsstart}">
-                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
-                        </h:outputText>
-                        <p:commandButton value="weniger" action="#{az.deleteStundeStart}" update="ma"/>
-                        <p:commandButton value="mehr" action="#{az.addStundeStart}" update="ma"/>
-                    </p:column>
-                    <p:column headerText="Arbeitsende">
-                        <h:outputText value="#{az.arbeitsende}">
-                            <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
-                        </h:outputText>
-                        <p:commandButton value="weniger" action="#{az.deleteStundeEnde}" update="ma"/>
-                        <p:commandButton value="mehr" action="#{az.addStundeEnde    }" update="ma"/>
-                    </p:column>
-                    <p:column headerText="Stunden">
-                        <h:outputText value="#{az.arbeitsdauer}"></h:outputText>
-                    </p:column>
-                </p:dataTable>
-                <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
-                <h:outputText id="arbeistd" value="#{kalenderHelfer.mitarbeit.arbeitsdauer}"/>
-            </b:column>
-        </h:form>
-    </b:row>
+                    </b:dataTable>
+
+                    <h:outputLabel for="arbeistd" value="Gesamtstunden: "></h:outputLabel>
+                    <h:outputText id="arbeistd" style="width: 60px; height: auto" value="#{kalenderHelfer.mitarbeit.arbeitsdauer}"/>
+
+
+                </b:row>
+            </h:form>
+        </b:tab>
+        <b:tab title="Urlaubszeiten">
+
+            <b:row>
+                <h:form id="urma">
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub">
+                        <b:dataTableColumn label="Urlaubsbeginn">
+                            <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
+                                <f:convertDateTime pattern="dd.MM.yyyy"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Urlaubsende">
+                            <h:outputText value="#{mitarbeiterurlaub.urlaubEnde}">
+                                <f:convertDateTime pattern="dd.MM.yyyy"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Urlaubstage">
+                            <h:outputText value="#{mitarbeiterurlaub.urlaubstage}"/>
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </h:form>
+            </b:row>
+        </b:tab>
+
+        <b:tab title="Krankheitstage">
+
+            <b:row>
+                <h:form id="krama">
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.krankheitslist}" var="mitkrank">
+                        <b:dataTableColumn label="Krankheitsbeginn">
+                            <h:outputText value="#{mitkrank.urlaubBeginn}">
+                                <f:convertDateTime pattern="dd.MM.yyyy"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Krankheitsende">
+                            <h:outputText value="#{mitkrank.urlaubEnde}">
+                                <f:convertDateTime pattern="dd.MM.yyyy"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn label="Krankheitstage">
+                            <h:outputText value="#{mitkrank.urlaubstage}"/>
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </h:form>
+            </b:row>
+        </b:tab>
+    </b:tabView>
+    </b:column>
+    <b:column span="1"></b:column>
+
+</b:row>
+       
+
 </b:container>
 
-
-<p:dialog widgetVar="arbeitszeitWidget" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-    <h:form id="arbeitszeitfenster">
-        <p:panelGrid columns="3" id="eventDetails">
-            <h:outputLabel value="Termin für #{kalenderHelfer.mitarbeit.name}"/>
-            <h:outputText id="Start" value="Schichtbeginn: "/>
-            <p:calendar widgetVar="startDate" name="start" for="Start" pattern="MM/dd/yyyy HH:mm" locale="de"
-                        value="#{kalenderHelfer.start}">
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleStartDate}"/>
-            </p:calendar>
-            <b/>
-            <h:outputText id="End" value="Schichtende: "/>
-            <p:calendar
-                    widgetVar="endDate"
-                    name="end"
-                    for="End"
-                    pattern="MM/dd/yyyy HH:mm"
-                    locale="de"
-                    value="#{kalenderHelfer.end}">
-                <p:ajax event="dateSelect" listener="#{kalenderHelfer.handleEndDate}"/>
-            </p:calendar>
-            <b/>
-            <h:outputText id="value" value="Wöchentlich wiederholen? "/>
-            <p:selectBooleanButton id="value1" value="#{kalenderHelfer.woechentlich}" onLabel="Ja" offLabel="Nein" style="width:60px" />
-
-            <div class="knob-container ui-corner-all">
-                <p:knob value="#{kalenderHelfer.temp}">
-                    <p:ajax listener="#{kalenderHelfer.onChange}"/>
-                </p:knob>
-            </div>
-            <p:commandButton action="#{kalenderHelfer.newWorktime}" value="go for it" update="cal"
-                             oncomplete="PF('arbeitszeitWidget').hide();" styleClass="btn"/>
-        </p:panelGrid>
-        <pe:remoteCommand id="arbeitszeitComand" name="dateSelect" process="@this" update="arbeitszeitfenster"
-                          actionListener="#{kalenderHelfer.myWorkDate}">
-            <pe:methodSignature parameters="java.lang.String"/>
-            <pe:methodParam name="dateEvent">
-            </pe:methodParam>
-        </pe:remoteCommand>
-        <script type="text/javascript" src="selectdate.js"></script>
-    </h:form>
-</p:dialog>
-<p:dialog widgetVar="dlg2" header="Event Details" showEffect="clip" hideEffect="clip" responsive="true">
-    <h:form id="deng">
-        <b:panelGrid columns="2">
-            <h:outputLabel for="mvor" value="Voranme "/>
-            <b:inputText id="mvor" name="mitarbeitervorname"/>
-            <h:outputLabel for="mnach" value="Nachname "/>
-            <b:inputText id="mnach" name="mitarbeiternachname"/>
-            <h:outputLabel for="mfarb" value="Kalenderfarbe "/>
-            <p:colorPicker id="mfarb" value="#{kalenderHelfer.tempColor}" mode="inline" />
-        </b:panelGrid>
-        <p:commandButton value="Speichern" action="#{kalenderHelfer.newWorker}" oncomplete="PF('mitarbeiter').hide();" styleClass="btn"/>
-    </h:form>
-</p:dialog>
-<p:dialog id="neueAufgabeID" widgetVar="NeueAufgabe" header="Neue Aufgabe" showEffect="clip" hideEffect="clip">
-    <h:form id="aufgabenForm">
-        <b:panelGrid columns="1">
-            <h:outputText value="Aufgabe: " for="aufgabe"></h:outputText>
-            <b:inputText id="aufgabe" name="aufgabenname"/>
-            <b:commandButton value="anlegen" action="#{kalenderHelfer.neueAufgabe}"  oncomplete="PF('NeueAufgabe').hide();"/>
-        </b:panelGrid>
-    </h:form>
-</p:dialog>
 
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </body>

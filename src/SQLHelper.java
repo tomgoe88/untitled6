@@ -2116,6 +2116,29 @@ public class SQLHelper{
             }
         }
     }
+    public static int selectKundenID(int terminID){
+        con = getInstance();
+        int kundenID=0;
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "SELECT KundenID FROM termin WHERE TerminID='"+terminID+"'";
+                ResultSet result = query.executeQuery(sql);
+                while (result.next()){
+                    kundenID= result.getInt("KundenID");
+                }
+
+            }catch(SQLException e){
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return kundenID;
+    }
 
     public static List<ErledigteTermine> getKundeTermine(int kundenid){//hier sollen die Events geholt werden und am ende der Eventlist hinzugefügt werdern
         con = getInstance();
