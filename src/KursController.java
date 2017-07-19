@@ -29,6 +29,7 @@ public class KursController {
     private Date initDate;
     private String javaScriptDate;
     private KundenController kundenController;
+    private int woechentlich;
 
     public KursController(){
         kundenController = new KundenController();
@@ -67,6 +68,14 @@ public class KursController {
 
     public void setKundenController(KundenController kundenController) {
         this.kundenController = kundenController;
+    }
+
+    public int getWoechentlich() {
+        return woechentlich;
+    }
+
+    public void setWoechentlich(int woechentlich) {
+        this.woechentlich = woechentlich;
     }
 
     public List<Mitarbeiter> getMitarbeiterList() {
@@ -170,8 +179,22 @@ public class KursController {
         return mitarbeit;
     }
     public void newKurs(){
+        GregorianCalendar c1= new GregorianCalendar();
+        GregorianCalendar c2= new GregorianCalendar();
+        c1.setTime(kursstart);
+        c2.setTime(kursende);
+            int i=0;
+            while(i<woechentlich){
+                SQLHelper.newKurs(kursbezeichnung,kursstart.toString(),kursende.toString(),q);
+                c1.add(Calendar.DAY_OF_WEEK, 7);
+                kursstart= c1.getTime();
+                c2.add(Calendar.DAY_OF_WEEK,7);
+                kursende=c2.getTime();
+                i++;
+            }
 
-        SQLHelper.newKurs(kursbezeichnung,kursstart.toString(),kursende.toString(),q);
+
+
         initDate=kursstart;
     }
     public void resourceGetMaId(){
@@ -304,4 +327,5 @@ public class KursController {
 
         System.out.println(initDate+"   So ist das Default-Datum");
     }
+
 }

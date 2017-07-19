@@ -334,8 +334,8 @@
                                        itemValue="#{kursb}"/>
 
                     </b:selectOneMenu>
-
-
+                    <h:outputLabel value="Wie viele Wochen? "></h:outputLabel>
+                    <b:slider min="1" max="10"  value="#{kursController.woechentlich}" />
 
                     <b:button value="close" dismiss="modal" onclick="return false;"/>
                     <b:commandButton value="Ok" onclick="ajax:kursController.newKurs();javascript:useCurrentDate()" />
