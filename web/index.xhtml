@@ -420,7 +420,7 @@
                     <b:selectOneMenu id="ausMit" value="#{kalenderHelfer.kundenID}" rendered="#{terminEintragController.wert==2}" >
 
                         <f:selectItem value="#{null}" itemLabel="keine Auswahl" itemValue="-1"/>
-                        <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.vorname} #{ku.nachname}"
+                        <f:selectItems value="#{kalenderHelfer.kC.kundeList}" var="ku" itemLabel="#{ku.nachname} #{ku.vorname}"
                                        itemValue="#{ku.kundeID}"/>
 
                     </b:selectOneMenu>
