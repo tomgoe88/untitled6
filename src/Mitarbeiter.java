@@ -159,36 +159,28 @@ public class Mitarbeiter extends FullCalendarEventList {
     }
 
     public List<Urlaub> getUrlaubList() {
-        urlaubList= new ArrayList<Urlaub>();
+        urlaubList = new ArrayList<Urlaub>();
         urlaubList.addAll(SQLHelper.getUrlaubsList(MitarbeiterID));
         List<Urlaub> tempList= new ArrayList<Urlaub>();
-        if(urlabuStart==null){
-            if(filterdUrlaubStart!=null){
-                if (filteredUrlaubEnd == null) {
-                    filteredUrlaubEnd=new Date();
-                }
-                for(Urlaub a:urlaubList){
-                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
-                        tempList.add(a);
-                    }
-                }
-                urlaubList=new ArrayList<Urlaub>();
-                urlaubList.addAll(tempList);
-                tempList=null;
-            }
-        } else {
-            if (urlaubEnd == null) {
-                urlaubEnd=new Date();
+
+        if(staticStart!=null){
+            if (staticEnd == null) {
+                staticEnd=new Date();
             }
             for(Urlaub a:urlaubList){
-                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                if(!a.getUrlaubBeginn().before(staticStart)&& !a.getUrlaubBeginn().after(staticEnd)){
                     tempList.add(a);
                 }
             }
             urlaubList=new ArrayList<Urlaub>();
             urlaubList.addAll(tempList);
             tempList=null;
+
         }
+
+
+
+
 
 
         Collections.sort(urlaubList, new Comparator<Urlaub>() {
@@ -199,40 +191,31 @@ public class Mitarbeiter extends FullCalendarEventList {
 
 
 
-
         return urlaubList;
     }
     public List<Krankheit> getKrankheitslist() {
-        krankheitslist= new ArrayList<Krankheit>();
+        krankheitslist = new ArrayList<Krankheit>();
         krankheitslist.addAll(SQLHelper.getKranklist(MitarbeiterID));
         List<Krankheit> tempList= new ArrayList<Krankheit>();
-        if(urlabuStart==null){
-            if(filterdUrlaubStart!=null){
-                if (filteredUrlaubEnd == null) {
-                    filteredUrlaubEnd=new Date();
-                }
-                for(Krankheit a:krankheitslist){
-                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
-                        tempList.add(a);
-                    }
-                }
-                krankheitslist=new ArrayList<Krankheit>();
-                krankheitslist.addAll(tempList);
-                tempList=null;
-            }
-        } else {
-            if (urlaubEnd == null) {
-                urlaubEnd=new Date();
+
+        if(staticStart!=null){
+            if (staticEnd == null) {
+                staticEnd=new Date();
             }
             for(Krankheit a:krankheitslist){
-                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                if(!a.getUrlaubBeginn().before(staticStart)&& !a.getUrlaubBeginn().after(staticEnd)){
                     tempList.add(a);
                 }
             }
             krankheitslist=new ArrayList<Krankheit>();
             krankheitslist.addAll(tempList);
             tempList=null;
+
         }
+
+
+
+
 
 
         Collections.sort(krankheitslist, new Comparator<Krankheit>() {
@@ -243,40 +226,31 @@ public class Mitarbeiter extends FullCalendarEventList {
 
 
 
-
         return krankheitslist;
     }
     public List<Uni> getUniList() {
-        uniList= new ArrayList<Uni>();
+        uniList = new ArrayList<Uni>();
         uniList.addAll(SQLHelper.getUnilist(MitarbeiterID));
         List<Uni> tempList= new ArrayList<Uni>();
-        if(urlabuStart==null){
-            if(filterdUrlaubStart!=null){
-                if (filteredUrlaubEnd == null) {
-                    filteredUrlaubEnd=new Date();
-                }
-                for(Uni a:uniList){
-                    if(!a.getUrlaubBeginn().before(filterdUrlaubStart)&& !a.getUrlaubBeginn().after(filteredUrlaubEnd)){
-                        tempList.add(a);
-                    }
-                }
-                uniList=new ArrayList<Uni>();
-                uniList.addAll(tempList);
-                tempList=null;
-            }
-        } else {
-            if (urlaubEnd == null) {
-                urlaubEnd=new Date();
+
+        if(staticStart!=null){
+            if (staticEnd == null) {
+                staticEnd=new Date();
             }
             for(Uni a:uniList){
-                if(!a.getUrlaubBeginn().before(urlabuStart)&& !a.getUrlaubBeginn().after(urlaubEnd)){
+                if(!a.getUrlaubBeginn().before(staticStart)&& !a.getUrlaubBeginn().after(staticEnd)){
                     tempList.add(a);
                 }
             }
             uniList=new ArrayList<Uni>();
             uniList.addAll(tempList);
             tempList=null;
+
         }
+
+
+
+
 
 
         Collections.sort(uniList, new Comparator<Uni>() {
@@ -284,7 +258,6 @@ public class Mitarbeiter extends FullCalendarEventList {
                 return o2.getUrlaubBeginn().compareTo(o1.getUrlaubBeginn());
             }
         });
-
 
 
 
@@ -575,12 +548,12 @@ public class Mitarbeiter extends FullCalendarEventList {
         FullCalendarEventList fk= new FullCalendarEventList();
 
         fk.getList().addAll(SQLHelper.getAllArbeitszeiten(MitarbeiterID));
-        fk.getList().addAll(SQLHelper.getSperrZeiten(MitarbeiterID));
+
         fk.getList().addAll( SQLHelper.getAllEvents(MitarbeiterID));
         fk.getList().addAll( SQLHelper.getUrlaubszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getKrankheitszeiten(MitarbeiterID));
         fk.getList().addAll(SQLHelper.getUniZeiten(MitarbeiterID));
-        fk.getList().addAll(SQLHelper.getKurse());
+
         if(fk.getList().size()==0){
             fk.getList().add(new FullCalendarEventBean());
             tem=fk.toJson();

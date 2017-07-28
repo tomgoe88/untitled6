@@ -152,6 +152,25 @@
         </h:form>
     </b:column>
         <b:column span="4">
+            <b:row>
+                <h:form>
+                    <b:column span="4">
+                        <h:outputLabel value="Datum von: "/>
+                        <p:calendar id="event" value="#{pageChanger.angemeldet.filteredDatestart}" locale="de">
+                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDate}"/>
+                        </p:calendar>
+
+                    </b:column>
+                    <b:column span="4">
+                        <h:outputLabel value="Datum bis: "/>
+                        <p:calendar id="caöe" value="#{pageChanger.angemeldet.filterDateEnd}" locale="de">
+                            <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDate}" update="ma urma krama" />
+                        </p:calendar>
+
+                    </b:column>
+
+                </h:form>
+            </b:row>
             <b:tabView>
                 <b:tab title="Benutzerdaten">
                     <h:form>
@@ -168,23 +187,7 @@
                     </h:form>
                 </b:tab>
                 <b:tab title="Arbeitszeiten">
-                    <b:row>
-                        <h:form>
-                        <b:column span="4">
-                            <p:calendar id="event" value="#{pageChanger.angemeldet.filteredDatestart}" locale="de">
-                                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateStartDate}"/>
-                            </p:calendar>
 
-                        </b:column>
-                        <b:column span="4">
-                            <p:calendar id="caöe" value="#{pageChanger.angemeldet.filterDateEnd}" locale="de">
-                                <p:ajax event="dateSelect" listener="#{pageChanger.angemeldet.filterDateEndDate}" update="ma" />
-                            </p:calendar>
-
-                        </b:column>
-
-                        </h:form>
-                    </b:row>
 
                     <h:form id="ma">
 

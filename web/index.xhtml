@@ -439,7 +439,9 @@
                     </b:inputText>
 
                     <h:outputLabel id="beschreibung" value="Beschreibung: "/>
-                    <b:inputText name="beschreibung" for="beschreibung" placeholder="Gebe eine Beschreibung an...."/>
+                    <b:inputText name="beschreibung" for="beschreibung" placeholder="Gebe eine Beschreibung an....">
+                        <f:validateLength minimum="2" />
+                    </b:inputText>
                     <h:outputLabel value="Einträger: "/>
                     <b:selectOneMenu value="#{kalenderHelfer.eintrager}">
                         <f:selectItems value="#{kalenderHelfer.mitarbeiter}" var="mitarb" itemLabel="#{mitarb.name}"

@@ -62,35 +62,38 @@
 <b:row>
     <b:column span="1"></b:column>
     <b:column span="10">
+        <b:row>
+            <h:form id="tet">
+                <b:column span="4">
+                    <h:outputLabel value="Datum von: "/>
+                    <p:calendar id="event" showTodayButton="true" showOn="button"
+
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item" value="#{kalenderHelfer.mitarbeit.filteredDatestart}" locale="de">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDate}"/>
+                    </p:calendar>
+                    <h:outputLabel value="Datum bis: "/>
+                    <p:calendar id="caöe" value="#{kalenderHelfer.mitarbeit.filterDateEnd}" showTodayButton="true" showOn="button"
+                                locale="de"
+
+                                pattern="dd.MM.yyyy"
+                                styleClass="embed-responsive-item">
+                        <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDate}" update="ma krama urma" />
+                    </p:calendar>
+
+
+                </b:column>
+                <b:column span="4">
+
+                </b:column>
+
+            </h:form>
+        </b:row>
     <b:tabView>
      
         <b:tab title="Arbeitszeiten">
-            <b:row>
-                <h:form id="tet">
-                    <b:column span="4">
-                        <p:calendar id="event" showTodayButton="true" showOn="button"
 
-
-                                    pattern="dd.MM.yyyy"
-                                    styleClass="embed-responsive-item" value="#{kalenderHelfer.mitarbeit.filteredDatestart}" locale="de">
-                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDate}"/>
-                        </p:calendar>
-                        <p:calendar id="caöe" value="#{kalenderHelfer.mitarbeit.filterDateEnd}" showTodayButton="true" showOn="button"
-                                    locale="de"
-
-                                    pattern="dd.MM.yyyy"
-                                    styleClass="embed-responsive-item">
-                            <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateEndDate}" update="ma" />
-                        </p:calendar>
-
-
-                    </b:column>
-                    <b:column span="4">
-
-                    </b:column>
-
-                </h:form>
-            </b:row>
 
             <h:form id="ma">
 
