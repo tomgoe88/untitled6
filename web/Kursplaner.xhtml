@@ -238,8 +238,11 @@
                         <b:column span="12">
                             <b:dataTable value="#{kursController.kursbezeichnungen}" var="kursbe"
                             >
-                                <b:dataTableColumn label="Kursbezeichnung" >
+                                <b:dataTableColumn label="Kursbezeichnung">
                                     <h:outputText value="#{kursbe}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="löschen" >
+                                    <b:commandButton value="X" ajax="true" action="#{kursController.deleteKurs(kursbe)}" update="aufgabenformer"></b:commandButton>
                                 </b:dataTableColumn>
 
                             </b:dataTable>

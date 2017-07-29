@@ -73,6 +73,8 @@
                                 styleClass="embed-responsive-item" value="#{kalenderHelfer.mitarbeit.filteredDatestart}" locale="de">
                         <p:ajax event="dateSelect" listener="#{kalenderHelfer.mitarbeit.filterDateStartDate}"/>
                     </p:calendar>
+                </b:column>
+                <b:column span="4">
                     <h:outputLabel value="Datum bis: "/>
                     <p:calendar id="caöe" value="#{kalenderHelfer.mitarbeit.filterDateEnd}" showTodayButton="true" showOn="button"
                                 locale="de"
@@ -90,9 +92,9 @@
 
             </h:form>
         </b:row>
-    <b:tabView>
+
      
-        <b:tab title="Arbeitszeiten">
+        <b:panel title="Arbeitszeiten">
 
 
             <h:form id="ma">
@@ -115,7 +117,7 @@
 
                 <b:row>
 
-                    <b:dataTable value="#{kalenderHelfer.mitarbeit.arbeitszeitList}" var="az">
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.arbeitszeitList}" var="az" responsive="true" pageLength="50" paginated="false">
                         <b:dataTableColumn label="Schicht">
                             <h:outputText value="#{az.schichtart}"></h:outputText>
                         </b:dataTableColumn>
@@ -160,12 +162,12 @@
 
                 </b:row>
             </h:form>
-        </b:tab>
-        <b:tab title="Urlaubszeiten">
+        </b:panel>
+        <b:panel title="Urlaubszeiten">
 
             <b:row>
                 <h:form id="urma">
-                    <b:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub">
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.urlaubList}" var="mitarbeiterurlaub" responsive="true" pageLength="50" paginated="false">
                         <b:dataTableColumn label="Urlaubsbeginn">
                             <h:outputText value="#{mitarbeiterurlaub.urlaubBeginn}">
                                 <f:convertDateTime pattern="dd.MM.yyyy"/>
@@ -182,13 +184,13 @@
                     </b:dataTable>
                 </h:form>
             </b:row>
-        </b:tab>
+        </b:panel>
 
-        <b:tab title="Krankheitstage">
+        <b:panel title="Krankheitstage">
 
             <b:row>
                 <h:form id="krama">
-                    <b:dataTable value="#{kalenderHelfer.mitarbeit.krankheitslist}" var="mitkrank">
+                    <b:dataTable value="#{kalenderHelfer.mitarbeit.krankheitslist}" var="mitkrank" responsive="true" pageLength="50" paginated="false">
                         <b:dataTableColumn label="Krankheitsbeginn">
                             <h:outputText value="#{mitkrank.urlaubBeginn}">
                                 <f:convertDateTime pattern="dd.MM.yyyy"/>
@@ -205,8 +207,8 @@
                     </b:dataTable>
                 </h:form>
             </b:row>
-        </b:tab>
-    </b:tabView>
+        </b:panel>
+
     </b:column>
     <b:column span="1"></b:column>
 

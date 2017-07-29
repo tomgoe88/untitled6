@@ -534,7 +534,7 @@ public class SQLHelper{
             try {
                 query = con.createStatement();
                 String sql =
-                        "SELECT * FROM kursbezeichnungen";
+                        "SELECT * FROM kursbezeichnungen ORDER BY Bezeichnung ASC";
                 ResultSet ergebnis = query.executeQuery(sql);
                 String title;
 
@@ -603,6 +603,26 @@ public class SQLHelper{
                 query.executeUpdate(sql);
             }catch(SQLException e){
                 System.out.println("Freier Termin löschen SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+
+
+    }
+
+    public static void delteKursbezeichnung (int kursbezeichnungsID){
+        con = getInstance();
+        if(con != null) {
+
+            Statement query;
+            try {
+                query = con.createStatement();
+                String sql=
+                        "DELETE FROM kursbezeichnungen WHERE BezeichnungsID='"+kursbezeichnungsID+"'";
+                query.executeUpdate(sql);
+            }catch(SQLException e){
+                System.out.println("Kursbezeichnungen löschen SQLException: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }

@@ -153,6 +153,10 @@ public class KursController {
     public List<String> getKursbezeichnungen() {
         kursbezeichnungen= new ArrayList<String>();
         kursbezeichnungen.addAll(SQLHelper.getKursbezeichnungen());
+
+        for (String a:kursbezeichnungen){
+            System.out.println(a);
+        }
         return kursbezeichnungen;
     }
 
